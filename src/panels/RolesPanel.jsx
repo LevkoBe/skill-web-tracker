@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Plus, Save, Upload, RotateCcw } from "lucide-react";
 import { RoleItem } from "../components/RoleItem";
 
@@ -8,6 +8,7 @@ const randomBrightColor = () => {
   const lightness = 55 + Math.random() * 10;
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
+const FIBONACCI = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233];
 
 export const RolesPanel = ({
   roles,
@@ -30,12 +31,30 @@ export const RolesPanel = ({
     setNewRoleName("");
   };
 
-  const getMilestonesReached = (roleId, points) => {
-    const fibonacci = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233];
-    const count = points.filter((p) => p.roleId === roleId).length;
-    console.log(points, count);
-    return fibonacci.filter((f) => f <= count).length;
-  };
+  const rolePointCounts = useMemo(() => {
+    const map = new Map();
+    for (const p of points) {
+      map.set(p.roleId, (map.get(p.roleId) ?? 0) + 1);
+    }
+    return map;
+  }, [points]);
+
+  const roleLevels = useMemo(() => {
+    const map = new Map();
+    for (const role of roles) {
+      const count = rolePointCounts.get(role.id) ?? 0;
+      const level = FIBONACCI.filter((f) => f <= count).length;
+      map.set(role.id, level);
+    }
+    return map;
+  }, [roles, rolePointCounts]);
+
+  const sortedRoles = useMemo(() => {
+    return [...roles].sort(
+      (a, b) =>
+        (rolePointCounts.get(b.id) ?? 0) - (rolePointCounts.get(a.id) ?? 0),
+    );
+  }, [roles, rolePointCounts]);
 
   return (
     <div
@@ -52,7 +71,7 @@ export const RolesPanel = ({
           type="text"
           value={newRoleName}
           onChange={(e) => setNewRoleName(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleAddRole()}
+          onKeyDown={(e) => e.key === "Enter" && handleAddRole()}
           placeholder="New role..."
           className="flex-1 bg-black border border-gray-800 px-3 py-2 rounded outline-none text-gray-300 placeholder-gray-700"
         />
@@ -64,20 +83,20 @@ export const RolesPanel = ({
         </button>
       </div>
       <div className="space-y-2">
-        {roles.map((role) => (
+        {sortedRoles.map((role) => (
           <RoleItem
             key={role.id}
             role={role}
             isActive={activeRole === role.id}
-            level={getMilestonesReached(role.id, points)}
+            level={roleLevels.get(role.id) ?? 0}
             onSelect={() =>
               onRoleSelect(activeRole === role.id ? null : role.id)
             }
             onDelete={() => onDeleteRole(role.id)}
             onColorChange={(color) => onUpdateRoleColor(role.id, color)}
-            onRandomizeColor={() => {
-              onUpdateRoleColor(role.id, randomBrightColor());
-            }}
+            onRandomizeColor={() =>
+              onUpdateRoleColor(role.id, randomBrightColor())
+            }
             onUpdateRole={(updates) => onUpdateRole(role.id, updates)}
           />
         ))}
