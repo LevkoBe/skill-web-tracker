@@ -88,15 +88,12 @@ export const RolesPanel = ({
           >
             <Save size={16} /> Save
           </button>
-          <label className="flex-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 px-4 py-2 rounded flex items-center justify-center gap-2 cursor-pointer text-gray-400 text-sm">
+          <button
+            onClick={onLoad}
+            className="flex-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 px-4 py-2 rounded flex items-center justify-center gap-2 cursor-pointer text-gray-400 text-sm"
+          >
             <Upload size={16} /> Load
-            <input
-              type="file"
-              accept=".json"
-              onChange={onLoad}
-              className="hidden"
-            />
-          </label>
+          </button>
         </div>
         <button
           onClick={handleReset}

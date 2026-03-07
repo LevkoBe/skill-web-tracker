@@ -46,6 +46,7 @@ export const RoleItem = ({
           : "border-gray-900 hover:bg-black hover:border-gray-800"
       }`}
       onClick={onSelect}
+      onDoubleClick={startEditing}
       title={role.description || "No description"}
     >
       {isEditing ? (

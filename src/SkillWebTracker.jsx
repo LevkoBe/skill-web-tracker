@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Settings } from "lucide-react";
 import { useSkillWeb } from "./hooks/useSkillWeb";
 import { useCanvasDrag } from "./hooks/useCanvasDrag";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import { SettingsPanel } from "./panels/SettingsPanel";
 import { WebCanvas } from "./panels/WebCanvas";
 import { RolesPanel } from "./panels/RolesPanel";
@@ -26,10 +27,15 @@ const SkillWebTracker = () => {
     save,
     load,
     reset,
+    undo,
+    redo,
   } = useSkillWeb();
 
   const { isDragging, dragHandlers } = useCanvasDrag(offset, setOffset);
   const [showSettings, setShowSettings] = useState(false);
+  const fileInputRef = useRef(null);
+
+  useKeyboardShortcuts({ undo, redo, save, fileInputRef, setActiveRole });
 
   const handleCanvasClick = (e) => {
     if (!activeRole || isDragging) return;
@@ -41,6 +47,14 @@ const SkillWebTracker = () => {
 
   return (
     <div className="flex h-screen bg-black text-gray-300">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json"
+        onChange={load}
+        className="hidden"
+      />
+
       <div className="flex-1 relative border-r border-gray-900">
         <WebCanvas
           points={points}
@@ -81,7 +95,7 @@ const SkillWebTracker = () => {
         onUpdateRole={updateRole}
         onUpdateRoleColor={updateRoleColor}
         onSave={save}
-        onLoad={load}
+        onLoad={() => fileInputRef.current?.click()}
         onReset={reset}
       />
 

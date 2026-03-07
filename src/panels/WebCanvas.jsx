@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect as useLayoutEffect } from "react";
 
 export const WebCanvas = ({
   points,
@@ -13,6 +13,13 @@ export const WebCanvas = ({
   const animationRef = useRef(null);
   const timeRef = useRef(0);
   const pointOffsetsRef = useRef([]);
+
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !dragHandlers.onWheel) return;
+    canvas.addEventListener("wheel", dragHandlers.onWheel, { passive: false });
+    return () => canvas.removeEventListener("wheel", dragHandlers.onWheel);
+  }, [dragHandlers.onWheel]);
 
   React.useEffect(() => {
     while (pointOffsetsRef.current.length < points.length) {
@@ -102,11 +109,13 @@ export const WebCanvas = ({
     return () => cancelAnimationFrame(animationRef.current);
   }, [points, connections, offset, activeRole, settings]);
 
+  const { onWheel: _onWheel, ...mouseHandlers } = dragHandlers;
+
   return (
     <canvas
       ref={canvasRef}
       onClick={onCanvasClick}
-      {...dragHandlers}
+      {...mouseHandlers}
       className="w-full h-full cursor-crosshair"
     />
   );

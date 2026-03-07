@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DEFAULT_ROLES } from "../data/roles";
 import { loadState, saveState, clearState } from "../utils/storage";
 import { nextRoleColor } from "../utils/colors";
@@ -10,6 +10,8 @@ const DEFAULT_SETTINGS = {
   pointDriftSpeed: 1,
   maxProximityConnections: 3,
 };
+
+const MAX_HISTORY = 50;
 
 export const useSkillWeb = () => {
   const [roles, setRoles] = useState(() => loadState()?.roles ?? DEFAULT_ROLES);
@@ -25,13 +27,46 @@ export const useSkillWeb = () => {
   );
   const [activeRole, setActiveRole] = useState(null);
 
+  const past = useRef([]);
+  const future = useRef([]);
+
   useEffect(() => {
     saveState({ roles, points, connections, offset, settings });
   }, [roles, points, connections, offset, settings]);
 
+  const snapshot = (r = roles, p = points, c = connections) => {
+    past.current = [
+      ...past.current.slice(-MAX_HISTORY + 1),
+      { roles: r, points: p, connections: c },
+    ];
+    future.current = [];
+  };
+
+  const undo = () => {
+    if (!past.current.length) return;
+    const prev = past.current[past.current.length - 1];
+    past.current = past.current.slice(0, -1);
+    future.current = [{ roles, points, connections }, ...future.current];
+    setRoles(prev.roles);
+    setPoints(prev.points);
+    setConnections(prev.connections);
+  };
+
+  const redo = () => {
+    if (!future.current.length) return;
+    const next = future.current[0];
+    future.current = future.current.slice(1);
+    past.current = [...past.current, { roles, points, connections }];
+    setRoles(next.roles);
+    setPoints(next.points);
+    setConnections(next.connections);
+  };
+
   const addPoint = (x, y) => {
     const role = roles.find((r) => r.id === activeRole);
     if (!role) return;
+
+    snapshot();
 
     const newIdx = points.length;
     const newPoint = {
@@ -82,6 +117,7 @@ export const useSkillWeb = () => {
   };
 
   const deleteRole = (id) => {
+    snapshot();
     const { newPoints, newConnections } = removeRoleFromGraph(
       points,
       connections,
@@ -99,6 +135,7 @@ export const useSkillWeb = () => {
     );
 
   const updateRoleColor = (id, color) => {
+    snapshot();
     setRoles((prev) => prev.map((r) => (r.id === id ? { ...r, color } : r)));
     setPoints((prev) =>
       prev.map((p) => (p.roleId === id ? { ...p, color } : p)),
@@ -138,6 +175,7 @@ export const useSkillWeb = () => {
     reader.onload = ({ target }) => {
       try {
         const data = JSON.parse(target.result);
+        snapshot();
         setRoles(data.roles ?? []);
         setPoints(data.points ?? []);
         setConnections(data.connections ?? []);
@@ -157,6 +195,8 @@ export const useSkillWeb = () => {
     setConnections([]);
     setOffset({ x: 0, y: 0 });
     setSettings(DEFAULT_SETTINGS);
+    past.current = [];
+    future.current = [];
   };
 
   return {
@@ -177,5 +217,7 @@ export const useSkillWeb = () => {
     save,
     load,
     reset,
+    undo,
+    redo,
   };
 };

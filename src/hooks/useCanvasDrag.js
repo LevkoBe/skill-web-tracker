@@ -19,6 +19,11 @@ export const useCanvasDrag = (offset, setOffset) => {
 
   const onMouseUp = () => setIsDragging(false);
 
+  const onWheel = (e) => {
+    e.preventDefault();
+    setOffset((prev) => ({ x: prev.x - e.deltaX, y: prev.y - e.deltaY }));
+  };
+
   return {
     isDragging,
     dragHandlers: {
@@ -26,6 +31,7 @@ export const useCanvasDrag = (offset, setOffset) => {
       onMouseMove,
       onMouseUp,
       onMouseLeave: onMouseUp,
+      onWheel,
     },
   };
 };
