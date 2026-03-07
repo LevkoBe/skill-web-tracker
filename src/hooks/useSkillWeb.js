@@ -1,0 +1,181 @@
+import { useState, useEffect } from "react";
+import { DEFAULT_ROLES } from "../data/roles";
+import { loadState, saveState, clearState } from "../utils/storage";
+import { nextRoleColor } from "../utils/colors";
+import { removeRoleFromGraph } from "../utils/connections";
+
+const DEFAULT_SETTINGS = {
+  connectionRange: 150,
+  pointDriftRadius: 2,
+  pointDriftSpeed: 1,
+  maxProximityConnections: 3,
+};
+
+export const useSkillWeb = () => {
+  const [roles, setRoles] = useState(() => loadState()?.roles ?? DEFAULT_ROLES);
+  const [points, setPoints] = useState(() => loadState()?.points ?? []);
+  const [connections, setConnections] = useState(
+    () => loadState()?.connections ?? [],
+  );
+  const [offset, setOffset] = useState(
+    () => loadState()?.offset ?? { x: 0, y: 0 },
+  );
+  const [settings, setSettings] = useState(
+    () => loadState()?.settings ?? DEFAULT_SETTINGS,
+  );
+  const [activeRole, setActiveRole] = useState(null);
+
+  useEffect(() => {
+    saveState({ roles, points, connections, offset, settings });
+  }, [roles, points, connections, offset, settings]);
+
+  const addPoint = (x, y) => {
+    const role = roles.find((r) => r.id === activeRole);
+    if (!role) return;
+
+    const newIdx = points.length;
+    const newPoint = {
+      id: Date.now(),
+      x,
+      y,
+      roleId: activeRole,
+      color: role.color,
+    };
+
+    const proximityConnections = points
+      .map((p, idx) => ({
+        idx,
+        dist: Math.hypot(p.x - x, p.y - y),
+        roleId: p.roleId,
+      }))
+      .filter(
+        ({ roleId, dist }) =>
+          roleId === activeRole && dist < settings.connectionRange,
+      )
+      .sort((a, b) => a.dist - b.dist)
+      .slice(0, settings.maxProximityConnections)
+      .map(({ idx }) => ({ fromIdx: idx, toIdx: newIdx, color: role.color }));
+
+    const sequentialConnection =
+      points.length > 0
+        ? [{ fromIdx: points.length - 1, toIdx: newIdx, color: role.color }]
+        : [];
+
+    setPoints((prev) => [...prev, newPoint]);
+    setConnections((prev) => [
+      ...prev,
+      ...sequentialConnection,
+      ...proximityConnections,
+    ]);
+  };
+
+  const addRole = (name) => {
+    setRoles((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name,
+        description: "",
+        color: nextRoleColor(prev.length),
+      },
+    ]);
+  };
+
+  const deleteRole = (id) => {
+    const { newPoints, newConnections } = removeRoleFromGraph(
+      points,
+      connections,
+      id,
+    );
+    setRoles((prev) => prev.filter((r) => r.id !== id));
+    setPoints(newPoints);
+    setConnections(newConnections);
+    if (activeRole === id) setActiveRole(null);
+  };
+
+  const updateRole = (id, updates) =>
+    setRoles((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, ...updates } : r)),
+    );
+
+  const updateRoleColor = (id, color) => {
+    setRoles((prev) => prev.map((r) => (r.id === id ? { ...r, color } : r)));
+    setPoints((prev) =>
+      prev.map((p) => (p.roleId === id ? { ...p, color } : p)),
+    );
+    const updatedPoints = points.map((p) =>
+      p.roleId === id ? { ...p, color } : p,
+    );
+    setConnections((prev) =>
+      prev.map((c) =>
+        updatedPoints[c.fromIdx]?.roleId === id ? { ...c, color } : c,
+      ),
+    );
+  };
+
+  const save = () => {
+    const blob = new Blob(
+      [
+        JSON.stringify(
+          { roles, points, connections, offset, settings },
+          null,
+          2,
+        ),
+      ],
+      { type: "application/json" },
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "skill-web.json";
+    a.click();
+  };
+
+  const load = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ({ target }) => {
+      try {
+        const data = JSON.parse(target.result);
+        setRoles(data.roles ?? []);
+        setPoints(data.points ?? []);
+        setConnections(data.connections ?? []);
+        setOffset(data.offset ?? { x: 0, y: 0 });
+        setSettings(data.settings ?? DEFAULT_SETTINGS);
+      } catch {
+        alert("Invalid file format");
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const reset = () => {
+    clearState();
+    setRoles(DEFAULT_ROLES);
+    setPoints([]);
+    setConnections([]);
+    setOffset({ x: 0, y: 0 });
+    setSettings(DEFAULT_SETTINGS);
+  };
+
+  return {
+    roles,
+    points,
+    connections,
+    offset,
+    settings,
+    activeRole,
+    setOffset,
+    setSettings,
+    setActiveRole,
+    addPoint,
+    addRole,
+    deleteRole,
+    updateRole,
+    updateRoleColor,
+    save,
+    load,
+    reset,
+  };
+};

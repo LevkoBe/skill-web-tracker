@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Edit2, Trash2, Palette } from "lucide-react";
+import { randomBrightColor } from "../utils/colors";
 
 export const RoleItem = ({
   role,
@@ -8,37 +9,33 @@ export const RoleItem = ({
   onSelect,
   onDelete,
   onColorChange,
-  onRandomizeColor,
   onUpdateRole,
 }) => {
-  const [editingRole, setEditingRole] = useState(false);
-  const [editingColor, setEditingColor] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const [tempName, setTempName] = useState(role.name);
   const [tempDescription, setTempDescription] = useState(role.description);
-  const editFormRef = useRef(null);
+  const formRef = useRef(null);
 
-  const handleSaveEdits = () => {
+  const commitEdits = () => {
     const updates = {};
-
-    if (tempName !== role.name) {
-      updates.name = tempName;
-    }
-
-    if (tempDescription !== role.description) {
+    if (tempName !== role.name) updates.name = tempName;
+    if (tempDescription !== role.description)
       updates.description = tempDescription;
-    }
-
-    if (Object.keys(updates).length > 0) {
-      onUpdateRole(updates);
-    }
-
-    setEditingRole(false);
+    if (Object.keys(updates).length > 0) onUpdateRole(updates);
+    setIsEditing(false);
   };
 
   const handleBlur = (e) => {
-    if (editFormRef.current && !editFormRef.current.contains(e.relatedTarget)) {
-      handleSaveEdits();
-    }
+    if (formRef.current && !formRef.current.contains(e.relatedTarget))
+      commitEdits();
+  };
+
+  const startEditing = (e) => {
+    e.stopPropagation();
+    setTempName(role.name);
+    setTempDescription(role.description);
+    setIsEditing(true);
   };
 
   return (
@@ -51,9 +48,9 @@ export const RoleItem = ({
       onClick={onSelect}
       title={role.description || "No description"}
     >
-      {editingRole ? (
+      {isEditing ? (
         <div
-          ref={editFormRef}
+          ref={formRef}
           className="space-y-2"
           onClick={(e) => e.stopPropagation()}
         >
@@ -62,11 +59,7 @@ export const RoleItem = ({
             value={tempName}
             onChange={(e) => setTempName(e.target.value)}
             onBlur={handleBlur}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSaveEdits();
-              }
-            }}
+            onKeyDown={(e) => e.key === "Enter" && commitEdits()}
             className="bg-black border border-gray-800 px-2 py-1 rounded outline-none w-full text-gray-300"
             autoFocus
           />
@@ -77,12 +70,12 @@ export const RoleItem = ({
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                handleSaveEdits();
+                commitEdits();
               }
             }}
             placeholder="Description..."
             className="bg-black border border-gray-800 px-2 py-1 rounded outline-none w-full text-gray-300 text-xs resize-none"
-            rows="3"
+            rows={3}
           />
         </div>
       ) : (
@@ -97,10 +90,10 @@ export const RoleItem = ({
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setEditingColor(!editingColor);
+                  setShowColorPicker((v) => !v);
                 }}
               />
-              {editingColor && (
+              {showColorPicker && (
                 <input
                   type="color"
                   value={role.color}
@@ -112,11 +105,12 @@ export const RoleItem = ({
             <span className="text-gray-300">{role.name}</span>
             <span className="text-xs text-gray-600 ml-1">Lv.{level}</span>
           </div>
+
           <div className="flex gap-2">
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onRandomizeColor();
+                onColorChange(randomBrightColor());
               }}
               className="text-gray-600 hover:text-gray-400 transition-colors"
               title="Randomize color"
@@ -124,14 +118,9 @@ export const RoleItem = ({
               <Palette size={14} />
             </button>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setTempName(role.name);
-                setTempDescription(role.description);
-                setEditingRole(true);
-              }}
+              onClick={startEditing}
               className="text-gray-600 hover:text-gray-400 transition-colors"
-              title="Edit role name and description"
+              title="Edit role"
             >
               <Edit2 size={14} />
             </button>

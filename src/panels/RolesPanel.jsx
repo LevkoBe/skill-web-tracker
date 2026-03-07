@@ -1,14 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Plus, Save, Upload, RotateCcw } from "lucide-react";
 import { RoleItem } from "../components/RoleItem";
-
-const randomBrightColor = () => {
-  const hue = Math.floor(Math.random() * 360);
-  const saturation = 90 + Math.random() * 10;
-  const lightness = 55 + Math.random() * 10;
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-};
-const FIBONACCI = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233];
+import { useRoleStats } from "../hooks/useRoleStats";
 
 export const RolesPanel = ({
   roles,
@@ -24,37 +17,23 @@ export const RolesPanel = ({
   onReset,
 }) => {
   const [newRoleName, setNewRoleName] = useState("");
+  const { levels, sortedRoles } = useRoleStats(roles, points);
 
   const handleAddRole = () => {
     if (!newRoleName.trim()) return;
-    onAddRole(newRoleName);
+    onAddRole(newRoleName.trim());
     setNewRoleName("");
   };
 
-  const rolePointCounts = useMemo(() => {
-    const map = new Map();
-    for (const p of points) {
-      map.set(p.roleId, (map.get(p.roleId) ?? 0) + 1);
+  const handleReset = () => {
+    if (
+      confirm(
+        "Reset everything to defaults?\n\nThis will clear all roles, points, and connections.",
+      )
+    ) {
+      onReset();
     }
-    return map;
-  }, [points]);
-
-  const roleLevels = useMemo(() => {
-    const map = new Map();
-    for (const role of roles) {
-      const count = rolePointCounts.get(role.id) ?? 0;
-      const level = FIBONACCI.filter((f) => f <= count).length;
-      map.set(role.id, level);
-    }
-    return map;
-  }, [roles, rolePointCounts]);
-
-  const sortedRoles = useMemo(() => {
-    return [...roles].sort(
-      (a, b) =>
-        (rolePointCounts.get(b.id) ?? 0) - (rolePointCounts.get(a.id) ?? 0),
-    );
-  }, [roles, rolePointCounts]);
+  };
 
   return (
     <div
@@ -66,6 +45,7 @@ export const RolesPanel = ({
       <h2 className="text-lg font-medium mb-4 text-gray-400 tracking-wide">
         ROLES
       </h2>
+
       <div className="flex gap-2 mb-6">
         <input
           type="text"
@@ -82,25 +62,24 @@ export const RolesPanel = ({
           <Plus size={20} />
         </button>
       </div>
+
       <div className="space-y-2">
         {sortedRoles.map((role) => (
           <RoleItem
             key={role.id}
             role={role}
             isActive={activeRole === role.id}
-            level={roleLevels.get(role.id) ?? 0}
+            level={levels.get(role.id) ?? 0}
             onSelect={() =>
               onRoleSelect(activeRole === role.id ? null : role.id)
             }
             onDelete={() => onDeleteRole(role.id)}
             onColorChange={(color) => onUpdateRoleColor(role.id, color)}
-            onRandomizeColor={() =>
-              onUpdateRoleColor(role.id, randomBrightColor())
-            }
             onUpdateRole={(updates) => onUpdateRole(role.id, updates)}
           />
         ))}
       </div>
+
       <div className="mt-6 space-y-2">
         <div className="flex gap-2">
           <button
@@ -109,7 +88,6 @@ export const RolesPanel = ({
           >
             <Save size={16} /> Save
           </button>
-
           <label className="flex-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 px-4 py-2 rounded flex items-center justify-center gap-2 cursor-pointer text-gray-400 text-sm">
             <Upload size={16} /> Load
             <input
@@ -120,17 +98,8 @@ export const RolesPanel = ({
             />
           </label>
         </div>
-
         <button
-          onClick={() => {
-            if (
-              confirm(
-                "Reset everything to defaults?\n\nThis will clear all roles, points, and connections.",
-              )
-            ) {
-              onReset();
-            }
-          }}
+          onClick={handleReset}
           className="w-full bg-red-900/30 hover:bg-red-900/50 border border-red-800 px-4 py-2 rounded flex items-center justify-center gap-2 text-red-400 text-sm"
         >
           <RotateCcw size={16} /> Reset All

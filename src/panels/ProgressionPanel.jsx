@@ -1,23 +1,8 @@
-import { useMemo } from "react";
-
-const FIBONACCI = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233];
-const FIBONACCI_SET = new Set(FIBONACCI);
+import { useRoleStats } from "../hooks/useRoleStats";
+import { FIBONACCI_SET } from "../utils/fibonacci";
 
 export const ProgressionPanel = ({ roles, points }) => {
-  const rolePointCounts = useMemo(() => {
-    const map = new Map();
-    for (const p of points) {
-      map.set(p.roleId, (map.get(p.roleId) ?? 0) + 1);
-    }
-    return map;
-  }, [points]);
-
-  const sortedRoles = useMemo(() => {
-    return [...roles].sort(
-      (a, b) =>
-        (rolePointCounts.get(b.id) ?? 0) - (rolePointCounts.get(a.id) ?? 0),
-    );
-  }, [roles, rolePointCounts]);
+  const { pointCounts, sortedRoles } = useRoleStats(roles, points);
 
   return (
     <div className="w-80 bg-zinc-950 p-6 overflow-y-auto">
@@ -26,8 +11,8 @@ export const ProgressionPanel = ({ roles, points }) => {
       </h2>
 
       {sortedRoles.map((role) => {
-        const count = rolePointCounts.get(role.id) ?? 0;
-        const maxBoxes = Math.max(50, count + 10);
+        const count = pointCounts.get(role.id) ?? 0;
+        const boxCount = Math.max(50, count + 10);
 
         return (
           <div key={role.id} className="mb-6">
@@ -44,24 +29,23 @@ export const ProgressionPanel = ({ roles, points }) => {
             </div>
 
             <div className="flex flex-wrap gap-0.5">
-              {Array.from({ length: maxBoxes }).map((_, idx) => {
+              {Array.from({ length: boxCount }).map((_, idx) => {
                 const num = idx + 1;
-                const isFib = FIBONACCI_SET.has(num);
-                const isCompleted = num <= count;
-
+                const isMilestone = FIBONACCI_SET.has(num);
+                const filled = num <= count;
                 return (
                   <div
                     key={idx}
-                    className={`w-2.5 h-2.5 border ${
-                      isFib ? "border-gray-700" : "border-gray-900"
-                    } ${
-                      isCompleted
-                        ? isFib
+                    className={[
+                      "w-2.5 h-2.5 border",
+                      isMilestone ? "border-gray-700" : "border-gray-900",
+                      filled
+                        ? isMilestone
                           ? "bg-gray-700"
                           : "bg-gray-800"
-                        : "bg-transparent"
-                    }`}
-                    title={isFib ? `Milestone: ${num}` : num}
+                        : "bg-transparent",
+                    ].join(" ")}
+                    title={isMilestone ? `Milestone: ${num}` : String(num)}
                   />
                 );
               })}
