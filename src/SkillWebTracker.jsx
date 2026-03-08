@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Settings } from "lucide-react";
+import { Settings, FullscreenIcon, RotateCw } from "lucide-react";
 import { useSkillWeb } from "./hooks/useSkillWeb";
 import { useCanvasDrag } from "./hooks/useCanvasDrag";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
@@ -37,9 +37,11 @@ const SkillWebTracker = () => {
     redo,
   } = useSkillWeb();
 
-  const { isDragging, dragHandlers } = useCanvasDrag(offset, setOffset);
+  const { isDragging, dragHandlers, scale, zoom, zoomReset, zoomToFit } =
+    useCanvasDrag(offset, setOffset);
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef(null);
+  const containerRef = useRef(null);
 
   const [pendingNote, setPendingNote] = useState(null);
   const [noteText, setNoteText] = useState("");
@@ -54,6 +56,8 @@ const SkillWebTracker = () => {
   const handleTimerToggle = () =>
     isRunning ? handleTimerStop() : startTimer();
 
+  const handleKeyboardZoom = (delta) => zoom(delta);
+
   useKeyboardShortcuts({
     undo,
     redo,
@@ -61,6 +65,7 @@ const SkillWebTracker = () => {
     fileInputRef,
     setActiveRole,
     onTimerToggle: activeRole ? handleTimerToggle : undefined,
+    onZoom: handleKeyboardZoom,
   });
 
   const handleRoleSelect = (id) => {
@@ -82,7 +87,7 @@ const SkillWebTracker = () => {
     const canvasX = e.clientX - rect.left;
     const canvasY = e.clientY - rect.top;
     const newId = Date.now();
-    addPoint(canvasX - offset.x, canvasY - offset.y);
+    addPoint((canvasX - offset.x) / scale, (canvasY - offset.y) / scale);
     setPendingNote({ pointId: newId, screenX: canvasX, screenY: canvasY });
     setNoteText("");
     setTooltip(null);
@@ -105,7 +110,10 @@ const SkillWebTracker = () => {
     let best = null;
     let bestDist = TOOLTIP_HIT_RADIUS;
     points.forEach((p) => {
-      const dist = Math.hypot(p.x + offset.x - mx, p.y + offset.y - my);
+      const dist = Math.hypot(
+        p.x * scale + offset.x - mx,
+        p.y * scale + offset.y - my,
+      );
       if (dist < bestDist) {
         bestDist = dist;
         best = p;
@@ -127,6 +135,7 @@ const SkillWebTracker = () => {
       />
 
       <div
+        ref={containerRef}
         className="flex-1 relative border-r border-gray-900"
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setTooltip(null)}
@@ -135,6 +144,7 @@ const SkillWebTracker = () => {
           points={points}
           connections={connections}
           offset={offset}
+          scale={scale}
           activeRole={activeRole}
           settings={settings}
           roles={roles}
@@ -224,6 +234,33 @@ const SkillWebTracker = () => {
             </div>
           </div>
         )}
+        <div className="absolute bottom-4 left-4 flex text-gray-500 items-center gap-1 bg-zinc-950 rounded border border-gray-800 overflow-hidden">
+          <span className="px-2 py-1">{Math.round(scale * 100)}%</span>
+          <div className="w-px h-4 bg-gray-800" />
+          <button
+            onClick={() => {
+              const el = containerRef.current;
+              if (!el) return;
+              zoomReset(points, el.getBoundingClientRect());
+            }}
+            title="Reset zoom (100%)"
+            className="flex-row px-2 py-1 text-xs hover:text-gray-300 hover:bg-zinc-800 transition font-mono tabular-nums"
+          >
+            <RotateCw size={20} />
+          </button>
+          <div className="w-px h-4 bg-gray-800" />
+          <button
+            onClick={() => {
+              const el = containerRef.current;
+              if (!el) return;
+              zoomToFit(points, el.getBoundingClientRect());
+            }}
+            title="Fit all content in view"
+            className="px-2 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-zinc-800 transition"
+          >
+            <FullscreenIcon size={20} />
+          </button>
+        </div>
 
         <button
           onClick={() => setShowSettings((s) => !s)}

@@ -4,6 +4,7 @@ export const WebCanvas = ({
   points,
   connections,
   offset,
+  scale,
   activeRole,
   settings,
   roles,
@@ -50,6 +51,10 @@ export const WebCanvas = ({
       ctx.fillStyle = "#0a0a0a";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      ctx.save();
+      ctx.translate(offset.x, offset.y);
+      ctx.scale(scale, scale);
+
       const driftMult = settings.pointDriftRadius / 2;
       const animatedPoints = points.map((point, idx) => {
         const o = pointOffsetsRef.current[idx];
@@ -75,10 +80,8 @@ export const WebCanvas = ({
         clusters.forEach((pts, roleId) => {
           const role = roleMap.get(roleId);
           if (!role) return;
-          const cx =
-            pts.reduce((s, p) => s + p.displayX, 0) / pts.length + offset.x;
-          const cy =
-            pts.reduce((s, p) => s + p.displayY, 0) / pts.length + offset.y;
+          const cx = pts.reduce((s, p) => s + p.displayX, 0) / pts.length;
+          const cy = pts.reduce((s, p) => s + p.displayY, 0) / pts.length;
           const isActive = roleId === activeRole;
 
           ctx.font = isActive ? "bold 11px monospace" : "11px monospace";
@@ -94,8 +97,8 @@ export const WebCanvas = ({
         const to = animatedPoints[conn.toIdx];
         if (!from || !to) return;
 
-        const [fx, fy] = [from.displayX + offset.x, from.displayY + offset.y];
-        const [tx, ty] = [to.displayX + offset.x, to.displayY + offset.y];
+        const [fx, fy] = [from.displayX, from.displayY];
+        const [tx, ty] = [to.displayX, to.displayY];
         const dist = Math.sqrt((tx - fx) ** 2 + (ty - fy) ** 2);
         const curve = Math.sin(timeRef.current + conn.fromIdx * 0.3) * 5;
         const ctrlX = (fx + tx) / 2 + (-(ty - fy) / dist) * curve;
@@ -125,14 +128,11 @@ export const WebCanvas = ({
           baseRadius *
           (1 + (scaleFactor - 1) * Math.log10(durationSec / 1000 + 1));
 
-        const px = point.displayX + offset.x;
-        const py = point.displayY + offset.y;
-
         ctx.fillStyle = point.color + (highlighted ? "ff" : "cc");
         ctx.shadowBlur = highlighted ? 6 : 3;
         ctx.shadowColor = point.color;
         ctx.beginPath();
-        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.arc(point.displayX, point.displayY, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
 
@@ -141,16 +141,18 @@ export const WebCanvas = ({
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
           ctx.fillStyle = point.color + (highlighted ? "cc" : "66");
-          ctx.fillText(point.note, px, py + radius + 3);
+          ctx.fillText(point.note, point.displayX, point.displayY + radius + 3);
         }
       });
+
+      ctx.restore();
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
     animate();
     return () => cancelAnimationFrame(animationRef.current);
-  }, [points, connections, offset, activeRole, settings, roles]);
+  }, [points, connections, offset, scale, activeRole, settings, roles]);
 
   const { onWheel: _onWheel, ...mouseHandlers } = dragHandlers;
 

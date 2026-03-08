@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 
 /**
- *   Ctrl+Z - undo
- *   Ctrl+Shift+Z - redo
- *   Ctrl+Y - redo (alternate)
- *   Ctrl+S - save to file
- *   Ctrl+O - open file picker
- *   Escape - deselect active role
+ *   Ctrl+Z          - undo
+ *   Ctrl+Shift+Z    - redo
+ *   Ctrl+Y          - redo (alternate)
+ *   Ctrl+S          - save to file
+ *   Ctrl+O          - open file picker
+ *   Ctrl+= / Ctrl++ - zoom in
+ *   Ctrl+-          - zoom out
+ *   Escape          - deselect active role
  */
 export const useKeyboardShortcuts = ({
   undo,
@@ -15,6 +17,7 @@ export const useKeyboardShortcuts = ({
   fileInputRef,
   setActiveRole,
   onTimerToggle,
+  onZoom,
 }) => {
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -22,13 +25,9 @@ export const useKeyboardShortcuts = ({
 
       if (!ctrl) {
         const inTextField = ["INPUT", "TEXTAREA"].includes(e.target.tagName);
-
-        switch (true) {
-          case e.code === "Enter" && !inTextField:
-            console.log("Enter");
-            e.preventDefault();
-            onTimerToggle?.();
-            break;
+        if (e.code === "Enter" && !inTextField) {
+          e.preventDefault();
+          onTimerToggle?.();
         }
         return;
       }
@@ -55,6 +54,18 @@ export const useKeyboardShortcuts = ({
           fileInputRef.current?.click();
           break;
 
+        case "Equal":
+        case "NumpadAdd":
+          e.preventDefault();
+          onZoom?.(1.2);
+          break;
+
+        case "Minus":
+        case "NumpadSubtract":
+          e.preventDefault();
+          onZoom?.(1 / 1.2);
+          break;
+
         default:
           break;
       }
@@ -62,5 +73,5 @@ export const useKeyboardShortcuts = ({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [undo, redo, save, fileInputRef, setActiveRole, onTimerToggle]);
+  }, [undo, redo, save, fileInputRef, setActiveRole, onTimerToggle, onZoom]);
 };
