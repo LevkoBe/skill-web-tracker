@@ -14,13 +14,25 @@ export const useKeyboardShortcuts = ({
   save,
   fileInputRef,
   setActiveRole,
+  onTimerToggle,
 }) => {
   useEffect(() => {
     const onKeyDown = (e) => {
       const ctrl = e.ctrlKey || e.metaKey;
 
       if (!ctrl) {
-        if (e.code === "Escape") setActiveRole(null);
+        const inTextField = ["INPUT", "TEXTAREA"].includes(e.target.tagName);
+
+        switch (true) {
+          case e.code === "Escape":
+            setActiveRole(null);
+            break;
+          case e.code === "Enter" && !inTextField:
+            console.log("Enter");
+            e.preventDefault();
+            onTimerToggle?.();
+            break;
+        }
         return;
       }
 
@@ -53,5 +65,5 @@ export const useKeyboardShortcuts = ({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [undo, redo, save, fileInputRef, setActiveRole]);
+  }, [undo, redo, save, fileInputRef, setActiveRole, onTimerToggle]);
 };

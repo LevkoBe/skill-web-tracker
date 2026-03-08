@@ -16,6 +16,40 @@ const SliderField = ({ label, min, max, step, value, onChange, format }) => (
   </div>
 );
 
+const ToggleField = ({ label, value, onChange }) => (
+  <div className="flex items-center justify-between">
+    <label className="text-xs text-gray-500">{label}</label>
+    <button
+      onClick={() => onChange(!value)}
+      style={{
+        position: "relative",
+        width: 36,
+        height: 20,
+        borderRadius: 10,
+        background: value ? "#4b5563" : "#1f2937",
+        flexShrink: 0,
+        border: "none",
+        cursor: "pointer",
+        transition: "background 0.15s ease",
+      }}
+    >
+      <span
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: value ? 18 : 2,
+          transform: "translateY(-50%)",
+          width: 16,
+          height: 16,
+          borderRadius: "50%",
+          background: value ? "#d1d5db" : "#6b7280",
+          transition: "left 0.15s ease",
+        }}
+      />
+    </button>
+  </div>
+);
+
 export const SettingsPanel = ({ settings, onSettingsChange }) => {
   const set = (key, parse) => (e) =>
     onSettingsChange({ ...settings, [key]: parse(e.target.value) });
@@ -55,6 +89,22 @@ export const SettingsPanel = ({ settings, onSettingsChange }) => {
           max={10}
           value={settings.maxProximityConnections}
           onChange={set("maxProximityConnections", parseInt)}
+        />
+        <SliderField
+          label="Duration Scale Factor"
+          min={1}
+          max={41}
+          step={0.1}
+          value={settings.durationScaleFactor ?? 1}
+          onChange={set("durationScaleFactor", parseFloat)}
+          format={(v) => (v === 1 ? "off" : `${parseFloat(v).toFixed(1)}x`)}
+        />
+        <ToggleField
+          label="Timer active by default"
+          value={settings.timerActiveByDefault ?? false}
+          onChange={(v) =>
+            onSettingsChange({ ...settings, timerActiveByDefault: v })
+          }
         />
       </div>
     </div>

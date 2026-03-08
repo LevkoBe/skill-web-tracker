@@ -3,19 +3,24 @@ import { DEFAULT_ROLES } from "../data/roles";
 import { loadState, saveState, clearState } from "../utils/storage";
 import { nextRoleColor } from "../utils/colors";
 import { removeRoleFromGraph } from "../utils/connections";
+import { migratePoints } from "../utils/time";
 
 const DEFAULT_SETTINGS = {
   connectionRange: 150,
   pointDriftRadius: 2,
   pointDriftSpeed: 1,
   maxProximityConnections: 3,
+  timerActiveByDefault: false,
+  durationScaleFactor: 1,
 };
 
 const MAX_HISTORY = 50;
 
 export const useSkillWeb = () => {
   const [roles, setRoles] = useState(() => loadState()?.roles ?? DEFAULT_ROLES);
-  const [points, setPoints] = useState(() => loadState()?.points ?? []);
+  const [points, setPoints] = useState(() =>
+    migratePoints(loadState()?.points ?? []),
+  );
   const [connections, setConnections] = useState(
     () => loadState()?.connections ?? [],
   );
@@ -68,16 +73,29 @@ export const useSkillWeb = () => {
 
     snapshot();
 
+    const now = Date.now();
     const newIdx = points.length;
+    let closedPoints = points;
+    for (let i = points.length - 1; i >= 0; i--) {
+      if (points[i].roleId === activeRole && points[i].endedAt === null) {
+        closedPoints = points.map((p, idx) =>
+          idx === i ? { ...p, endedAt: now } : p,
+        );
+        break;
+      }
+    }
+
     const newPoint = {
-      id: Date.now(),
+      id: now,
       x,
       y,
       roleId: activeRole,
       color: role.color,
+      startedAt: now,
+      endedAt: null,
     };
 
-    const proximityConnections = points
+    const proximityConnections = closedPoints
       .map((p, idx) => ({
         idx,
         dist: Math.hypot(p.x - x, p.y - y),
@@ -92,16 +110,35 @@ export const useSkillWeb = () => {
       .map(({ idx }) => ({ fromIdx: idx, toIdx: newIdx, color: role.color }));
 
     const sequentialConnection =
-      points.length > 0
-        ? [{ fromIdx: points.length - 1, toIdx: newIdx, color: role.color }]
+      closedPoints.length > 0
+        ? [
+            {
+              fromIdx: closedPoints.length - 1,
+              toIdx: newIdx,
+              color: role.color,
+            },
+          ]
         : [];
 
-    setPoints((prev) => [...prev, newPoint]);
+    setPoints([...closedPoints, newPoint]);
     setConnections((prev) => [
       ...prev,
       ...sequentialConnection,
       ...proximityConnections,
     ]);
+  };
+
+  const finalizeLastOpenPoint = () => {
+    if (!activeRole) return;
+    const now = Date.now();
+    for (let i = points.length - 1; i >= 0; i--) {
+      if (points[i].roleId === activeRole && points[i].endedAt === null) {
+        setPoints((prev) =>
+          prev.map((p, idx) => (idx === i ? { ...p, endedAt: now } : p)),
+        );
+        return;
+      }
+    }
   };
 
   const addRole = (name) => {
@@ -177,7 +214,7 @@ export const useSkillWeb = () => {
         const data = JSON.parse(target.result);
         snapshot();
         setRoles(data.roles ?? []);
-        setPoints(data.points ?? []);
+        setPoints(migratePoints(data.points ?? []));
         setConnections(data.connections ?? []);
         setOffset(data.offset ?? { x: 0, y: 0 });
         setSettings(data.settings ?? DEFAULT_SETTINGS);
@@ -214,6 +251,7 @@ export const useSkillWeb = () => {
     deleteRole,
     updateRole,
     updateRoleColor,
+    finalizeLastOpenPoint,
     save,
     load,
     reset,

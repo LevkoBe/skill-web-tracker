@@ -87,6 +87,18 @@ export const WebCanvas = ({
 
       animatedPoints.forEach((point) => {
         const highlighted = activeRole === point.roleId;
+        const baseRadius = highlighted ? 3.5 : 2;
+
+        const scaleFactor = settings.durationScaleFactor ?? 1;
+        const durationMs =
+          point.endedAt === null
+            ? Date.now() - point.startedAt
+            : point.endedAt - point.startedAt;
+        const durationSec = Math.max(0, durationMs) / 1000;
+        const radius =
+          baseRadius *
+          (1 + (scaleFactor - 1) * Math.log10(durationSec / 1000 + 1));
+
         ctx.fillStyle = point.color + (highlighted ? "ff" : "cc");
         ctx.shadowBlur = highlighted ? 6 : 3;
         ctx.shadowColor = point.color;
@@ -94,7 +106,7 @@ export const WebCanvas = ({
         ctx.arc(
           point.displayX + offset.x,
           point.displayY + offset.y,
-          highlighted ? 3.5 : 2,
+          radius,
           0,
           Math.PI * 2,
         );
