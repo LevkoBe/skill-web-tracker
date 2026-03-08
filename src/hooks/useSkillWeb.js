@@ -12,6 +12,8 @@ const DEFAULT_SETTINGS = {
   maxProximityConnections: 3,
   timerActiveByDefault: false,
   durationScaleFactor: 1,
+  showClusterLabels: true,
+  showNoteLabels: true,
 };
 
 const MAX_HISTORY = 50;
@@ -141,6 +143,9 @@ export const useSkillWeb = () => {
     }
   };
 
+  const updatePointNote = (id, note) =>
+    setPoints((prev) => prev.map((p) => (p.id === id ? { ...p, note } : p)));
+
   const addRole = (name) => {
     setRoles((prev) => [
       ...prev,
@@ -252,6 +257,7 @@ export const useSkillWeb = () => {
     updateRole,
     updateRoleColor,
     finalizeLastOpenPoint,
+    updatePointNote,
     save,
     load,
     reset,

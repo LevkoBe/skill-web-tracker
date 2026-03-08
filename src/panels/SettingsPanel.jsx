@@ -93,11 +93,11 @@ export const SettingsPanel = ({ settings, onSettingsChange }) => {
         <SliderField
           label="Duration Scale Factor"
           min={1}
-          max={41}
+          max={3}
           step={0.1}
           value={settings.durationScaleFactor ?? 1}
           onChange={set("durationScaleFactor", parseFloat)}
-          format={(v) => (v === 1 ? "off" : `${parseFloat(v).toFixed(1)}x`)}
+          format={(v) => (v === 1 ? "off" : `${parseFloat(v).toFixed(1)}×`)}
         />
         <ToggleField
           label="Timer active by default"
@@ -105,6 +105,18 @@ export const SettingsPanel = ({ settings, onSettingsChange }) => {
           onChange={(v) =>
             onSettingsChange({ ...settings, timerActiveByDefault: v })
           }
+        />
+        <ToggleField
+          label="Show cluster labels"
+          value={settings.showClusterLabels ?? true}
+          onChange={(v) =>
+            onSettingsChange({ ...settings, showClusterLabels: v })
+          }
+        />
+        <ToggleField
+          label="Show notes on canvas"
+          value={settings.showNoteLabels ?? true}
+          onChange={(v) => onSettingsChange({ ...settings, showNoteLabels: v })}
         />
       </div>
     </div>

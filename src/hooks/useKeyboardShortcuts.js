@@ -24,9 +24,6 @@ export const useKeyboardShortcuts = ({
         const inTextField = ["INPUT", "TEXTAREA"].includes(e.target.tagName);
 
         switch (true) {
-          case e.code === "Escape":
-            setActiveRole(null);
-            break;
           case e.code === "Enter" && !inTextField:
             console.log("Enter");
             e.preventDefault();
