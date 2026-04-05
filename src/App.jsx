@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { DynamicPanelRoot, useI18n } from "@levkobe/c7one";
-import { Waypoints, List, TrendingUp, Settings } from "lucide-react";
+import { Waypoints, List, TrendingUp, Settings, BarChart2 } from "lucide-react";
 import { AppHeader } from "./components/AppHeader";
 import { CanvasWindow } from "./windows/CanvasWindow";
 import { RolesWindow } from "./windows/RolesWindow";
 import { ProgressionWindow } from "./windows/ProgressionWindow";
 import { SettingsWindow } from "./windows/SettingsWindow";
+import { StatsWindow } from "./windows/StatsWindow";
 
 // canvas | roles | progression — 64 / 18 / 18
 const LAYOUT = {
@@ -47,6 +48,12 @@ function App() {
         title: t("window.settings"),
         icon: <Settings size={16} />,
         component: SettingsWindow,
+      },
+      {
+        id: "stats",
+        title: t("window.stats"),
+        icon: <BarChart2 size={16} />,
+        component: StatsWindow,
       },
     ],
     [t],

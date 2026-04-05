@@ -14,6 +14,7 @@ export const MESSAGES_EN = {
   "window.roles": "Roles",
   "window.progression": "Progression",
   "window.settings": "Settings",
+  "window.stats": "Stats",
 
   // ── Roles panel ────────────────────────────────────────────────────────────
   "roles.title": "Roles",
@@ -59,6 +60,11 @@ export const MESSAGES_EN = {
   "progression.title": "Progression",
   "progression.milestone": "Milestone: {n}",
 
+  // ── Stats window ───────────────────────────────────────────────────────────
+  "stats.title": "Stats",
+  "stats.role": "Role",
+  "stats.empty": "No activity recorded yet.",
+
   // ── Settings window ────────────────────────────────────────────────────────
   "settings.canvas.section": "Canvas",
   "settings.connectionRange": "Connection Range: {value}px",
@@ -90,6 +96,7 @@ export const MESSAGES_UK = {
   "window.roles": "Ролі",
   "window.progression": "Прогрес",
   "window.settings": "Налаштування",
+  "window.stats": "Статистика",
 
   // ── Roles panel ────────────────────────────────────────────────────────────
   "roles.title": "Ролі",
@@ -134,6 +141,11 @@ export const MESSAGES_UK = {
   // ── Progression panel ──────────────────────────────────────────────────────
   "progression.title": "Прогрес",
   "progression.milestone": "Рубіж: {n}",
+
+  // ── Stats window ───────────────────────────────────────────────────────────
+  "stats.title": "Статистика",
+  "stats.role": "Роль",
+  "stats.empty": "Активності ще немає.",
 
   // ── Settings window ────────────────────────────────────────────────────────
   "settings.canvas.section": "Полотно",
