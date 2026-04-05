@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Edit2, Trash2, Palette } from "lucide-react";
+import { Card, Button, Input, Textarea } from "@levkobe/c7one";
 import { randomBrightColor } from "../utils/colors";
 
 export const RoleItem = ({
@@ -39,11 +40,10 @@ export const RoleItem = ({
   };
 
   return (
-    <div
-      className={`p-3 rounded cursor-pointer border transition ${
-        isActive
-          ? "border-gray-700 bg-black shadow-inner"
-          : "border-gray-900 hover:bg-black hover:border-gray-800"
+    <Card
+      variant={isActive ? "elevated" : "outlined"}
+      className={`cursor-pointer transition-colors select-none ${
+        isActive ? "" : "hover:bg-bg-elevated"
       }`}
       onClick={onSelect}
       onDoubleClick={startEditing}
@@ -52,19 +52,17 @@ export const RoleItem = ({
       {isEditing ? (
         <div
           ref={formRef}
-          className="space-y-2"
+          className="p-3 space-y-2"
           onClick={(e) => e.stopPropagation()}
         >
-          <input
-            type="text"
+          <Input
             value={tempName}
             onChange={(e) => setTempName(e.target.value)}
             onBlur={handleBlur}
             onKeyDown={(e) => e.key === "Enter" && commitEdits()}
-            className="bg-black border border-gray-800 px-2 py-1 rounded outline-none w-full text-gray-300"
             autoFocus
           />
-          <textarea
+          <Textarea
             value={tempDescription}
             onChange={(e) => setTempDescription(e.target.value)}
             onBlur={handleBlur}
@@ -75,16 +73,16 @@ export const RoleItem = ({
               }
             }}
             placeholder="Description..."
-            className="bg-black border border-gray-800 px-2 py-1 rounded outline-none w-full text-gray-300 text-xs resize-none"
             rows={3}
+            className="resize-none"
           />
         </div>
       ) : (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="relative">
+        <div className="flex items-center justify-between p-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="relative shrink-0">
               <div
-                className="w-3 h-3 rounded-full shadow-sm cursor-pointer"
+                className="w-3 h-3 rounded-full cursor-pointer"
                 style={{
                   backgroundColor: role.color,
                   boxShadow: `0 0 4px ${role.color}`,
@@ -103,41 +101,49 @@ export const RoleItem = ({
                 />
               )}
             </div>
-            <span className="text-gray-300">{role.name}</span>
-            <span className="text-xs text-gray-600 ml-1">Lv.{level}</span>
+            <span className="text-fg-primary text-sm truncate">{role.name}</span>
+            <span className="text-xs text-fg-disabled shrink-0">
+              Lv.{level}
+            </span>
           </div>
 
-          <div className="flex gap-2">
-            <button
+          <div className="flex gap-0.5 shrink-0 ml-2">
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={(e) => {
                 e.stopPropagation();
                 onColorChange(randomBrightColor());
               }}
-              className="text-gray-600 hover:text-gray-400 transition-colors"
               title="Randomize color"
+              className="p-1 h-auto w-auto"
             >
-              <Palette size={14} />
-            </button>
-            <button
+              <Palette size={13} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={startEditing}
-              className="text-gray-600 hover:text-gray-400 transition-colors"
               title="Edit role"
+              className="p-1 h-auto w-auto"
             >
-              <Edit2 size={14} />
-            </button>
-            <button
+              <Edit2 size={13} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete();
               }}
-              className="text-gray-600 hover:text-red-900 transition-colors"
               title="Delete role"
+              className="p-1 h-auto w-auto text-error hover:text-error"
             >
-              <Trash2 size={14} />
-            </button>
+              <Trash2 size={13} />
+            </Button>
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 };

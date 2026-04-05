@@ -8,6 +8,7 @@ export const WebCanvas = ({
   activeRole,
   settings,
   roles,
+  bgColor,
   onCanvasClick,
   dragHandlers,
 }) => {
@@ -45,10 +46,11 @@ export const WebCanvas = ({
     canvas.height = canvas.offsetHeight;
 
     const roleMap = new Map(roles.map((r) => [r.id, r]));
+    const bg = bgColor || "#0f0f0f";
 
     const animate = () => {
       timeRef.current += 0.01 * settings.pointDriftSpeed;
-      ctx.fillStyle = "#0a0a0a";
+      ctx.fillStyle = bg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.save();
@@ -152,7 +154,7 @@ export const WebCanvas = ({
 
     animate();
     return () => cancelAnimationFrame(animationRef.current);
-  }, [points, connections, offset, scale, activeRole, settings, roles]);
+  }, [points, connections, offset, scale, activeRole, settings, roles, bgColor]);
 
   const { onWheel: _onWheel, ...mouseHandlers } = dragHandlers;
 
