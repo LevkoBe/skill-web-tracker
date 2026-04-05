@@ -43,7 +43,7 @@ export const RoleItem = ({
   return (
     <Card
       variant={isActive ? "elevated" : "outlined"}
-      className={`cursor-pointer transition-colors select-none ${
+      className={`p-0 cursor-pointer transition-colors select-none ${
         isActive ? "" : "hover:bg-bg-elevated"
       }`}
       onClick={onSelect}
@@ -53,7 +53,7 @@ export const RoleItem = ({
       {isEditing ? (
         <div
           ref={formRef}
-          className="p-3 space-y-2"
+          className="p-2 space-y-2"
           onClick={(e) => e.stopPropagation()}
         >
           <Input
@@ -79,7 +79,7 @@ export const RoleItem = ({
           />
         </div>
       ) : (
-        <div className="flex items-center justify-between p-3">
+        <div className="flex items-center justify-between px-2.5 py-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="relative shrink-0">
               <div

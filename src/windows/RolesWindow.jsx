@@ -42,7 +42,7 @@ export function RolesWindow() {
       }}
     >
       {/* Header */}
-      <div className="px-4 py-3 border-b border-border shrink-0">
+      <div className="px-3 py-2 border-b border-border shrink-0">
         <Body
           size="sm"
           className="text-fg-disabled uppercase tracking-widest font-semibold"
@@ -52,7 +52,7 @@ export function RolesWindow() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
         {/* Add role input */}
         <div className="flex gap-2">
           <Input
@@ -75,7 +75,7 @@ export function RolesWindow() {
         <Divider />
 
         {/* Role list */}
-        <div className="space-y-1.5">
+        <div className="space-y-1">
           {sortedRoles.map((role) => (
             <RoleItem
               key={role.id}
@@ -94,7 +94,7 @@ export function RolesWindow() {
       </div>
 
       {/* Footer actions */}
-      <div className="shrink-0 px-4 py-3 border-t border-border space-y-2">
+      <div className="shrink-0 px-3 py-2 border-t border-border space-y-1.5">
         <div className="flex gap-2">
           <Button
             onClick={save}
