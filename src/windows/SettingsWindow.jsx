@@ -17,6 +17,7 @@ export function AppSettings() {
   const set = (key, val) => handleSettingsChange({ ...settings, [key]: val });
 
   const durationScaleFactor = settings.durationScaleFactor ?? 1;
+  const breathingStrength = settings.breathingStrength ?? 0.3;
 
   return (
     <div className="space-y-4">
@@ -98,6 +99,23 @@ export function AppSettings() {
             step={0.1}
             value={[durationScaleFactor]}
             onValueChange={([v]) => set("durationScaleFactor", v)}
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label className="text-xs text-fg-muted">
+            {breathingStrength === 0
+              ? t("settings.breathingStrength.off")
+              : t("settings.breathingStrength", {
+                  value: Number(breathingStrength).toFixed(1) + "×",
+                })}
+          </Label>
+          <Slider
+            min={0}
+            max={2}
+            step={0.1}
+            value={[breathingStrength]}
+            onValueChange={([v]) => set("breathingStrength", v)}
           />
         </div>
       </div>

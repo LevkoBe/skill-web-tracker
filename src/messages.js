@@ -83,6 +83,8 @@ export const MESSAGES_EN = {
   "settings.timer.default": "Timer active by default",
   "settings.clusterLabels": "Show cluster labels",
   "settings.noteLabels": "Show notes on canvas",
+  "settings.breathingStrength": "Breathing: {value}x",
+  "settings.breathingStrength.off": "Breathing: off",
 
   // ── Theme presets ──────────────────────────────────────────────────────────
   "theme.dark": "Dark",
@@ -172,6 +174,8 @@ export const MESSAGES_UK = {
   "settings.timer.default": "Таймер увімкнений за замовчуванням",
   "settings.clusterLabels": "Показувати мітки кластерів",
   "settings.noteLabels": "Показувати нотатки на полотні",
+  "settings.breathingStrength": "Дихання: {value}x",
+  "settings.breathingStrength.off": "Дихання: вимк.",
 
   // ── Theme presets ──────────────────────────────────────────────────────────
   "theme.dark": "Темна",

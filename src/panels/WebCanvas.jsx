@@ -89,7 +89,9 @@ export const WebCanvas = ({
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const timeRef = useRef(0);
-  const pointOffsetsRef = useRef([]); // { dx, dy, vx, vy } per node
+  const pointOffsetsRef = useRef([]); // { dx, dy, vx, vy, breathPhase } per node
+  const mouseRef = useRef(null);       // canvas-space { x, y } or null
+  const hoverScalesRef = useRef([]);   // per-node hover multiplier (1..2.5, lerped)
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -97,6 +99,19 @@ export const WebCanvas = ({
     canvas.addEventListener("wheel", dragHandlers.onWheel, { passive: false });
     return () => canvas.removeEventListener("wheel", dragHandlers.onWheel);
   }, [dragHandlers.onWheel]);
+
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const onMove = (e) => { mouseRef.current = { x: e.offsetX, y: e.offsetY }; };
+    const onLeave = () => { mouseRef.current = null; };
+    canvas.addEventListener("mousemove", onMove);
+    canvas.addEventListener("mouseleave", onLeave);
+    return () => {
+      canvas.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
 
   React.useEffect(() => {
     while (pointOffsetsRef.current.length < points.length) {
@@ -107,7 +122,11 @@ export const WebCanvas = ({
         dy: 0,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
+        breathPhase: Math.random() * Math.PI * 2,
       });
+    }
+    while (hoverScalesRef.current.length < points.length) {
+      hoverScalesRef.current.push(1);
     }
   }, [points.length]);
 
@@ -246,7 +265,11 @@ export const WebCanvas = ({
 
       // Nodes
       const scaleFactor = settings.durationScaleFactor ?? 1;
-      animatedPoints.forEach((point) => {
+      const breathAmp = settings.breathingStrength ?? 0.3;
+      const mouse = mouseRef.current;
+      const hoverThreshSq = (20 / scale) ** 2; // 20px screen-space threshold
+
+      animatedPoints.forEach((point, idx) => {
         const highlighted = activeRole === point.roleId;
         const baseRadius = highlighted ? 3.5 : 2;
         const durationMs =
@@ -254,13 +277,32 @@ export const WebCanvas = ({
             ? Date.now() - point.startedAt
             : point.endedAt - point.startedAt;
         const durationSec = Math.max(0, durationMs) / 1000;
-        const radius =
+        const durationRadius =
           baseRadius *
           (1 + (scaleFactor - 1) * Math.log10(durationSec / 1000 + 1));
 
+        // Breathing pulse
+        const o = pointOffsetsRef.current[idx];
+        const breathMult = o
+          ? 1 + breathAmp * 0.35 * Math.sin(timeRef.current * 1.8 + o.breathPhase)
+          : 1;
+
+        // Hover scale (lerp toward target each frame)
+        const wx = (mouse ? (mouse.x - offset.x) / scale : Infinity);
+        const wy = (mouse ? (mouse.y - offset.y) / scale : Infinity);
+        const dSq = (point.displayX - wx) ** 2 + (point.displayY - wy) ** 2;
+        const hovered = dSq < hoverThreshSq;
+        const targetHover = hovered ? 2.5 : 1;
+        hoverScalesRef.current[idx] = hoverScalesRef.current[idx] ?? 1;
+        hoverScalesRef.current[idx] +=
+          (targetHover - hoverScalesRef.current[idx]) * 0.12;
+        const hoverMult = hoverScalesRef.current[idx];
+
+        const radius = durationRadius * breathMult * hoverMult;
+
         const shifted = shiftedRoleColor.get(point.roleId) ?? point.color;
-        ctx.fillStyle = shifted + (highlighted ? "ff" : "cc");
-        ctx.shadowBlur = highlighted ? 6 : 3;
+        ctx.fillStyle = shifted + (highlighted || hovered ? "ff" : "cc");
+        ctx.shadowBlur = hovered ? 14 : highlighted ? 6 : 3;
         ctx.shadowColor = shifted;
         ctx.beginPath();
         ctx.arc(point.displayX, point.displayY, radius, 0, Math.PI * 2);
@@ -271,7 +313,7 @@ export const WebCanvas = ({
           ctx.font = "9px monospace";
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
-          ctx.fillStyle = shifted + (highlighted ? "cc" : "66");
+          ctx.fillStyle = shifted + (highlighted || hovered ? "cc" : "66");
           ctx.fillText(
             point.note,
             point.displayX,

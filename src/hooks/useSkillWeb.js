@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS = {
   durationScaleFactor: 1,
   showClusterLabels: true,
   showNoteLabels: true,
+  breathingStrength: 0.3,
 };
 
 const MAX_HISTORY = 50;
