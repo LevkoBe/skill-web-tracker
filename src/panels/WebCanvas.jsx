@@ -89,7 +89,7 @@ export const WebCanvas = ({
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const timeRef = useRef(0);
-  const pointOffsetsRef = useRef([]);
+  const pointOffsetsRef = useRef([]); // { dx, dy, vx, vy } per node
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -100,13 +100,13 @@ export const WebCanvas = ({
 
   React.useEffect(() => {
     while (pointOffsetsRef.current.length < points.length) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 0.05 + Math.random() * 0.1;
       pointOffsetsRef.current.push({
-        x: Math.random() * Math.PI * 2,
-        y: Math.random() * Math.PI * 2,
-        speedX: 0.01 + Math.random() * 0.02,
-        speedY: 0.01 + Math.random() * 0.02,
-        radiusX: 1 + Math.random() * 2,
-        radiusY: 1 + Math.random() * 2,
+        dx: 0,
+        dy: 0,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
       });
     }
   }, [points.length]);
@@ -137,7 +137,7 @@ export const WebCanvas = ({
     });
 
     const animate = () => {
-      timeRef.current += 0.01 * settings.pointDriftSpeed;
+      timeRef.current += 0.01;
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -145,18 +145,51 @@ export const WebCanvas = ({
       ctx.translate(offset.x, offset.y);
       ctx.scale(scale, scale);
 
-      const driftMult = settings.pointDriftRadius / 2;
+      const maxRadius = settings.pointDriftRadius * 5; // canvas units
+      const maxSpeed = settings.pointDriftSpeed * 0.25;
+      const accelMag = settings.pointDriftSpeed * 0.012;
+
       const animatedPoints = points.map((point, idx) => {
         const o = pointOffsetsRef.current[idx];
-        if (!o) return point;
+        if (!o) return { ...point, displayX: point.x, displayY: point.y };
+
+        if (maxRadius > 0) {
+          // Random acceleration nudge each frame
+          o.vx += (Math.random() - 0.5) * accelMag;
+          o.vy += (Math.random() - 0.5) * accelMag;
+
+          // Cap speed
+          const spd = Math.hypot(o.vx, o.vy);
+          if (spd > maxSpeed) {
+            o.vx = (o.vx / spd) * maxSpeed;
+            o.vy = (o.vy / spd) * maxSpeed;
+          }
+
+          // Advance position
+          o.dx += o.vx;
+          o.dy += o.vy;
+
+          // Soft boundary: push back when beyond radius
+          const dist = Math.hypot(o.dx, o.dy);
+          if (dist > maxRadius) {
+            const over = dist - maxRadius;
+            o.vx -= (o.dx / dist) * over * 0.08;
+            o.vy -= (o.dy / dist) * over * 0.08;
+            o.dx = (o.dx / dist) * maxRadius;
+            o.dy = (o.dy / dist) * maxRadius;
+          }
+        } else {
+          // Radius = 0: dampen back to center
+          o.vx *= 0.85;
+          o.vy *= 0.85;
+          o.dx *= 0.85;
+          o.dy *= 0.85;
+        }
+
         return {
           ...point,
-          displayX:
-            point.x +
-            Math.sin(timeRef.current * o.speedX + o.x) * o.radiusX * driftMult,
-          displayY:
-            point.y +
-            Math.sin(timeRef.current * o.speedY + o.y) * o.radiusY * driftMult,
+          displayX: point.x + o.dx,
+          displayY: point.y + o.dy,
         };
       });
 
