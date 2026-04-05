@@ -1,9 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { C7OneProvider, I18nProvider } from "@levkobe/c7one";
-import { dark } from "@levkobe/c7one";
 import { SkillWebProvider } from "./context/SkillContext";
 import { MESSAGES_EN, MESSAGES_UK } from "./messages";
+import { DARK_COLORS } from "./themes";
 import "./index.css";
 import App from "./App.jsx";
 
@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")).render(
     >
       <C7OneProvider
         defaultMode="classic"
-        config={{ colors: dark }}
+        config={{ colors: DARK_COLORS }}
         storageKey="skill-web-theme"
       >
         <SkillWebProvider>

@@ -6,10 +6,9 @@ import {
   Label,
   Body,
   Divider,
-  dark,
-  light,
   useI18n,
 } from "@levkobe/c7one";
+import { DARK_COLORS, LIGHT_COLORS } from "../themes";
 import { useSkillContext } from "../context/SkillContext";
 
 export function AppSettings() {
@@ -144,12 +143,12 @@ export function SettingsWindow() {
           {
             label: t("theme.dark"),
             icon: <Moon size={12} />,
-            apply: (ctx) => ctx.setColors(dark),
+            apply: (ctx) => ctx.setColors(DARK_COLORS),
           },
           {
             label: t("theme.light"),
             icon: <Sun size={12} />,
-            apply: (ctx) => ctx.setColors(light),
+            apply: (ctx) => ctx.setColors(LIGHT_COLORS),
           },
         ]}
         renderAppSettings={() => <AppSettings />}

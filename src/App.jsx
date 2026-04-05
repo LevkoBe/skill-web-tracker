@@ -1,19 +1,20 @@
 import { useMemo } from "react";
 import { DynamicPanelRoot, useI18n } from "@levkobe/c7one";
-import { Activity, List, TrendingUp, Settings } from "lucide-react";
+import { Waypoints, List, TrendingUp, Settings } from "lucide-react";
 import { AppHeader } from "./components/AppHeader";
 import { CanvasWindow } from "./windows/CanvasWindow";
 import { RolesWindow } from "./windows/RolesWindow";
 import { ProgressionWindow } from "./windows/ProgressionWindow";
 import { SettingsWindow } from "./windows/SettingsWindow";
 
+// canvas | roles | progression — 64 / 18 / 18
 const LAYOUT = {
   type: "group",
   direction: "horizontal",
-  sizes: [22, 56, 22],
+  sizes: [64, 18, 18],
   children: [
-    { type: "leaf", windowId: "roles" },
     { type: "leaf", windowId: "canvas", isDefault: true },
+    { type: "leaf", windowId: "roles" },
     { type: "leaf", windowId: "progression" },
   ],
 };
@@ -26,7 +27,7 @@ function App() {
       {
         id: "canvas",
         title: t("window.canvas"),
-        icon: <Activity size={16} />,
+        icon: <Waypoints size={16} />,
         component: CanvasWindow,
       },
       {

@@ -7,9 +7,8 @@ import {
   ThemeToggleButton,
   useC7One,
   useI18n,
-  dark,
-  light,
 } from "@levkobe/c7one";
+import { DARK_COLORS, LIGHT_COLORS } from "../themes";
 import { AppSettings } from "../windows/SettingsWindow";
 
 export function AppHeader() {
@@ -72,8 +71,8 @@ export function AppHeader() {
         </div>
 
         <ThemeToggleButton
-          dark={dark}
-          light={light}
+          dark={DARK_COLORS}
+          light={LIGHT_COLORS}
           size="sm"
           variant="secondary"
           title={t("app.toggleTheme")}
@@ -126,12 +125,12 @@ export function AppHeader() {
             {
               label: t("theme.dark"),
               icon: <Moon size={12} />,
-              apply: (ctx) => ctx.setColors(dark),
+              apply: (ctx) => ctx.setColors(DARK_COLORS),
             },
             {
               label: t("theme.light"),
               icon: <Sun size={12} />,
-              apply: (ctx) => ctx.setColors(light),
+              apply: (ctx) => ctx.setColors(LIGHT_COLORS),
             },
           ]}
           renderAppSettings={() => <AppSettings />}
