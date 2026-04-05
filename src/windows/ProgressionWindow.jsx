@@ -1,9 +1,10 @@
-import { Body, Badge } from "@levkobe/c7one";
+import { Body, Badge, useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 import { useRoleStats } from "../hooks/useRoleStats";
 import { FIBONACCI_SET } from "../utils/fibonacci";
 
 export function ProgressionWindow() {
+  const { t } = useI18n();
   const { roles, points } = useSkillContext();
   const { pointCounts, sortedRoles } = useRoleStats(roles, points);
 
@@ -14,7 +15,7 @@ export function ProgressionWindow() {
           size="sm"
           className="text-fg-disabled uppercase tracking-widest font-semibold"
         >
-          Progression
+          {t("progression.title")}
         </Body>
       </div>
 
@@ -61,7 +62,11 @@ export function ProgressionWindow() {
                             }
                           : {}
                       }
-                      title={isMilestone ? `Milestone: ${num}` : String(num)}
+                      title={
+                        isMilestone
+                          ? t("progression.milestone", { n: num })
+                          : String(num)
+                      }
                     />
                   );
                 })}

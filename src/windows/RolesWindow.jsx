@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Plus, Save, Upload, RotateCcw } from "lucide-react";
-import { Button, Input, Body, Divider } from "@levkobe/c7one";
+import { Button, Input, Body, Divider, useI18n } from "@levkobe/c7one";
 import { RoleItem } from "../components/RoleItem";
 import { useRoleStats } from "../hooks/useRoleStats";
 import { useSkillContext } from "../context/SkillContext";
 
 export function RolesWindow() {
+  const { t } = useI18n();
   const {
     roles,
     points,
@@ -30,13 +31,7 @@ export function RolesWindow() {
   };
 
   const handleReset = () => {
-    if (
-      confirm(
-        "Reset everything to defaults?\n\nThis will clear all roles, points, and connections.",
-      )
-    ) {
-      reset();
-    }
+    if (confirm(t("roles.reset.confirm"))) reset();
   };
 
   return (
@@ -52,7 +47,7 @@ export function RolesWindow() {
           size="sm"
           className="text-fg-disabled uppercase tracking-widest font-semibold"
         >
-          Roles
+          {t("roles.title")}
         </Body>
       </div>
 
@@ -64,14 +59,14 @@ export function RolesWindow() {
             value={newRoleName}
             onChange={(e) => setNewRoleName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAddRole()}
-            placeholder="New role..."
+            placeholder={t("roles.add.placeholder")}
             className="flex-1"
           />
           <Button
             onClick={handleAddRole}
             variant="secondary"
             size="sm"
-            title="Add role"
+            title={t("roles.add.title")}
           >
             <Plus size={16} />
           </Button>
@@ -107,7 +102,7 @@ export function RolesWindow() {
             size="sm"
             className="flex-1 gap-1.5"
           >
-            <Save size={14} /> Save
+            <Save size={14} /> {t("roles.save")}
           </Button>
           <Button
             onClick={triggerLoad}
@@ -115,7 +110,7 @@ export function RolesWindow() {
             size="sm"
             className="flex-1 gap-1.5"
           >
-            <Upload size={14} /> Load
+            <Upload size={14} /> {t("roles.load")}
           </Button>
         </div>
         <Button
@@ -124,7 +119,7 @@ export function RolesWindow() {
           size="sm"
           className="w-full gap-1.5"
         >
-          <RotateCcw size={14} /> Reset All
+          <RotateCcw size={14} /> {t("roles.reset")}
         </Button>
       </div>
     </div>

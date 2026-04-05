@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Edit2, Trash2, Palette } from "lucide-react";
-import { Card, Button, Input, Textarea } from "@levkobe/c7one";
+import { Card, Button, Input, Textarea, useI18n } from "@levkobe/c7one";
 import { randomBrightColor } from "../utils/colors";
 
 export const RoleItem = ({
@@ -12,6 +12,7 @@ export const RoleItem = ({
   onColorChange,
   onUpdateRole,
 }) => {
+  const { t } = useI18n();
   const [isEditing, setIsEditing] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [tempName, setTempName] = useState(role.name);
@@ -47,7 +48,7 @@ export const RoleItem = ({
       }`}
       onClick={onSelect}
       onDoubleClick={startEditing}
-      title={role.description || "No description"}
+      title={role.description || ""}
     >
       {isEditing ? (
         <div
@@ -72,7 +73,7 @@ export const RoleItem = ({
                 commitEdits();
               }
             }}
-            placeholder="Description..."
+            placeholder={t("role.description.placeholder")}
             rows={3}
             className="resize-none"
           />
@@ -103,7 +104,7 @@ export const RoleItem = ({
             </div>
             <span className="text-fg-primary text-sm truncate">{role.name}</span>
             <span className="text-xs text-fg-disabled shrink-0">
-              Lv.{level}
+              {t("role.level", { n: level })}
             </span>
           </div>
 
@@ -115,7 +116,7 @@ export const RoleItem = ({
                 e.stopPropagation();
                 onColorChange(randomBrightColor());
               }}
-              title="Randomize color"
+              title={t("role.color.randomize")}
               className="p-1 h-auto w-auto"
             >
               <Palette size={13} />
@@ -124,7 +125,7 @@ export const RoleItem = ({
               variant="ghost"
               size="sm"
               onClick={startEditing}
-              title="Edit role"
+              title={t("role.edit")}
               className="p-1 h-auto w-auto"
             >
               <Edit2 size={13} />
@@ -136,7 +137,7 @@ export const RoleItem = ({
                 e.stopPropagation();
                 onDelete();
               }}
-              title="Delete role"
+              title={t("role.delete")}
               className="p-1 h-auto w-auto text-error hover:text-error"
             >
               <Trash2 size={13} />

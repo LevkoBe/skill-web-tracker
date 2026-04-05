@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Fullscreen, HelpCircle, Undo2, Redo2, RotateCw } from "lucide-react";
-import { Card, Button, Divider, useC7One } from "@levkobe/c7one";
+import { Card, Button, Divider, useC7One, useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 import { useCanvasDrag } from "../hooks/useCanvasDrag";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
@@ -9,18 +9,8 @@ import { formatElapsed } from "../utils/time";
 
 const TOOLTIP_HIT_RADIUS = 12;
 
-const SHORTCUTS = [
-  ["Enter", "Toggle timer"],
-  ["Ctrl+Z", "Undo"],
-  ["Ctrl+Shift+Z / Ctrl+Y", "Redo"],
-  ["Ctrl+S", "Save to file"],
-  ["Ctrl+O", "Open file"],
-  ["Ctrl++ / Ctrl+=", "Zoom in"],
-  ["Ctrl+-", "Zoom out"],
-  ["Pinch / Ctrl+scroll", "Zoom"],
-];
-
 export function CanvasWindow() {
+  const { t } = useI18n();
   const {
     roles,
     points,
@@ -115,6 +105,17 @@ export function CanvasWindow() {
 
   const activeRoleName = roles.find((r) => r.id === activeRole)?.name;
 
+  const shortcuts = [
+    ["Enter", t("shortcut.enter")],
+    ["Ctrl+Z", t("shortcut.ctrlZ")],
+    ["Ctrl+Shift+Z / Ctrl+Y", t("shortcut.ctrlShiftZ")],
+    ["Ctrl+S", t("shortcut.ctrlS")],
+    ["Ctrl+O", t("shortcut.ctrlO")],
+    ["Ctrl++ / Ctrl+=", t("shortcut.zoomIn")],
+    ["Ctrl+-", t("shortcut.zoomOut")],
+    ["Pinch / Ctrl+scroll", t("shortcut.pinch")],
+  ];
+
   return (
     <div
       ref={containerRef}
@@ -152,13 +153,13 @@ export function CanvasWindow() {
               setNoteText("");
             }
           }}
-          placeholder="Note… (Enter to save, Esc to skip)"
+          placeholder={t("canvas.note.placeholder")}
           style={{
             position: "absolute",
             left: pendingNote.screenX + 10,
             top: pendingNote.screenY + 10,
           }}
-          className="bg-bg-elevated border border-border text-fg-primary text-xs px-2 py-1 rounded-[var(--radius)] outline-none w-48 placeholder:text-fg-disabled shadow-c7-sm"
+          className="bg-bg-elevated border border-border text-fg-primary text-xs px-2 py-1 rounded-(--radius) outline-none w-48 placeholder:text-fg-disabled shadow-c7-sm"
         />
       )}
 
@@ -177,7 +178,7 @@ export function CanvasWindow() {
                 top: tooltip.screenY + 14,
                 pointerEvents: "none",
               }}
-              className="bg-bg-elevated border border-border text-xs rounded-[var(--radius)] px-2 py-1.5 shadow-c7-sm"
+              className="bg-bg-elevated border border-border text-xs rounded-(--radius) px-2 py-1.5 shadow-c7-sm"
             >
               <div className="text-fg-muted font-mono tabular-nums">
                 {formatElapsed(Math.max(0, durationMs))}
@@ -201,7 +202,9 @@ export function CanvasWindow() {
           className="absolute top-4 left-4 flex items-center gap-3 px-4 py-2 border border-border shadow-c7-sm"
         >
           <div>
-            <span className="text-fg-disabled text-sm">Active:</span>
+            <span className="text-fg-disabled text-sm">
+              {t("canvas.active.label")}
+            </span>
             <span className="ml-2 text-fg-primary">{activeRoleName}</span>
           </div>
           <div className="flex items-center gap-2 border-l border-border pl-3">
@@ -216,9 +219,11 @@ export function CanvasWindow() {
               variant={timer.isRunning ? "destructive" : "secondary"}
               size="sm"
               onClick={handleTimerToggle}
-              title="Toggle timer (Enter)"
+              title={t("canvas.timer.toggle")}
             >
-              {timer.isRunning ? "Stop" : "Start"}
+              {timer.isRunning
+                ? t("canvas.timer.stop")
+                : t("canvas.timer.start")}
             </Button>
           </div>
         </Card>
@@ -239,7 +244,7 @@ export function CanvasWindow() {
             if (!el) return;
             zoomReset(points, el.getBoundingClientRect());
           }}
-          title="Reset zoom (100%)"
+          title={t("canvas.zoom.reset")}
           className="px-2 py-1 hover:text-fg-primary hover:bg-bg-elevated transition-colors"
         >
           <RotateCw size={16} />
@@ -251,14 +256,14 @@ export function CanvasWindow() {
             if (!el) return;
             zoomToFit(points, el.getBoundingClientRect());
           }}
-          title="Fit all content in view"
+          title={t("canvas.zoom.fit")}
           className="px-2 py-1 hover:text-fg-primary hover:bg-bg-elevated transition-colors"
         >
           <Fullscreen size={16} />
         </button>
       </Card>
 
-      {/* Action buttons (top right) */}
+      {/* Action buttons */}
       <Card
         variant="flat"
         className="absolute top-4 right-4 flex items-center border border-border overflow-hidden"
@@ -266,17 +271,17 @@ export function CanvasWindow() {
         {[
           {
             icon: <HelpCircle size={15} />,
-            title: "Keyboard shortcuts (?)",
+            title: t("canvas.shortcuts.button"),
             onClick: () => setShowHelp((s) => !s),
           },
           {
             icon: <Undo2 size={15} />,
-            title: "Undo (Ctrl+Z)",
+            title: t("canvas.undo"),
             onClick: undo,
           },
           {
             icon: <Redo2 size={15} />,
-            title: "Redo (Ctrl+Shift+Z)",
+            title: t("canvas.redo"),
             onClick: redo,
           },
         ].map(({ icon, title, onClick }, i, arr) => (
@@ -300,11 +305,11 @@ export function CanvasWindow() {
           className="absolute top-14 right-4 border border-border shadow-c7-sm text-xs text-fg-muted w-64 overflow-hidden"
         >
           <div className="px-3 py-2 border-b border-border text-fg-primary font-medium text-sm">
-            Keyboard shortcuts
+            {t("canvas.help.title")}
           </div>
           <table className="w-full">
             <tbody>
-              {SHORTCUTS.map(([key, desc]) => (
+              {shortcuts.map(([key, desc]) => (
                 <tr key={key} className="border-b border-border last:border-0">
                   <td className="px-3 py-1.5 font-mono text-fg-disabled whitespace-nowrap">
                     {key}

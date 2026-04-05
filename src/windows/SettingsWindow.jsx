@@ -8,12 +8,16 @@ import {
   Divider,
   dark,
   light,
+  useI18n,
 } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 
-function AppSettings() {
+export function AppSettings() {
+  const { t } = useI18n();
   const { settings, handleSettingsChange } = useSkillContext();
   const set = (key, val) => handleSettingsChange({ ...settings, [key]: val });
+
+  const durationScaleFactor = settings.durationScaleFactor ?? 1;
 
   return (
     <div className="space-y-4">
@@ -21,13 +25,15 @@ function AppSettings() {
         size="sm"
         className="text-fg-disabled uppercase tracking-widest font-semibold"
       >
-        Canvas
+        {t("settings.canvas.section")}
       </Body>
 
       <div className="space-y-4">
         <div className="space-y-1.5">
           <Label className="text-xs text-fg-muted">
-            Connection Range: {settings.connectionRange}px
+            {t("settings.connectionRange", {
+              value: settings.connectionRange,
+            })}
           </Label>
           <Slider
             min={50}
@@ -40,7 +46,7 @@ function AppSettings() {
 
         <div className="space-y-1.5">
           <Label className="text-xs text-fg-muted">
-            Drift Radius: {settings.pointDriftRadius}
+            {t("settings.driftRadius", { value: settings.pointDriftRadius })}
           </Label>
           <Slider
             min={0}
@@ -53,7 +59,7 @@ function AppSettings() {
 
         <div className="space-y-1.5">
           <Label className="text-xs text-fg-muted">
-            Drift Speed: {settings.pointDriftSpeed}x
+            {t("settings.driftSpeed", { value: settings.pointDriftSpeed })}
           </Label>
           <Slider
             min={0}
@@ -66,7 +72,9 @@ function AppSettings() {
 
         <div className="space-y-1.5">
           <Label className="text-xs text-fg-muted">
-            Max Connections: {settings.maxProximityConnections}
+            {t("settings.maxConnections", {
+              value: settings.maxProximityConnections,
+            })}
           </Label>
           <Slider
             min={1}
@@ -79,16 +87,17 @@ function AppSettings() {
 
         <div className="space-y-1.5">
           <Label className="text-xs text-fg-muted">
-            Duration Scale:{" "}
-            {(settings.durationScaleFactor ?? 1) === 1
-              ? "off"
-              : `${Number(settings.durationScaleFactor).toFixed(1)}×`}
+            {durationScaleFactor === 1
+              ? t("settings.durationScale.off")
+              : t("settings.durationScale", {
+                  value: Number(durationScaleFactor).toFixed(1) + "×",
+                })}
           </Label>
           <Slider
             min={1}
             max={3}
             step={0.1}
-            value={[settings.durationScaleFactor ?? 1]}
+            value={[durationScaleFactor]}
             onValueChange={([v]) => set("durationScaleFactor", v)}
           />
         </div>
@@ -100,17 +109,17 @@ function AppSettings() {
         <Toggle
           checked={settings.timerActiveByDefault ?? false}
           onCheckedChange={(v) => set("timerActiveByDefault", v)}
-          label="Timer active by default"
+          label={t("settings.timer.default")}
         />
         <Toggle
           checked={settings.showClusterLabels ?? true}
           onCheckedChange={(v) => set("showClusterLabels", v)}
-          label="Show cluster labels"
+          label={t("settings.clusterLabels")}
         />
         <Toggle
           checked={settings.showNoteLabels ?? true}
           onCheckedChange={(v) => set("showNoteLabels", v)}
-          label="Show notes on canvas"
+          label={t("settings.noteLabels")}
         />
       </div>
     </div>
@@ -118,6 +127,8 @@ function AppSettings() {
 }
 
 export function SettingsWindow() {
+  const { t } = useI18n();
+
   return (
     <div className="h-full overflow-y-auto p-4">
       <SettingsPanel
@@ -131,12 +142,12 @@ export function SettingsWindow() {
         ]}
         presets={[
           {
-            label: "Dark",
+            label: t("theme.dark"),
             icon: <Moon size={12} />,
             apply: (ctx) => ctx.setColors(dark),
           },
           {
-            label: "Light",
+            label: t("theme.light"),
             icon: <Sun size={12} />,
             apply: (ctx) => ctx.setColors(light),
           },
