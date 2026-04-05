@@ -1,19 +1,35 @@
-import rolesData from "../data/roles.json";
+import rolesEn from "../data/roles.json";
+import rolesUk from "../data/roles.uk.json";
+import techniquesEn from "../data/techniques.json";
+import techniquesUk from "../data/techniques.uk.json";
 import { colorForRole } from "./colors";
 
 /** Ensure every role has a color (generated if missing). */
 export const enrichRole = (role) =>
   role.color ? role : { ...role, color: colorForRole(role) };
 
-/** All roles with generated colors, including shadow ones (for reference/navigation). */
-export const ALL_ROLES_ENRICHED = rolesData.map(enrichRole);
+const rolesDataByLocale = { en: rolesEn, uk: rolesUk };
+const techniquesDataByLocale = { en: techniquesEn, uk: techniquesUk };
 
 /**
- * Default set loaded on first run / reset — shadow roles are excluded so they
- * don't appear to general users unless they were explicitly saved.
+ * Default roles for a given locale — shadow types excluded.
+ * Called once during initialization; afterwards the user's saved list is used as-is.
  */
+export const getDefaultRoles = (locale = "en") => {
+  const data = rolesDataByLocale[locale] ?? rolesEn;
+  return data.filter((r) => r.type === "positive").map(enrichRole);
+};
+
+/** Default techniques for a given locale. */
+export const getDefaultTechniques = (locale = "en") => [
+  ...(techniquesDataByLocale[locale] ?? techniquesEn),
+];
+
+// Keep these exports so existing imports (e.g. RoleCardModal) still resolve.
+// They always use English — the static fallback used for navigation/reference only.
+export const ALL_ROLES_ENRICHED = rolesEn.map(enrichRole);
 export const DEFAULT_ROLES_ENRICHED = ALL_ROLES_ENRICHED.filter(
-  (r) => r.type !== "shadow",
+  (r) => r.type === "positive",
 );
 
 const isOldFormat = (role) =>
@@ -42,17 +58,15 @@ export const migrateRoles = (savedRoles, savedPoints = []) => {
   const idMap = new Map(); // old numeric/string id → new string id
 
   const roles = savedRoles.map((oldRole) => {
-    const match = rolesData.find(
+    const match = rolesEn.find(
       (r) => r.name.toLowerCase() === oldRole.name.toLowerCase(),
     );
 
     if (match) {
       idMap.set(oldRole.id, match.id);
-      // Preserve the user's color if they had one
       return enrichRole({ ...match, color: oldRole.color ?? undefined });
     }
 
-    // Unknown custom role — keep it as a minimal new-format entry
     const newId = `custom-${oldRole.id}`;
     idMap.set(oldRole.id, newId);
     return {
@@ -70,7 +84,6 @@ export const migrateRoles = (savedRoles, savedPoints = []) => {
     };
   });
 
-  // Re-map point roleIds
   const points = savedPoints.map((p) => ({
     ...p,
     roleId: idMap.has(p.roleId) ? idMap.get(p.roleId) : p.roleId,

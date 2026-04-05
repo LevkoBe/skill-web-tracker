@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from "react";
+import { useI18n } from "@levkobe/c7one";
 import { loadState, saveState, clearState } from "../utils/storage";
 import { nextRoleColor } from "../utils/colors";
 import { removeRoleFromGraph } from "../utils/connections";
 import { migratePoints } from "../utils/time";
 import {
-  DEFAULT_ROLES_ENRICHED,
   enrichRole,
   migrateRoles,
+  getDefaultRoles,
+  getDefaultTechniques,
 } from "../utils/migrate";
-import techniquesData from "../data/techniques.json";
 
 const DEFAULT_SETTINGS = {
   connectionRange: 150,
@@ -24,23 +25,24 @@ const DEFAULT_SETTINGS = {
 
 const MAX_HISTORY = 50;
 
-const getInitialState = () => {
+// Plain function — receives locale as an argument so it has no hook dependency.
+const getInitialState = (locale) => {
   const saved = loadState();
   if (!saved) {
     return {
-      roles: DEFAULT_ROLES_ENRICHED,
+      roles: getDefaultRoles(locale),
       points: [],
       connections: [],
       offset: { x: 0, y: 0 },
       settings: DEFAULT_SETTINGS,
-      techniques: [...techniquesData],
+      techniques: getDefaultTechniques(locale),
     };
   }
 
   const migratedPoints = migratePoints(saved.points ?? []);
   const { roles, points } = saved.roles?.length
-    ? migrateRoles(saved.roles, migratedPoints)   // load everything, including shadow
-    : { roles: DEFAULT_ROLES_ENRICHED, points: migratedPoints }; // no saved roles → use defaults (no shadow)
+    ? migrateRoles(saved.roles, migratedPoints)
+    : { roles: getDefaultRoles(locale), points: migratedPoints };
 
   return {
     roles,
@@ -48,12 +50,15 @@ const getInitialState = () => {
     connections: saved.connections ?? [],
     offset: saved.offset ?? { x: 0, y: 0 },
     settings: { ...DEFAULT_SETTINGS, ...(saved.settings ?? {}) },
-    techniques: saved.techniques ?? [...techniquesData],
+    techniques: saved.techniques ?? getDefaultTechniques(locale),
   };
 };
 
 export const useSkillWeb = () => {
-  const [init] = useState(getInitialState);
+  const { locale } = useI18n();
+
+  // useState initializer runs once — capture locale at that moment.
+  const [init] = useState(() => getInitialState(locale));
 
   const [roles, setRoles] = useState(() => init.roles);
   const [points, setPoints] = useState(() => init.points);
@@ -142,13 +147,7 @@ export const useSkillWeb = () => {
 
     const sequentialConnection =
       closedPoints.length > 0
-        ? [
-            {
-              fromIdx: closedPoints.length - 1,
-              toIdx: newIdx,
-              color: role.color,
-            },
-          ]
+        ? [{ fromIdx: closedPoints.length - 1, toIdx: newIdx, color: role.color }]
         : [];
 
     setPoints([...closedPoints, newPoint]);
@@ -226,7 +225,7 @@ export const useSkillWeb = () => {
     );
   };
 
-  // ── Techniques CRUD ──────────────────────────────────────────────────────────
+  // ── Techniques CRUD ────────────────────────────────────────────────────────
 
   const addTechnique = (name, description = "") => {
     setTechniques((prev) => [
@@ -243,17 +242,11 @@ export const useSkillWeb = () => {
   const deleteTechnique = (id) =>
     setTechniques((prev) => prev.filter((t) => t.id !== id));
 
-  // ── File I/O ──────────────────────────────────────────────────────────────────
+  // ── File I/O ───────────────────────────────────────────────────────────────
 
   const save = () => {
     const blob = new Blob(
-      [
-        JSON.stringify(
-          { roles, points, connections, offset, settings, techniques },
-          null,
-          2,
-        ),
-      ],
+      [JSON.stringify({ roles, points, connections, offset, settings, techniques }, null, 2)],
       { type: "application/json" },
     );
     const url = URL.createObjectURL(blob);
@@ -280,7 +273,8 @@ export const useSkillWeb = () => {
         setConnections(data.connections ?? []);
         setOffset(data.offset ?? { x: 0, y: 0 });
         setSettings({ ...DEFAULT_SETTINGS, ...(data.settings ?? {}) });
-        setTechniques(data.techniques ?? [...techniquesData]);
+        // Loaded files use whatever techniques were saved; no locale defaulting here.
+        setTechniques(data.techniques ?? getDefaultTechniques(locale));
       } catch {
         alert("Invalid file format");
       }
@@ -290,12 +284,12 @@ export const useSkillWeb = () => {
 
   const reset = () => {
     clearState();
-    setRoles(DEFAULT_ROLES_ENRICHED);
+    setRoles(getDefaultRoles(locale));
     setPoints([]);
     setConnections([]);
     setOffset({ x: 0, y: 0 });
     setSettings(DEFAULT_SETTINGS);
-    setTechniques([...techniquesData]);
+    setTechniques(getDefaultTechniques(locale));
     past.current = [];
     future.current = [];
   };
