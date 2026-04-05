@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
-import { Edit2, Trash2, Palette } from "lucide-react";
-import { Card, Button, Input, Textarea, useI18n } from "@levkobe/c7one";
+import { useState } from "react";
+import { Trash2, Palette, Maximize2 } from "lucide-react";
+import { Card, Button, useI18n } from "@levkobe/c7one";
 import { randomBrightColor } from "../utils/colors";
+import { RoleCardModal } from "./RoleCardModal";
 
 export const RoleItem = ({
   role,
@@ -10,75 +11,27 @@ export const RoleItem = ({
   onSelect,
   onDelete,
   onColorChange,
-  onUpdateRole,
 }) => {
   const { t } = useI18n();
-  const [isEditing, setIsEditing] = useState(false);
+  const [showCard, setShowCard] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [tempName, setTempName] = useState(role.name);
-  const [tempDescription, setTempDescription] = useState(role.description);
-  const formRef = useRef(null);
 
-  const commitEdits = () => {
-    const updates = {};
-    if (tempName !== role.name) updates.name = tempName;
-    if (tempDescription !== role.description)
-      updates.description = tempDescription;
-    if (Object.keys(updates).length > 0) onUpdateRole(updates);
-    setIsEditing(false);
-  };
-
-  const handleBlur = (e) => {
-    if (formRef.current && !formRef.current.contains(e.relatedTarget))
-      commitEdits();
-  };
-
-  const startEditing = (e) => {
-    e.stopPropagation();
-    setTempName(role.name);
-    setTempDescription(role.description);
-    setIsEditing(true);
+  const openCard = (e) => {
+    e?.stopPropagation();
+    setShowCard(true);
   };
 
   return (
-    <Card
-      variant={isActive ? "elevated" : "outlined"}
-      className={`p-0 cursor-pointer transition-colors select-none ${
-        isActive ? "" : "hover:bg-bg-elevated"
-      }`}
-      onClick={onSelect}
-      onDoubleClick={startEditing}
-      title={role.description || ""}
-    >
-      {isEditing ? (
-        <div
-          ref={formRef}
-          className="p-2 space-y-2"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Input
-            value={tempName}
-            onChange={(e) => setTempName(e.target.value)}
-            onBlur={handleBlur}
-            onKeyDown={(e) => e.key === "Enter" && commitEdits()}
-            autoFocus
-          />
-          <Textarea
-            value={tempDescription}
-            onChange={(e) => setTempDescription(e.target.value)}
-            onBlur={handleBlur}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                commitEdits();
-              }
-            }}
-            placeholder={t("role.description.placeholder")}
-            rows={3}
-            className="resize-none"
-          />
-        </div>
-      ) : (
+    <>
+      <Card
+        variant={isActive ? "elevated" : "outlined"}
+        className={`p-0 cursor-pointer transition-colors select-none ${
+          isActive ? "" : "hover:bg-bg-elevated"
+        }`}
+        onClick={onSelect}
+        onDoubleClick={openCard}
+        title={role.summary || ""}
+      >
         <div className="flex items-center justify-between px-2.5 py-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="relative shrink-0">
@@ -124,11 +77,11 @@ export const RoleItem = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={startEditing}
-              title={t("role.edit")}
+              onClick={openCard}
+              title={t("role.open")}
               className="p-1 h-auto w-auto"
             >
-              <Edit2 size={13} />
+              <Maximize2 size={13} />
             </Button>
             <Button
               variant="ghost"
@@ -144,7 +97,14 @@ export const RoleItem = ({
             </Button>
           </div>
         </div>
-      )}
-    </Card>
+      </Card>
+
+      <RoleCardModal
+        role={role}
+        usageLevel={level}
+        open={showCard}
+        onOpenChange={setShowCard}
+      />
+    </>
   );
 };

@@ -1,9 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { DEFAULT_ROLES } from "../data/roles";
 import { loadState, saveState, clearState } from "../utils/storage";
 import { nextRoleColor } from "../utils/colors";
 import { removeRoleFromGraph } from "../utils/connections";
 import { migratePoints } from "../utils/time";
+import {
+  DEFAULT_ROLES_ENRICHED,
+  enrichRole,
+  migrateRoles,
+} from "../utils/migrate";
+import techniquesData from "../data/techniques.json";
 
 const DEFAULT_SETTINGS = {
   connectionRange: 150,
@@ -19,28 +24,51 @@ const DEFAULT_SETTINGS = {
 
 const MAX_HISTORY = 50;
 
+const getInitialState = () => {
+  const saved = loadState();
+  if (!saved) {
+    return {
+      roles: DEFAULT_ROLES_ENRICHED,
+      points: [],
+      connections: [],
+      offset: { x: 0, y: 0 },
+      settings: DEFAULT_SETTINGS,
+      techniques: [...techniquesData],
+    };
+  }
+
+  const migratedPoints = migratePoints(saved.points ?? []);
+  const { roles, points } = saved.roles?.length
+    ? migrateRoles(saved.roles, migratedPoints)   // load everything, including shadow
+    : { roles: DEFAULT_ROLES_ENRICHED, points: migratedPoints }; // no saved roles → use defaults (no shadow)
+
+  return {
+    roles,
+    points,
+    connections: saved.connections ?? [],
+    offset: saved.offset ?? { x: 0, y: 0 },
+    settings: { ...DEFAULT_SETTINGS, ...(saved.settings ?? {}) },
+    techniques: saved.techniques ?? [...techniquesData],
+  };
+};
+
 export const useSkillWeb = () => {
-  const [roles, setRoles] = useState(() => loadState()?.roles ?? DEFAULT_ROLES);
-  const [points, setPoints] = useState(() =>
-    migratePoints(loadState()?.points ?? []),
-  );
-  const [connections, setConnections] = useState(
-    () => loadState()?.connections ?? [],
-  );
-  const [offset, setOffset] = useState(
-    () => loadState()?.offset ?? { x: 0, y: 0 },
-  );
-  const [settings, setSettings] = useState(
-    () => loadState()?.settings ?? DEFAULT_SETTINGS,
-  );
+  const [init] = useState(getInitialState);
+
+  const [roles, setRoles] = useState(() => init.roles);
+  const [points, setPoints] = useState(() => init.points);
+  const [connections, setConnections] = useState(() => init.connections);
+  const [offset, setOffset] = useState(() => init.offset);
+  const [settings, setSettings] = useState(() => init.settings);
+  const [techniques, setTechniques] = useState(() => init.techniques);
   const [activeRole, setActiveRole] = useState(null);
 
   const past = useRef([]);
   const future = useRef([]);
 
   useEffect(() => {
-    saveState({ roles, points, connections, offset, settings });
-  }, [roles, points, connections, offset, settings]);
+    saveState({ roles, points, connections, offset, settings, techniques });
+  }, [roles, points, connections, offset, settings, techniques]);
 
   const snapshot = (r = roles, p = points, c = connections) => {
     past.current = [
@@ -150,12 +178,17 @@ export const useSkillWeb = () => {
   const addRole = (name) => {
     setRoles((prev) => [
       ...prev,
-      {
-        id: Date.now(),
+      enrichRole({
+        id: `custom-${Date.now()}`,
         name,
-        description: "",
+        complexity: 1,
+        type: "positive",
+        summary: "",
+        techniques: [],
+        buildsFrom: [],
+        buildsInto: [],
         color: nextRoleColor(prev.length),
-      },
+      }),
     ]);
   };
 
@@ -193,11 +226,30 @@ export const useSkillWeb = () => {
     );
   };
 
+  // ── Techniques CRUD ──────────────────────────────────────────────────────────
+
+  const addTechnique = (name, description = "") => {
+    setTechniques((prev) => [
+      ...prev,
+      { id: `custom-tech-${Date.now()}`, name, description },
+    ]);
+  };
+
+  const updateTechnique = (id, updates) =>
+    setTechniques((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...updates } : t)),
+    );
+
+  const deleteTechnique = (id) =>
+    setTechniques((prev) => prev.filter((t) => t.id !== id));
+
+  // ── File I/O ──────────────────────────────────────────────────────────────────
+
   const save = () => {
     const blob = new Blob(
       [
         JSON.stringify(
-          { roles, points, connections, offset, settings },
+          { roles, points, connections, offset, settings, techniques },
           null,
           2,
         ),
@@ -219,11 +271,16 @@ export const useSkillWeb = () => {
       try {
         const data = JSON.parse(target.result);
         snapshot();
-        setRoles(data.roles ?? []);
-        setPoints(migratePoints(data.points ?? []));
+        const { roles: migratedRoles, points: migratedPoints } = migrateRoles(
+          data.roles ?? [],
+          migratePoints(data.points ?? []),
+        );
+        setRoles(migratedRoles);
+        setPoints(migratedPoints);
         setConnections(data.connections ?? []);
         setOffset(data.offset ?? { x: 0, y: 0 });
-        setSettings(data.settings ?? DEFAULT_SETTINGS);
+        setSettings({ ...DEFAULT_SETTINGS, ...(data.settings ?? {}) });
+        setTechniques(data.techniques ?? [...techniquesData]);
       } catch {
         alert("Invalid file format");
       }
@@ -233,11 +290,12 @@ export const useSkillWeb = () => {
 
   const reset = () => {
     clearState();
-    setRoles(DEFAULT_ROLES);
+    setRoles(DEFAULT_ROLES_ENRICHED);
     setPoints([]);
     setConnections([]);
     setOffset({ x: 0, y: 0 });
     setSettings(DEFAULT_SETTINGS);
+    setTechniques([...techniquesData]);
     past.current = [];
     future.current = [];
   };
@@ -248,6 +306,7 @@ export const useSkillWeb = () => {
     connections,
     offset,
     settings,
+    techniques,
     activeRole,
     setOffset,
     setSettings,
@@ -259,6 +318,9 @@ export const useSkillWeb = () => {
     updateRoleColor,
     finalizeLastOpenPoint,
     updatePointNote,
+    addTechnique,
+    updateTechnique,
+    deleteTechnique,
     save,
     load,
     reset,

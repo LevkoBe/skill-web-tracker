@@ -16,6 +16,7 @@ export const MESSAGES_EN = {
   "window.settings": "Settings",
   "window.stats": "Stats",
   "window.history": "History",
+  "window.techniques": "Techniques",
 
   // ── Roles panel ────────────────────────────────────────────────────────────
   "roles.title": "Roles",
@@ -29,10 +30,35 @@ export const MESSAGES_EN = {
 
   // ── Role item ──────────────────────────────────────────────────────────────
   "role.level": "Lv.{n}",
+  "role.open": "Open role card",
   "role.edit": "Edit role",
   "role.delete": "Delete role",
   "role.color.randomize": "Randomize color",
-  "role.description.placeholder": "Description...",
+  "role.summary.placeholder": "Summary...",
+
+  // ── Role card modal ────────────────────────────────────────────────────────
+  "roleCard.summary": "Summary",
+  "roleCard.techniques": "Techniques",
+  "roleCard.origins": "Comes from",
+  "roleCard.paths": "Evolves into",
+  "roleCard.complexity": "Depth {n}/5",
+  "roleCard.addTechnique": "Add technique...",
+  "roleCard.addRole": "Add role...",
+
+  // ── Techniques window ──────────────────────────────────────────────────────
+  "techniques.title": "Techniques",
+  "techniques.search": "Search techniques...",
+  "techniques.empty": "No techniques found.",
+  "techniques.new": "New technique",
+  "techniques.add": "Add",
+  "techniques.edit": "Edit technique",
+  "techniques.delete": "Delete technique",
+  "techniques.name.placeholder": "Technique name...",
+  "techniques.description.placeholder": "What is this technique and how is it applied?",
+
+  // ── Common actions ─────────────────────────────────────────────────────────
+  "common.save": "Save",
+  "common.cancel": "Cancel",
 
   // ── Canvas overlays ────────────────────────────────────────────────────────
   "canvas.active.label": "Active:",
@@ -107,6 +133,7 @@ export const MESSAGES_UK = {
   "window.settings": "Налаштування",
   "window.stats": "Статистика",
   "window.history": "Історія",
+  "window.techniques": "Техніки",
 
   // ── Roles panel ────────────────────────────────────────────────────────────
   "roles.title": "Ролі",
@@ -120,10 +147,35 @@ export const MESSAGES_UK = {
 
   // ── Role item ──────────────────────────────────────────────────────────────
   "role.level": "Рів.{n}",
+  "role.open": "Відкрити картку ролі",
   "role.edit": "Редагувати роль",
   "role.delete": "Видалити роль",
   "role.color.randomize": "Випадковий колір",
-  "role.description.placeholder": "Опис...",
+  "role.summary.placeholder": "Короткий опис...",
+
+  // ── Role card modal ────────────────────────────────────────────────────────
+  "roleCard.summary": "Опис",
+  "roleCard.techniques": "Техніки",
+  "roleCard.origins": "Базується на",
+  "roleCard.paths": "Розвивається в",
+  "roleCard.complexity": "Рівень {n}/5",
+  "roleCard.addTechnique": "Додати техніку...",
+  "roleCard.addRole": "Додати роль...",
+
+  // ── Techniques window ──────────────────────────────────────────────────────
+  "techniques.title": "Техніки",
+  "techniques.search": "Пошук технік...",
+  "techniques.empty": "Нічого не знайдено.",
+  "techniques.new": "Нова техніка",
+  "techniques.add": "Додати",
+  "techniques.edit": "Редагувати техніку",
+  "techniques.delete": "Видалити техніку",
+  "techniques.name.placeholder": "Назва техніки...",
+  "techniques.description.placeholder": "Що це за техніка і як вона застосовується?",
+
+  // ── Common actions ─────────────────────────────────────────────────────────
+  "common.save": "Зберегти",
+  "common.cancel": "Скасувати",
 
   // ── Canvas overlays ────────────────────────────────────────────────────────
   "canvas.active.label": "Активна:",
