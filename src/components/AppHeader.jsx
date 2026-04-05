@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, BarChart2, History } from "lucide-react";
 import {
   Badge,
+  Button,
+  Modal,
   RandomizeButton,
   SettingsModalButton,
   ThemeToggleButton,
@@ -10,6 +12,8 @@ import {
 } from "@levkobe/c7one";
 import { DARK_COLORS, LIGHT_COLORS } from "../themes";
 import { AppSettings } from "../windows/SettingsWindow";
+import { StatsWindow } from "../windows/StatsWindow";
+import { HistoryWindow } from "../windows/HistoryWindow";
 
 export function AppHeader() {
   const { t, locale, setLocale } = useI18n();
@@ -110,6 +114,28 @@ export function AppHeader() {
             title={t("app.randomize")}
           />
         </div>
+
+        <Modal>
+          <Modal.Trigger asChild>
+            <Button size="sm" variant="secondary" title={t("window.stats")}>
+              <BarChart2 size={14} />
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content className="max-w-5xl w-[90vw] h-[80vh] p-0 overflow-hidden">
+            <StatsWindow />
+          </Modal.Content>
+        </Modal>
+
+        <Modal>
+          <Modal.Trigger asChild>
+            <Button size="sm" variant="secondary" title={t("window.history")}>
+              <History size={14} />
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content className="max-w-5xl w-[90vw] h-[80vh] p-0 overflow-hidden">
+            <HistoryWindow />
+          </Modal.Content>
+        </Modal>
 
         <SettingsModalButton
           label={t("app.openSettings")}
