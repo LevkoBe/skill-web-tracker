@@ -7,9 +7,15 @@ import { migratePoints } from "../utils/time";
 import {
   enrichRole,
   migrateRoles,
+  migrateMechanicIds,
   getDefaultRoles,
   getDefaultTechniques,
 } from "../utils/migrate";
+import {
+  computeUnlocks,
+  computePointsPerNode,
+  getInitialUnlocked,
+} from "../utils/progression";
 
 const DEFAULT_SETTINGS = {
   connectionRange: 150,
@@ -21,43 +27,55 @@ const DEFAULT_SETTINGS = {
   showClusterLabels: true,
   showNoteLabels: true,
   breathingStrength: 0.3,
+  gameMode: "gradual",
+  unlockThreshold: 5,
 };
 
 const MAX_HISTORY = 50;
 
-// Plain function — receives locale as an argument so it has no hook dependency.
 const getInitialState = (locale) => {
   const saved = loadState();
   if (!saved) {
+    const roles = getDefaultRoles(locale);
     return {
-      roles: getDefaultRoles(locale),
+      roles,
       points: [],
       connections: [],
       offset: { x: 0, y: 0 },
       settings: DEFAULT_SETTINGS,
       techniques: getDefaultTechniques(locale),
+      pointsPerNode: {},
+      unlockedNodes: getInitialUnlocked(roles),
     };
   }
 
-  const migratedPoints = migratePoints(saved.points ?? []);
-  const { roles, points } = saved.roles?.length
-    ? migrateRoles(saved.roles, migratedPoints)
-    : { roles: getDefaultRoles(locale), points: migratedPoints };
+  const migratedTimestamps = migratePoints(saved.points ?? []);
+  const { roles, points: rolesMigratedPoints } = saved.roles?.length
+    ? migrateRoles(saved.roles, migratedTimestamps)
+    : { roles: getDefaultRoles(locale), points: migratedTimestamps };
+  const points = migrateMechanicIds(roles, rolesMigratedPoints);
+
+  const settings = { ...DEFAULT_SETTINGS, ...(saved.settings ?? {}) };
+  const pointsPerNode = saved.pointsPerNode ?? computePointsPerNode(points);
+  const unlockedNodes =
+    saved.unlockedNodes ??
+    computeUnlocks(roles, pointsPerNode, getInitialUnlocked(roles), settings.unlockThreshold);
 
   return {
     roles,
     points,
     connections: saved.connections ?? [],
     offset: saved.offset ?? { x: 0, y: 0 },
-    settings: { ...DEFAULT_SETTINGS, ...(saved.settings ?? {}) },
+    settings,
     techniques: saved.techniques ?? getDefaultTechniques(locale),
+    pointsPerNode,
+    unlockedNodes,
   };
 };
 
 export const useSkillWeb = () => {
   const { locale } = useI18n();
 
-  // useState initializer runs once — capture locale at that moment.
   const [init] = useState(() => getInitialState(locale));
 
   const [roles, setRoles] = useState(() => init.roles);
@@ -66,14 +84,26 @@ export const useSkillWeb = () => {
   const [offset, setOffset] = useState(() => init.offset);
   const [settings, setSettings] = useState(() => init.settings);
   const [techniques, setTechniques] = useState(() => init.techniques);
+  const [pointsPerNode, setPointsPerNode] = useState(() => init.pointsPerNode);
+  const [unlockedNodes, setUnlockedNodes] = useState(() => init.unlockedNodes);
   const [activeRole, setActiveRole] = useState(null);
+  const [activeMechanic, setActiveMechanic] = useState(null);
 
   const past = useRef([]);
   const future = useRef([]);
 
   useEffect(() => {
-    saveState({ roles, points, connections, offset, settings, techniques });
-  }, [roles, points, connections, offset, settings, techniques]);
+    saveState({
+      roles,
+      points,
+      connections,
+      offset,
+      settings,
+      techniques,
+      pointsPerNode,
+      unlockedNodes,
+    });
+  }, [roles, points, connections, offset, settings, techniques, pointsPerNode, unlockedNodes]);
 
   const snapshot = (r = roles, p = points, c = connections) => {
     past.current = [
@@ -126,6 +156,7 @@ export const useSkillWeb = () => {
       x,
       y,
       roleId: activeRole,
+      mechanicId: activeMechanic,
       color: role.color,
       startedAt: now,
       endedAt: null,
@@ -150,12 +181,28 @@ export const useSkillWeb = () => {
         ? [{ fromIdx: closedPoints.length - 1, toIdx: newIdx, color: role.color }]
         : [];
 
+    // Update progression counters
+    const nextPPN = {
+      ...pointsPerNode,
+      [activeRole]: (pointsPerNode[activeRole] ?? 0) + 1,
+    };
+    if (activeMechanic) {
+      nextPPN[activeMechanic] = (pointsPerNode[activeMechanic] ?? 0) + 1;
+    }
+
+    const threshold = settings.unlockThreshold ?? 10;
+    const nextUnlocked = computeUnlocks(roles, nextPPN, unlockedNodes, threshold);
+
     setPoints([...closedPoints, newPoint]);
     setConnections((prev) => [
       ...prev,
       ...sequentialConnection,
       ...proximityConnections,
     ]);
+    setPointsPerNode(nextPPN);
+    if (nextUnlocked.length !== unlockedNodes.length) {
+      setUnlockedNodes(nextUnlocked);
+    }
   };
 
   const finalizeLastOpenPoint = () => {
@@ -246,7 +293,13 @@ export const useSkillWeb = () => {
 
   const save = () => {
     const blob = new Blob(
-      [JSON.stringify({ roles, points, connections, offset, settings, techniques }, null, 2)],
+      [
+        JSON.stringify(
+          { roles, points, connections, offset, settings, techniques, pointsPerNode, unlockedNodes },
+          null,
+          2,
+        ),
+      ],
       { type: "application/json" },
     );
     const url = URL.createObjectURL(blob);
@@ -264,17 +317,31 @@ export const useSkillWeb = () => {
       try {
         const data = JSON.parse(target.result);
         snapshot();
-        const { roles: migratedRoles, points: migratedPoints } = migrateRoles(
+        const { roles: migratedRoles, points: rolesMigratedPoints } = migrateRoles(
           data.roles ?? [],
           migratePoints(data.points ?? []),
         );
+        const migratedPoints = migrateMechanicIds(migratedRoles, rolesMigratedPoints);
+        const loadedSettings = { ...DEFAULT_SETTINGS, ...(data.settings ?? {}) };
+        const loadedPPN = data.pointsPerNode ?? computePointsPerNode(migratedPoints);
+        const loadedUnlocked =
+          data.unlockedNodes ??
+          computeUnlocks(
+            migratedRoles,
+            loadedPPN,
+            getInitialUnlocked(migratedRoles),
+            loadedSettings.unlockThreshold,
+          );
         setRoles(migratedRoles);
         setPoints(migratedPoints);
         setConnections(data.connections ?? []);
         setOffset(data.offset ?? { x: 0, y: 0 });
-        setSettings({ ...DEFAULT_SETTINGS, ...(data.settings ?? {}) });
-        // Loaded files use whatever techniques were saved; no locale defaulting here.
+        setSettings(loadedSettings);
         setTechniques(data.techniques ?? getDefaultTechniques(locale));
+        setPointsPerNode(loadedPPN);
+        setUnlockedNodes(loadedUnlocked);
+        setActiveRole(null);
+        setActiveMechanic(null);
       } catch {
         alert("Invalid file format");
       }
@@ -284,12 +351,17 @@ export const useSkillWeb = () => {
 
   const reset = () => {
     clearState();
-    setRoles(getDefaultRoles(locale));
+    const defaultRoles = getDefaultRoles(locale);
+    setRoles(defaultRoles);
     setPoints([]);
     setConnections([]);
     setOffset({ x: 0, y: 0 });
     setSettings(DEFAULT_SETTINGS);
     setTechniques(getDefaultTechniques(locale));
+    setPointsPerNode({});
+    setUnlockedNodes(getInitialUnlocked(defaultRoles));
+    setActiveRole(null);
+    setActiveMechanic(null);
     past.current = [];
     future.current = [];
   };
@@ -301,10 +373,14 @@ export const useSkillWeb = () => {
     offset,
     settings,
     techniques,
+    pointsPerNode,
+    unlockedNodes,
     activeRole,
+    activeMechanic,
     setOffset,
     setSettings,
     setActiveRole,
+    setActiveMechanic,
     addPoint,
     addRole,
     deleteRole,

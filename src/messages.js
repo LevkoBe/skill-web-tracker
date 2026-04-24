@@ -1,7 +1,4 @@
-// ─── Skill Web Tracker — UI strings (en + uk) ────────────────────────────────
-
 export const MESSAGES_EN = {
-  // ── Header ─────────────────────────────────────────────────────────────────
   "app.subtitle": "tracker",
   "app.toggleTheme": "Toggle dark / light",
   "app.randomizeTame": "Randomize (tame · 20% freedom)",
@@ -9,16 +6,21 @@ export const MESSAGES_EN = {
   "app.randomizeChaos": "Randomize (chaos · 100% freedom)",
   "app.openSettings": "Open settings",
 
-  // ── Window titles ──────────────────────────────────────────────────────────
   "window.canvas": "Canvas",
-  "window.roles": "Roles",
+  "window.roles": "Active",
   "window.progression": "Progression",
   "window.settings": "Settings",
   "window.stats": "Stats",
   "window.history": "History",
   "window.techniques": "Techniques",
+  "window.mechanics": "Mechanics",
+  "window.rolesCatalogue": "Roles",
+  "window.diagram": "Diagram",
+  "diagram.title": "Role Progression",
+  "diagram.theme.default": "Default",
+  "diagram.theme.battle": "Battle",
+  "diagram.theme.craft": "Craft",
 
-  // ── Roles panel ────────────────────────────────────────────────────────────
   "roles.title": "Roles",
   "roles.add.placeholder": "New role...",
   "roles.add.title": "Add role",
@@ -28,7 +30,6 @@ export const MESSAGES_EN = {
   "roles.reset.confirm":
     "Reset everything to defaults?\n\nThis will clear all roles, points, and connections.",
 
-  // ── Role item ──────────────────────────────────────────────────────────────
   "role.level": "Lv.{n}",
   "role.open": "Open role card",
   "role.edit": "Edit role",
@@ -36,7 +37,6 @@ export const MESSAGES_EN = {
   "role.color.randomize": "Randomize color",
   "role.summary.placeholder": "Summary...",
 
-  // ── Role card modal ────────────────────────────────────────────────────────
   "roleCard.summary": "Summary",
   "roleCard.techniques": "Techniques",
   "roleCard.origins": "Comes from",
@@ -45,7 +45,6 @@ export const MESSAGES_EN = {
   "roleCard.addTechnique": "Add technique...",
   "roleCard.addRole": "Add role...",
 
-  // ── Techniques window ──────────────────────────────────────────────────────
   "techniques.title": "Techniques",
   "techniques.search": "Search techniques...",
   "techniques.empty": "No techniques found.",
@@ -56,11 +55,9 @@ export const MESSAGES_EN = {
   "techniques.name.placeholder": "Technique name...",
   "techniques.description.placeholder": "What is this technique and how is it applied?",
 
-  // ── Common actions ─────────────────────────────────────────────────────────
   "common.save": "Save",
   "common.cancel": "Cancel",
 
-  // ── Canvas overlays ────────────────────────────────────────────────────────
   "canvas.active.label": "Active:",
   "canvas.timer.start": "Start",
   "canvas.timer.stop": "Stop",
@@ -73,7 +70,6 @@ export const MESSAGES_EN = {
   "canvas.help.title": "Keyboard shortcuts",
   "canvas.note.placeholder": "Note… (Enter to save, Esc to skip)",
 
-  // ── Keyboard shortcuts table ───────────────────────────────────────────────
   "shortcut.enter": "Toggle timer",
   "shortcut.ctrlZ": "Undo",
   "shortcut.ctrlShiftZ": "Redo",
@@ -83,22 +79,18 @@ export const MESSAGES_EN = {
   "shortcut.zoomOut": "Zoom out",
   "shortcut.pinch": "Zoom",
 
-  // ── Progression panel ──────────────────────────────────────────────────────
   "progression.title": "Progression",
   "progression.milestone": "Milestone: {n}",
 
-  // ── Stats window ───────────────────────────────────────────────────────────
   "stats.title": "Stats",
   "stats.role": "Role",
   "stats.empty": "No activity recorded yet.",
 
-  // ── History window ─────────────────────────────────────────────────────────
   "history.title": "History",
   "history.today": "Today",
   "history.yesterday": "Yesterday",
   "history.empty": "No activity recorded yet.",
 
-  // ── Settings window ────────────────────────────────────────────────────────
   "settings.canvas.section": "Canvas",
   "settings.connectionRange": "Connection Range: {value}px",
   "settings.driftRadius": "Drift Radius: {value}",
@@ -112,13 +104,25 @@ export const MESSAGES_EN = {
   "settings.breathingStrength": "Breathing: {value}x",
   "settings.breathingStrength.off": "Breathing: off",
 
-  // ── Theme presets ──────────────────────────────────────────────────────────
+  "settings.progression.section": "Progression",
+  "settings.progression.gradual": "Gradual unlock mode",
+  "settings.progression.threshold": "Unlock threshold: {value} pts",
+
+  "mechanics.title": "Mechanics",
+  "mechanics.empty": "No mechanics available yet.",
+  "mechanics.locked": "Locked",
+
+  "rolesCatalogue.search": "Search roles...",
+  "rolesCatalogue.empty": "No roles found.",
+
+  "roleCard.removeTechnique": "Remove from role",
+  "techniques.locked": "Locked",
+
   "theme.dark": "Dark",
   "theme.light": "Light",
 };
 
 export const MESSAGES_UK = {
-  // ── Header ─────────────────────────────────────────────────────────────────
   "app.subtitle": "трекер",
   "app.toggleTheme": "Перемкнути темну / світлу",
   "app.randomizeTame": "Рандомізувати (м'яко · 20% свободи)",
@@ -126,16 +130,21 @@ export const MESSAGES_UK = {
   "app.randomizeChaos": "Рандомізувати (хаос · 100% свободи)",
   "app.openSettings": "Відкрити налаштування",
 
-  // ── Window titles ──────────────────────────────────────────────────────────
   "window.canvas": "Полотно",
-  "window.roles": "Ролі",
+  "window.roles": "Активна",
   "window.progression": "Прогрес",
   "window.settings": "Налаштування",
   "window.stats": "Статистика",
   "window.history": "Історія",
   "window.techniques": "Техніки",
+  "window.mechanics": "Механіки",
+  "window.rolesCatalogue": "Ролі",
+  "window.diagram": "Діаграма",
+  "diagram.title": "Прогрес ролей",
+  "diagram.theme.default": "Типова",
+  "diagram.theme.battle": "Бойова",
+  "diagram.theme.craft": "Ремесло",
 
-  // ── Roles panel ────────────────────────────────────────────────────────────
   "roles.title": "Ролі",
   "roles.add.placeholder": "Нова роль...",
   "roles.add.title": "Додати роль",
@@ -145,7 +154,6 @@ export const MESSAGES_UK = {
   "roles.reset.confirm":
     "Скинути все до початкових?\n\nЦе видалить усі ролі, точки та зв'язки.",
 
-  // ── Role item ──────────────────────────────────────────────────────────────
   "role.level": "Рів.{n}",
   "role.open": "Відкрити картку ролі",
   "role.edit": "Редагувати роль",
@@ -153,7 +161,6 @@ export const MESSAGES_UK = {
   "role.color.randomize": "Випадковий колір",
   "role.summary.placeholder": "Короткий опис...",
 
-  // ── Role card modal ────────────────────────────────────────────────────────
   "roleCard.summary": "Опис",
   "roleCard.techniques": "Техніки",
   "roleCard.origins": "Базується на",
@@ -162,7 +169,6 @@ export const MESSAGES_UK = {
   "roleCard.addTechnique": "Додати техніку...",
   "roleCard.addRole": "Додати роль...",
 
-  // ── Techniques window ──────────────────────────────────────────────────────
   "techniques.title": "Техніки",
   "techniques.search": "Пошук технік...",
   "techniques.empty": "Нічого не знайдено.",
@@ -173,11 +179,9 @@ export const MESSAGES_UK = {
   "techniques.name.placeholder": "Назва техніки...",
   "techniques.description.placeholder": "Що це за техніка і як вона застосовується?",
 
-  // ── Common actions ─────────────────────────────────────────────────────────
   "common.save": "Зберегти",
   "common.cancel": "Скасувати",
 
-  // ── Canvas overlays ────────────────────────────────────────────────────────
   "canvas.active.label": "Активна:",
   "canvas.timer.start": "Старт",
   "canvas.timer.stop": "Стоп",
@@ -190,7 +194,6 @@ export const MESSAGES_UK = {
   "canvas.help.title": "Клавіатурні скорочення",
   "canvas.note.placeholder": "Нотатка… (Enter — зберегти, Esc — пропустити)",
 
-  // ── Keyboard shortcuts table ───────────────────────────────────────────────
   "shortcut.enter": "Перемкнути таймер",
   "shortcut.ctrlZ": "Відмінити",
   "shortcut.ctrlShiftZ": "Повторити",
@@ -200,22 +203,18 @@ export const MESSAGES_UK = {
   "shortcut.zoomOut": "Зменшити",
   "shortcut.pinch": "Масштаб",
 
-  // ── Progression panel ──────────────────────────────────────────────────────
   "progression.title": "Прогрес",
   "progression.milestone": "Рубіж: {n}",
 
-  // ── Stats window ───────────────────────────────────────────────────────────
   "stats.title": "Статистика",
   "stats.role": "Роль",
   "stats.empty": "Активності ще немає.",
 
-  // ── History window ─────────────────────────────────────────────────────────
   "history.title": "Історія",
   "history.today": "Сьогодні",
   "history.yesterday": "Вчора",
   "history.empty": "Активності ще немає.",
 
-  // ── Settings window ────────────────────────────────────────────────────────
   "settings.canvas.section": "Полотно",
   "settings.connectionRange": "Дальність зв'язків: {value}пкс",
   "settings.driftRadius": "Радіус дрейфу: {value}",
@@ -229,7 +228,20 @@ export const MESSAGES_UK = {
   "settings.breathingStrength": "Дихання: {value}x",
   "settings.breathingStrength.off": "Дихання: вимк.",
 
-  // ── Theme presets ──────────────────────────────────────────────────────────
+  "settings.progression.section": "Прогресія",
+  "settings.progression.gradual": "Поступкове розблокування",
+  "settings.progression.threshold": "Поріг розблокування: {value} пт",
+
+  "mechanics.title": "Механіки",
+  "mechanics.empty": "Поки немає доступних механік.",
+  "mechanics.locked": "Заблоковано",
+
+  "rolesCatalogue.search": "Пошук ролей...",
+  "rolesCatalogue.empty": "Ролей не знайдено.",
+
+  "roleCard.removeTechnique": "Видалити з ролі",
+  "techniques.locked": "Заблоковано",
+
   "theme.dark": "Темна",
   "theme.light": "Світла",
 };

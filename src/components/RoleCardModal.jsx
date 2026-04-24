@@ -31,8 +31,6 @@ const TYPE_BADGE = {
   shadow: "warning",
 };
 
-// ── Small reusable components ─────────────────────────────────────────────────
-
 function ComplexityDots({ value, max = 5 }) {
   return (
     <div className="flex gap-0.5 items-center">
@@ -48,10 +46,6 @@ function ComplexityDots({ value, max = 5 }) {
   );
 }
 
-/**
- * Technique chip — tooltip rendered via portal so it's never clipped by modal overflow.
- * In edit mode shows a trash button instead of navigating.
- */
 function TechChip({ tech, isEditing, onDelete }) {
   const [tooltipPos, setTooltipPos] = useState(null);
   if (!tech) return null;
@@ -110,7 +104,6 @@ function TechChip({ tech, isEditing, onDelete }) {
   );
 }
 
-/** Role pill — in edit mode shows trash, otherwise navigates */
 function RolePill({ roleId, isEditing, onDelete, onOpen }) {
   const { roles } = useSkillContext();
   const liveRole = roles.find((r) => r.id === roleId);
@@ -154,7 +147,6 @@ function RolePill({ roleId, isEditing, onDelete, onOpen }) {
   );
 }
 
-/** Inline row with icon + label + content */
 function Row({ icon, label, children }) {
   return (
     <div className="flex gap-3 py-3 border-b border-border last:border-0">
@@ -171,10 +163,6 @@ function Row({ icon, label, children }) {
   );
 }
 
-/**
- * A Select that resets to placeholder after each selection — used for the
- * "add item" affordance in edit mode.
- */
 function AddSelect({ options, onAdd, placeholder }) {
   const [val, setVal] = useState("");
   if (!options.length) return null;
@@ -192,22 +180,17 @@ function AddSelect({ options, onAdd, placeholder }) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
-
 export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
   const { t } = useI18n();
   const { roles, techniques, updateRole } = useSkillContext();
 
-  // Build live tech map from context so custom techniques appear
   const techMap = useMemo(
     () => new Map(techniques.map((t) => [t.id, t])),
     [techniques],
   );
 
-  // Navigation stack
   const [stack, setStack] = useState([]);
 
-  // Edit state
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState("");
   const [editSummary, setEditSummary] = useState("");
@@ -231,7 +214,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
     setStack((s) => s.slice(0, -1));
   };
 
-  // Resolve displayed role
   const activeRoleId = stack.length > 0 ? stack[stack.length - 1] : null;
   const displayRole = activeRoleId
     ? (roles.find((r) => r.id === activeRoleId) ??
@@ -263,7 +245,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
     setIsEditing(false);
   };
 
-  // ── Computed option lists for the Add selectors ──────────────────────────
   const techOptions = useMemo(
     () =>
       techniques
@@ -292,7 +273,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
 
   const typeColor = TYPE_BADGE[displayRole.type] ?? "neutral";
 
-  // Resolve technique objects for display (view + edit)
   const displayTechs = isEditing
     ? editTechniques.map((id) => techMap.get(id)).filter(Boolean)
     : (displayRole.techniques ?? []).map((id) => techMap.get(id)).filter(Boolean);
@@ -300,19 +280,13 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
   const displayBuildsFrom = isEditing ? editBuildsFrom : (displayRole.buildsFrom ?? []);
   const displayBuildsInto = isEditing ? editBuildsInto : (displayRole.buildsInto ?? []);
 
-  // Whether a section should be visible (always in edit, only when non-empty otherwise)
   const showTechs = isEditing || displayTechs.length > 0;
   const showFrom = isEditing || displayBuildsFrom.length > 0;
   const showInto = isEditing || displayBuildsInto.length > 0;
 
   return (
     <Modal open={open} onOpenChange={handleClose}>
-      <Modal.Content
-        title={displayRole.name}
-        description={displayRole.summary ?? "Role details"}
-        className="max-w-md w-full"
-      >
-        {/* ── Header ─────────────────────────────────────────────── */}
+      <Modal.Content className="max-w-md w-full">
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
@@ -354,7 +328,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
             </div>
           </div>
 
-          {/* Color dot + edit controls */}
           <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
             <div
               className="w-3.5 h-3.5 rounded-full"
@@ -399,9 +372,7 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
           </div>
         </div>
 
-        {/* ── Rows ───────────────────────────────────────────────── */}
         <div>
-          {/* Summary */}
           <Row icon={<Info size={15} />} label={t("roleCard.summary")}>
             {isEditing ? (
               <Textarea
@@ -421,7 +392,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
             )}
           </Row>
 
-          {/* Techniques */}
           {showTechs && (
             <Row icon={<Zap size={15} />} label={t("roleCard.techniques")}>
               <div className="flex flex-wrap gap-1.5 items-center">
@@ -451,7 +421,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
             </Row>
           )}
 
-          {/* Builds from */}
           {showFrom && (
             <Row icon={<Footprints size={15} />} label={t("roleCard.origins")}>
               <div className="flex flex-wrap gap-1.5 items-center">
@@ -480,7 +449,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
             </Row>
           )}
 
-          {/* Builds into */}
           {showInto && (
             <Row icon={<GitFork size={15} />} label={t("roleCard.paths")}>
               <div className="flex flex-wrap gap-1.5 items-center">
@@ -510,7 +478,6 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
           )}
         </div>
 
-        {/* Footer Save/Cancel when editing */}
         {isEditing && (
           <div className="flex gap-2 mt-4 pt-3 border-t border-border">
             <Button

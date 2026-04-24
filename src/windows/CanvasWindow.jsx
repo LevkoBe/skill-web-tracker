@@ -17,7 +17,9 @@ export function CanvasWindow() {
     connections,
     offset,
     settings,
+    techniques,
     activeRole,
+    activeMechanic,
     setOffset,
     addPoint,
     updatePointNote,
@@ -104,6 +106,7 @@ export function CanvasWindow() {
   };
 
   const activeRoleName = roles.find((r) => r.id === activeRole)?.name;
+  const activeMechanicName = techniques.find((t) => t.id === activeMechanic)?.name;
 
   const shortcuts = [
     ["Enter", t("shortcut.enter")],
@@ -136,7 +139,6 @@ export function CanvasWindow() {
         dragHandlers={dragHandlers}
       />
 
-      {/* Note input */}
       {pendingNote && (
         <input
           autoFocus
@@ -163,7 +165,6 @@ export function CanvasWindow() {
         />
       )}
 
-      {/* Point tooltip */}
       {tooltip &&
         !pendingNote &&
         (() => {
@@ -195,17 +196,23 @@ export function CanvasWindow() {
           );
         })()}
 
-      {/* Active role + timer */}
       {activeRoleName && (
         <Card
           variant="flat"
           className="absolute top-4 left-4 flex items-center gap-3 px-4 py-2 border border-border shadow-c7-sm"
         >
-          <div>
-            <span className="text-fg-disabled text-sm">
-              {t("canvas.active.label")}
-            </span>
-            <span className="ml-2 text-fg-primary">{activeRoleName}</span>
+          <div className="flex flex-col">
+            <div>
+              <span className="text-fg-disabled text-sm">
+                {t("canvas.active.label")}
+              </span>
+              <span className="ml-2 text-fg-primary">{activeRoleName}</span>
+            </div>
+            {activeMechanicName && (
+              <span className="text-xs text-fg-muted mt-0.5">
+                {activeMechanicName}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-2 border-l border-border pl-3">
             <span
@@ -229,7 +236,6 @@ export function CanvasWindow() {
         </Card>
       )}
 
-      {/* Zoom controls */}
       <Card
         variant="flat"
         className="absolute bottom-4 left-4 flex items-center border border-border overflow-hidden text-fg-muted"
@@ -263,7 +269,6 @@ export function CanvasWindow() {
         </button>
       </Card>
 
-      {/* Action buttons */}
       <Card
         variant="flat"
         className="absolute top-4 right-4 flex items-center border border-border overflow-hidden"
@@ -298,7 +303,6 @@ export function CanvasWindow() {
         ))}
       </Card>
 
-      {/* Help panel */}
       {showHelp && (
         <Card
           variant="flat"

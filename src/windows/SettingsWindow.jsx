@@ -139,6 +139,38 @@ export function AppSettings() {
           label={t("settings.noteLabels")}
         />
       </div>
+
+      <Divider />
+
+      <Body
+        size="sm"
+        className="text-fg-disabled uppercase tracking-widest font-semibold"
+      >
+        {t("settings.progression.section")}
+      </Body>
+
+      <div className="space-y-3">
+        <Toggle
+          checked={(settings.gameMode ?? "immediate") === "gradual"}
+          onCheckedChange={(v) => set("gameMode", v ? "gradual" : "immediate")}
+          label={t("settings.progression.gradual")}
+        />
+
+        <div className="space-y-1.5">
+          <Label className="text-xs text-fg-muted">
+            {t("settings.progression.threshold", {
+              value: settings.unlockThreshold ?? 5,
+            })}
+          </Label>
+          <Slider
+            min={1}
+            max={50}
+            step={1}
+            value={[settings.unlockThreshold ?? 5]}
+            onValueChange={([v]) => set("unlockThreshold", v)}
+          />
+        </div>
+      </div>
     </div>
   );
 }

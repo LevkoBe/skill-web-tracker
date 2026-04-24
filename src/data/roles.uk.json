@@ -38,8 +38,12 @@
       "space-decluttering",
       "pattern-recognition"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["resolver"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "resolver"
+    ]
   },
   {
     "id": "executor",
@@ -53,8 +57,15 @@
       "task-chunking",
       "minimal-viable-action"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["impactor", "robot", "resolver", "accelerator"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "impactor",
+      "robot",
+      "resolver",
+      "accelerator"
+    ]
   },
   {
     "id": "explorer",
@@ -68,7 +79,9 @@
       "scenario-forecasting",
       "journaling-reflection"
     ],
-    "buildsFrom": ["myself"],
+    "buildsFrom": [
+      "myself"
+    ],
     "buildsInto": [
       "impactor",
       "perfecto",
@@ -90,7 +103,9 @@
       "emotional-reframing",
       "scenario-forecasting"
     ],
-    "buildsFrom": ["myself"],
+    "buildsFrom": [
+      "myself"
+    ],
     "buildsInto": [
       "impactor",
       "perfecto",
@@ -114,8 +129,13 @@
       "pattern-recognition",
       "root-cause-analysis"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["proud", "resolver"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "proud",
+      "resolver"
+    ]
   },
   {
     "id": "present",
@@ -123,9 +143,18 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Відрізає шум минулого і тривогу майбутнього. Все, що є — тут і зараз, і цього достатньо.",
-    "techniques": ["sensory-grounding", "minimal-viable-action"],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["hopeful", "little-human", "sportsman"]
+    "techniques": [
+      "sensory-grounding",
+      "minimal-viable-action"
+    ],
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "hopeful",
+      "little-human",
+      "sportsman"
+    ]
   },
   {
     "id": "representative",
@@ -138,8 +167,13 @@
       "inner-dialogue",
       "analytical-detachment"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["impostor", "actor"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "impostor",
+      "actor"
+    ]
   },
   {
     "id": "survivor",
@@ -152,8 +186,16 @@
       "task-chunking",
       "friction-as-fuel"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["resistor", "impostor", "avenger", "endurer", "phoenix"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "resistor",
+      "impostor",
+      "avenger",
+      "endurer",
+      "phoenix"
+    ]
   },
   {
     "id": "enjoyer",
@@ -166,8 +208,14 @@
       "sensory-grounding",
       "analytical-detachment"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["lover", "sad-kid", "candy-hunter"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "lover",
+      "sad-kid",
+      "candy-hunter"
+    ]
   },
   {
     "id": "future",
@@ -180,8 +228,15 @@
       "scenario-forecasting",
       "goal-definition"
     ],
-    "buildsFrom": ["myself"],
-    "buildsInto": ["perfecto", "hopeful", "wannabe-astronaut", "oracle"]
+    "buildsFrom": [
+      "myself"
+    ],
+    "buildsInto": [
+      "perfecto",
+      "hopeful",
+      "wannabe-astronaut",
+      "oracle"
+    ]
   },
   {
     "id": "impactor",
@@ -194,8 +249,14 @@
       "goal-definition",
       "root-cause-analysis"
     ],
-    "buildsFrom": ["executor", "observer"],
-    "buildsInto": ["opportunist", "ashmaker"]
+    "buildsFrom": [
+      "executor",
+      "observer"
+    ],
+    "buildsInto": [
+      "opportunist",
+      "ashmaker"
+    ]
   },
   {
     "id": "resistor",
@@ -203,9 +264,21 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Чим більше тиск ззовні — тим більше сил зсередини. Опір не зламує, а заряджає.",
-    "techniques": ["friction-as-fuel", "momentum-building", "goal-definition"],
-    "buildsFrom": ["survivor"],
-    "buildsInto": ["impostor", "operator", "antagonist", "endurer", "danger"]
+    "techniques": [
+      "friction-as-fuel",
+      "momentum-building",
+      "goal-definition"
+    ],
+    "buildsFrom": [
+      "survivor"
+    ],
+    "buildsInto": [
+      "impostor",
+      "operator",
+      "antagonist",
+      "endurer",
+      "danger"
+    ]
   },
   {
     "id": "robot",
@@ -218,8 +291,14 @@
       "minimal-viable-action",
       "analytical-detachment"
     ],
-    "buildsFrom": ["executor"],
-    "buildsInto": ["operator", "puppeteer", "accelerator"]
+    "buildsFrom": [
+      "executor"
+    ],
+    "buildsInto": [
+      "operator",
+      "puppeteer",
+      "accelerator"
+    ]
   },
   {
     "id": "hopeful",
@@ -233,8 +312,13 @@
       "future-self-projection",
       "self-acknowledgment"
     ],
-    "buildsFrom": ["present", "future"],
-    "buildsInto": ["wannabe-astronaut"]
+    "buildsFrom": [
+      "present",
+      "future"
+    ],
+    "buildsInto": [
+      "wannabe-astronaut"
+    ]
   },
   {
     "id": "sportsman",
@@ -248,8 +332,14 @@
       "momentum-building",
       "reward-system"
     ],
-    "buildsFrom": ["executor", "present"],
-    "buildsInto": ["endurer", "hero"]
+    "buildsFrom": [
+      "executor",
+      "present"
+    ],
+    "buildsInto": [
+      "endurer",
+      "hero"
+    ]
   },
   {
     "id": "procrastinator",
@@ -257,8 +347,12 @@
     "complexity": 2,
     "type": "negative",
     "summary": "Антироль для відстеження уникання. Не для втілення — для усвідомлення.",
-    "techniques": ["anti-behavior-tracking"],
-    "buildsFrom": ["myself"],
+    "techniques": [
+      "anti-behavior-tracking"
+    ],
+    "buildsFrom": [
+      "myself"
+    ],
     "buildsInto": []
   },
   {
@@ -273,8 +367,13 @@
       "minimal-viable-action",
       "momentum-building"
     ],
-    "buildsFrom": ["executor", "robot"],
-    "buildsInto": ["operator"]
+    "buildsFrom": [
+      "executor",
+      "robot"
+    ],
+    "buildsInto": [
+      "operator"
+    ]
   },
   {
     "id": "little-human",
@@ -288,8 +387,13 @@
       "self-acknowledgment",
       "minimal-viable-action"
     ],
-    "buildsFrom": ["myself", "present"],
-    "buildsInto": ["hopeful"]
+    "buildsFrom": [
+      "myself",
+      "present"
+    ],
+    "buildsInto": [
+      "hopeful"
+    ]
   },
   {
     "id": "proud",
@@ -297,9 +401,17 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Робить паузу, щоб побачити, як далеко зайшов/зайшла. Без порівнянь з ідеалом — просто тепло й чесно.",
-    "techniques": ["self-acknowledgment", "journaling-reflection"],
-    "buildsFrom": ["past", "observer"],
-    "buildsInto": ["perfecto"]
+    "techniques": [
+      "self-acknowledgment",
+      "journaling-reflection"
+    ],
+    "buildsFrom": [
+      "past",
+      "observer"
+    ],
+    "buildsInto": [
+      "perfecto"
+    ]
   },
   {
     "id": "impostor",
@@ -312,8 +424,15 @@
       "pattern-recognition",
       "analytical-detachment"
     ],
-    "buildsFrom": ["resistor", "survivor", "representative"],
-    "buildsInto": ["antagonist", "actor"]
+    "buildsFrom": [
+      "resistor",
+      "survivor",
+      "representative"
+    ],
+    "buildsInto": [
+      "antagonist",
+      "actor"
+    ]
   },
   {
     "id": "operator",
@@ -327,8 +446,18 @@
       "momentum-building",
       "task-chunking"
     ],
-    "buildsFrom": ["executor", "robot", "resistor", "accelerator"],
-    "buildsInto": ["ashmaker", "avenger", "calm-before-storm", "hero"]
+    "buildsFrom": [
+      "executor",
+      "robot",
+      "resistor",
+      "accelerator"
+    ],
+    "buildsInto": [
+      "ashmaker",
+      "avenger",
+      "calm-before-storm",
+      "hero"
+    ]
   },
   {
     "id": "perfecto",
@@ -342,8 +471,16 @@
       "inner-dialogue",
       "dream-visualization"
     ],
-    "buildsFrom": ["observer", "explorer", "future", "proud"],
-    "buildsInto": ["lover", "wannabe-astronaut"]
+    "buildsFrom": [
+      "observer",
+      "explorer",
+      "future",
+      "proud"
+    ],
+    "buildsInto": [
+      "lover",
+      "wannabe-astronaut"
+    ]
   },
   {
     "id": "resolver",
@@ -357,8 +494,16 @@
       "iteration",
       "goal-definition"
     ],
-    "buildsFrom": ["observer", "executor", "archivist", "past"],
-    "buildsInto": ["tracker", "ashmaker"]
+    "buildsFrom": [
+      "observer",
+      "executor",
+      "archivist",
+      "past"
+    ],
+    "buildsInto": [
+      "tracker",
+      "ashmaker"
+    ]
   },
   {
     "id": "blocker",
@@ -371,8 +516,13 @@
       "body-dissociation",
       "minimal-viable-action"
     ],
-    "buildsFrom": ["survivor", "observer"],
-    "buildsInto": ["puppeteer"]
+    "buildsFrom": [
+      "survivor",
+      "observer"
+    ],
+    "buildsInto": [
+      "puppeteer"
+    ]
   },
   {
     "id": "opportunist",
@@ -386,8 +536,13 @@
       "impact-assessment",
       "first-step-rule"
     ],
-    "buildsFrom": ["explorer", "impactor"],
-    "buildsInto": ["antagonist"]
+    "buildsFrom": [
+      "explorer",
+      "impactor"
+    ],
+    "buildsInto": [
+      "antagonist"
+    ]
   },
   {
     "id": "danger",
@@ -401,8 +556,14 @@
       "scenario-forecasting",
       "dream-visualization"
     ],
-    "buildsFrom": ["explorer", "resistor"],
-    "buildsInto": ["hero", "antagonist"]
+    "buildsFrom": [
+      "explorer",
+      "resistor"
+    ],
+    "buildsInto": [
+      "hero",
+      "antagonist"
+    ]
   },
   {
     "id": "candy-hunter",
@@ -410,9 +571,18 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Зробить усе заради винагороди. Знаходить морквинку, прив'язує її до неприємного завдання — і раптом все стає можливим.",
-    "techniques": ["reward-system", "goal-definition", "task-chunking"],
-    "buildsFrom": ["enjoyer", "executor"],
-    "buildsInto": ["opportunist"]
+    "techniques": [
+      "reward-system",
+      "goal-definition",
+      "task-chunking"
+    ],
+    "buildsFrom": [
+      "enjoyer",
+      "executor"
+    ],
+    "buildsInto": [
+      "opportunist"
+    ]
   },
   {
     "id": "sad-kid",
@@ -425,8 +595,14 @@
       "sensory-grounding",
       "journaling-reflection"
     ],
-    "buildsFrom": ["enjoyer", "observer"],
-    "buildsInto": ["mind-warper", "lover"]
+    "buildsFrom": [
+      "enjoyer",
+      "observer"
+    ],
+    "buildsInto": [
+      "mind-warper",
+      "lover"
+    ]
   },
   {
     "id": "wannabe-astronaut",
@@ -439,8 +615,16 @@
       "future-self-projection",
       "scenario-forecasting"
     ],
-    "buildsFrom": ["explorer", "hopeful", "future", "perfecto"],
-    "buildsInto": ["antagonist", "avenger"]
+    "buildsFrom": [
+      "explorer",
+      "hopeful",
+      "future",
+      "perfecto"
+    ],
+    "buildsInto": [
+      "antagonist",
+      "avenger"
+    ]
   },
   {
     "id": "actor",
@@ -453,8 +637,14 @@
       "inner-dialogue",
       "analytical-detachment"
     ],
-    "buildsFrom": ["representative", "impostor"],
-    "buildsInto": ["puppeteer", "director"]
+    "buildsFrom": [
+      "representative",
+      "impostor"
+    ],
+    "buildsInto": [
+      "puppeteer",
+      "director"
+    ]
   },
   {
     "id": "endurer",
@@ -468,8 +658,15 @@
       "momentum-building",
       "self-acknowledgment"
     ],
-    "buildsFrom": ["survivor", "resistor", "sportsman"],
-    "buildsInto": ["hero", "avenger"]
+    "buildsFrom": [
+      "survivor",
+      "resistor",
+      "sportsman"
+    ],
+    "buildsInto": [
+      "hero",
+      "avenger"
+    ]
   },
   {
     "id": "ashmaker",
@@ -482,8 +679,15 @@
       "impact-assessment",
       "momentum-building"
     ],
-    "buildsFrom": ["operator", "resolver", "impactor"],
-    "buildsInto": ["phoenix", "antagonist"]
+    "buildsFrom": [
+      "operator",
+      "resolver",
+      "impactor"
+    ],
+    "buildsInto": [
+      "phoenix",
+      "antagonist"
+    ]
   },
   {
     "id": "mind-warper",
@@ -497,8 +701,15 @@
       "inner-dialogue",
       "sensory-grounding"
     ],
-    "buildsFrom": ["explorer", "observer", "sad-kid"],
-    "buildsInto": ["lover", "director"]
+    "buildsFrom": [
+      "explorer",
+      "observer",
+      "sad-kid"
+    ],
+    "buildsInto": [
+      "lover",
+      "director"
+    ]
   },
   {
     "id": "puppeteer",
@@ -512,8 +723,16 @@
       "strategic-planning",
       "inner-dialogue"
     ],
-    "buildsFrom": ["robot", "observer", "blocker", "actor"],
-    "buildsInto": ["god", "director"]
+    "buildsFrom": [
+      "robot",
+      "observer",
+      "blocker",
+      "actor"
+    ],
+    "buildsInto": [
+      "god",
+      "director"
+    ]
   },
   {
     "id": "calm-before-storm",
@@ -526,8 +745,14 @@
       "scenario-forecasting",
       "strategic-planning"
     ],
-    "buildsFrom": ["operator", "observer"],
-    "buildsInto": ["avenger", "antagonist"]
+    "buildsFrom": [
+      "operator",
+      "observer"
+    ],
+    "buildsInto": [
+      "avenger",
+      "antagonist"
+    ]
   },
   {
     "id": "tracker",
@@ -541,8 +766,14 @@
       "brainstorming",
       "iteration"
     ],
-    "buildsFrom": ["resolver", "observer"],
-    "buildsInto": ["antagonist", "ashmaker"]
+    "buildsFrom": [
+      "resolver",
+      "observer"
+    ],
+    "buildsInto": [
+      "antagonist",
+      "ashmaker"
+    ]
   },
   {
     "id": "oracle",
@@ -556,8 +787,13 @@
       "future-self-projection",
       "analytical-detachment"
     ],
-    "buildsFrom": ["future", "observer"],
-    "buildsInto": ["director"]
+    "buildsFrom": [
+      "future",
+      "observer"
+    ],
+    "buildsInto": [
+      "director"
+    ]
   },
   {
     "id": "phoenix",
@@ -571,8 +807,14 @@
       "momentum-building",
       "dream-visualization"
     ],
-    "buildsFrom": ["survivor", "ashmaker"],
-    "buildsInto": ["avenger", "lover"]
+    "buildsFrom": [
+      "survivor",
+      "ashmaker"
+    ],
+    "buildsInto": [
+      "avenger",
+      "lover"
+    ]
   },
   {
     "id": "hero",
@@ -586,8 +828,17 @@
       "body-dissociation",
       "goal-definition"
     ],
-    "buildsFrom": ["operator", "survivor", "endurer", "danger", "sportsman"],
-    "buildsInto": ["avenger", "antagonist"]
+    "buildsFrom": [
+      "operator",
+      "survivor",
+      "endurer",
+      "danger",
+      "sportsman"
+    ],
+    "buildsInto": [
+      "avenger",
+      "antagonist"
+    ]
   },
   {
     "id": "antagonist",
@@ -648,7 +899,13 @@
       "sensory-grounding",
       "body-dissociation"
     ],
-    "buildsFrom": ["enjoyer", "perfecto", "mind-warper", "phoenix", "sad-kid"],
+    "buildsFrom": [
+      "enjoyer",
+      "perfecto",
+      "mind-warper",
+      "phoenix",
+      "sad-kid"
+    ],
     "buildsInto": []
   },
   {
@@ -663,7 +920,12 @@
       "inner-dialogue",
       "pattern-recognition"
     ],
-    "buildsFrom": ["oracle", "puppeteer", "actor", "mind-warper"],
+    "buildsFrom": [
+      "oracle",
+      "puppeteer",
+      "actor",
+      "mind-warper"
+    ],
     "buildsInto": []
   },
   {
@@ -677,7 +939,9 @@
       "strategic-planning",
       "analytical-detachment"
     ],
-    "buildsFrom": ["puppeteer"],
+    "buildsFrom": [
+      "puppeteer"
+    ],
     "buildsInto": []
   }
 ]

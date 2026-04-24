@@ -19,11 +19,28 @@ export function SkillWebProvider({ children }) {
   const handleTimerToggle = () =>
     timer.isRunning ? handleTimerStop() : timer.start();
 
+  const defaultMechanicFor = (roleId) => {
+    if (!roleId) return null;
+    const role = skillWeb.roles.find((r) => r.id === roleId);
+    const mechs = role?.techniques ?? [];
+    if (!mechs.length) return null;
+    const isGradual = (skillWeb.settings.gameMode ?? "immediate") === "gradual";
+    if (!isGradual) return mechs[0];
+    return mechs.find((m) => skillWeb.unlockedNodes.includes(m)) ?? null;
+  };
+
   const handleRoleSelect = (id) => {
     skillWeb.setActiveRole(id);
+    skillWeb.setActiveMechanic(defaultMechanicFor(id));
     timer.stop();
     if (id !== null && (skillWeb.settings.timerActiveByDefault ?? false))
       timer.start();
+  };
+
+  const handleMechanicSelect = (mechId) => {
+    skillWeb.setActiveMechanic(
+      mechId === skillWeb.activeMechanic ? null : mechId,
+    );
   };
 
   const handleSettingsChange = (next) => {
@@ -42,6 +59,7 @@ export function SkillWebProvider({ children }) {
     handleTimerStop,
     handleTimerToggle,
     handleRoleSelect,
+    handleMechanicSelect,
     handleSettingsChange,
   };
 

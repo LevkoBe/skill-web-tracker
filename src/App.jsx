@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { DynamicPanelRoot, useI18n } from "@levkobe/c7one";
-import { Waypoints, List, TrendingUp, Settings, BarChart2, History, Zap } from "lucide-react";
+import { Waypoints, List, TrendingUp, Settings, BarChart2, History, Zap, Network, BookOpen } from "lucide-react";
 import { AppHeader } from "./components/AppHeader";
 import { CanvasWindow } from "./windows/CanvasWindow";
 import { RolesWindow } from "./windows/RolesWindow";
@@ -9,8 +9,9 @@ import { SettingsWindow } from "./windows/SettingsWindow";
 import { StatsWindow } from "./windows/StatsWindow";
 import { HistoryWindow } from "./windows/HistoryWindow";
 import { TechniquesWindow } from "./windows/TechniquesWindow";
+import { RolesCatalogueWindow } from "./windows/RolesCatalogueWindow";
+import { DiagramWindow } from "./windows/DiagramWindow";
 
-// canvas | roles | progression — 64 / 18 / 18
 const LAYOUT = {
   type: "group",
   direction: "horizontal",
@@ -68,6 +69,18 @@ function App() {
         title: t("window.techniques"),
         icon: <Zap size={16} />,
         component: TechniquesWindow,
+      },
+      {
+        id: "rolesCatalogue",
+        title: t("window.rolesCatalogue"),
+        icon: <BookOpen size={16} />,
+        component: RolesCatalogueWindow,
+      },
+      {
+        id: "diagram",
+        title: t("window.diagram"),
+        icon: <Network size={16} />,
+        component: DiagramWindow,
       },
     ],
     [t],

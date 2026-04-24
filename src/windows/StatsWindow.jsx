@@ -1,10 +1,9 @@
 import { useMemo } from "react";
-import { Body, Table, useI18n } from "@levkobe/c7one";
+import { Table, useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 import { useRoleStats } from "../hooks/useRoleStats";
 
 function formatDate(dayKey) {
-  // dayKey is "YYYY-MM-DD"
   const [, mm, dd] = dayKey.split("-");
   return `${dd}.${mm}`;
 }
@@ -82,7 +81,6 @@ export function StatsWindow() {
         _name: role.name,
         _color: role.color,
         _counts: countMap.get(role.id),
-        // spread day keys so Table's default string renderer has something
         ...Object.fromEntries(sortedDays.map((d) => [d, ""])),
       })),
     [sortedRoles, countMap, sortedDays],
@@ -90,15 +88,6 @@ export function StatsWindow() {
 
   return (
     <div className="h-full overflow-y-auto bg-bg-base">
-      <div className="px-4 py-3 border-b border-border sticky top-0 bg-bg-base z-10">
-        <Body
-          size="sm"
-          className="text-fg-disabled uppercase tracking-widest font-semibold"
-        >
-          {t("stats.title")}
-        </Body>
-      </div>
-
       <div className="px-4 py-4">
         <Table
           data={data}

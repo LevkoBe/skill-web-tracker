@@ -1,32 +1,36 @@
-import rolesEn from "../data/roles.json";
-import rolesUk from "../data/roles.uk.json";
+import rolesEnRaw from "../data/roles.json";
+import rolesUkRaw from "../data/roles.uk.json";
 import techniquesEn from "../data/techniques.json";
 import techniquesUk from "../data/techniques.uk.json";
 import { colorForRole } from "./colors";
 
-/** Ensure every role has a color (generated if missing). */
 export const enrichRole = (role) =>
   role.color ? role : { ...role, color: colorForRole(role) };
+
+const shadowIds = new Set(
+  rolesEnRaw.filter((r) => r.type === "shadow").map((r) => r.id),
+);
+const stripShadowDeps = (role) => ({
+  ...role,
+  buildsFrom: (role.buildsFrom ?? []).filter((id) => !shadowIds.has(id)),
+  buildsInto: (role.buildsInto ?? []).filter((id) => !shadowIds.has(id)),
+});
+
+const rolesEn = rolesEnRaw.filter((r) => r.type !== "shadow").map(stripShadowDeps);
+const rolesUk = rolesUkRaw.filter((r) => r.type !== "shadow").map(stripShadowDeps);
 
 const rolesDataByLocale = { en: rolesEn, uk: rolesUk };
 const techniquesDataByLocale = { en: techniquesEn, uk: techniquesUk };
 
-/**
- * Default roles for a given locale — shadow types excluded.
- * Called once during initialization; afterwards the user's saved list is used as-is.
- */
 export const getDefaultRoles = (locale = "en") => {
   const data = rolesDataByLocale[locale] ?? rolesEn;
   return data.filter((r) => r.type === "positive").map(enrichRole);
 };
 
-/** Default techniques for a given locale. */
 export const getDefaultTechniques = (locale = "en") => [
   ...(techniquesDataByLocale[locale] ?? techniquesEn),
 ];
 
-// Keep these exports so existing imports (e.g. RoleCardModal) still resolve.
-// They always use English — the static fallback used for navigation/reference only.
 export const ALL_ROLES_ENRICHED = rolesEn.map(enrichRole);
 export const DEFAULT_ROLES_ENRICHED = ALL_ROLES_ENRICHED.filter(
   (r) => r.type === "positive",
@@ -36,26 +40,22 @@ const isOldFormat = (role) =>
   typeof role.id === "number" ||
   (role.description !== undefined && role.summary === undefined);
 
-/**
- * Migrate saved roles (and their associated points) from the old
- * `{ id: number, name, description, color }` format to the new
- * `{ id: string, name, complexity, type, summary, techniques, buildsFrom, buildsInto }` format.
- *
- * Returns `{ roles, points }` — always in new format.
- * Caller is responsible for deciding the default when savedRoles is empty.
- */
 export const migrateRoles = (savedRoles, savedPoints = []) => {
   if (!savedRoles?.length) {
     return { roles: [], points: savedPoints };
   }
 
-  // Already new format — just make sure color is present
   if (!isOldFormat(savedRoles[0])) {
-    return { roles: savedRoles.map(enrichRole), points: savedPoints };
+    return {
+      roles: savedRoles
+        .filter((r) => r.type !== "shadow")
+        .map(stripShadowDeps)
+        .map(enrichRole),
+      points: savedPoints,
+    };
   }
 
-  // Old format: map each role to a new-format counterpart by name
-  const idMap = new Map(); // old numeric/string id → new string id
+  const idMap = new Map();
 
   const roles = savedRoles.map((oldRole) => {
     const match = rolesEn.find(
@@ -90,4 +90,13 @@ export const migrateRoles = (savedRoles, savedPoints = []) => {
   }));
 
   return { roles, points };
+};
+
+export const migrateMechanicIds = (roles, points) => {
+  const roleMap = new Map(roles.map((r) => [r.id, r]));
+  return points.map((p) => {
+    if (p.mechanicId !== undefined) return p;
+    const role = roleMap.get(p.roleId);
+    return { ...p, mechanicId: role?.techniques?.[0] ?? null };
+  });
 };

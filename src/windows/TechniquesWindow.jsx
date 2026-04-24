@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { Body, Input, Textarea, Button, useI18n } from "@levkobe/c7one";
+import { Input, Textarea, Button, useI18n } from "@levkobe/c7one";
 import { Search, Plus, Edit2, Check, X, Trash2 } from "lucide-react";
 import { useSkillContext } from "../context/SkillContext";
 
-function TechniqueCard({ tech, onUpdate, onDelete }) {
+function TechniqueCard({ tech, roles, onUpdate, onDelete }) {
   const { t } = useI18n();
+  const usedByRoles = roles.filter((r) => (r.techniques ?? []).includes(tech.id));
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(tech.name);
   const [editDesc, setEditDesc] = useState(tech.description);
@@ -87,6 +88,16 @@ function TechniqueCard({ tech, onUpdate, onDelete }) {
       <p className="text-xs text-fg-secondary leading-relaxed">
         {tech.description}
       </p>
+      {usedByRoles.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-2">
+          {usedByRoles.map((r) => (
+            <span key={r.id} className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded bg-bg-base border border-border text-fg-muted">
+              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: r.color }} />
+              {r.name}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -138,7 +149,7 @@ function NewTechniqueForm({ onAdd, onCancel }) {
 
 export function TechniquesWindow() {
   const { t } = useI18n();
-  const { techniques, addTechnique, updateTechnique, deleteTechnique } =
+  const { techniques, roles, addTechnique, updateTechnique, deleteTechnique } =
     useSkillContext();
 
   const [query, setQuery] = useState("");
@@ -156,17 +167,6 @@ export function TechniquesWindow() {
 
   return (
     <div className="flex flex-col h-full bg-bg-base overflow-hidden">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-border shrink-0 sticky top-0 bg-bg-base z-10">
-        <Body
-          size="sm"
-          className="text-fg-disabled uppercase tracking-widest font-semibold"
-        >
-          {t("techniques.title")}
-        </Body>
-      </div>
-
-      {/* Search + Add */}
       <div className="px-4 py-3 border-b border-border shrink-0 flex gap-2">
         <div className="relative flex-1">
           <Search
@@ -213,6 +213,7 @@ export function TechniquesWindow() {
           <TechniqueCard
             key={tech.id}
             tech={tech}
+            roles={roles}
             onUpdate={(updates) => updateTechnique(tech.id, updates)}
             onDelete={() => deleteTechnique(tech.id)}
           />

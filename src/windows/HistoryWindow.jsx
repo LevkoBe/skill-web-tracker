@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Body, useI18n } from "@levkobe/c7one";
+import { useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 
 function toDayKey(ts) {
@@ -26,7 +26,6 @@ export function HistoryWindow() {
   const todayKey = toDayKey(Date.now());
   const yesterdayKey = toDayKey(Date.now() - 86_400_000);
 
-  // dayKey -> roleId -> count
   const dayData = useMemo(() => {
     const map = new Map();
     for (const pt of points) {
@@ -39,13 +38,11 @@ export function HistoryWindow() {
     return map;
   }, [points]);
 
-  // Sorted days (chronological)
   const sortedDays = useMemo(
     () => [...dayData.keys()].sort(),
     [dayData],
   );
 
-  // Per day: roles sorted by count desc
   const columns = useMemo(
     () =>
       sortedDays.map((dk) => {
@@ -61,45 +58,27 @@ export function HistoryWindow() {
 
   if (sortedDays.length === 0) {
     return (
-      <div className="h-full flex flex-col bg-bg-base">
-        <div className="px-4 py-3 border-b border-border">
-          <Body size="sm" className="text-fg-disabled uppercase tracking-widest font-semibold">
-            {t("history.title")}
-          </Body>
-        </div>
-        <div className="flex-1 flex items-center justify-center text-sm text-fg-disabled">
-          {t("history.empty")}
-        </div>
+      <div className="h-full flex items-center justify-center text-sm text-fg-disabled bg-bg-base">
+        {t("history.empty")}
       </div>
     );
   }
 
   return (
     <div className="h-full flex flex-col bg-bg-base overflow-hidden">
-      {/* Window header */}
-      <div className="px-4 py-3 border-b border-border shrink-0">
-        <Body size="sm" className="text-fg-disabled uppercase tracking-widest font-semibold">
-          {t("history.title")}
-        </Body>
-      </div>
-
-      {/* Horizontally scrollable column layout */}
       <div className="flex-1 overflow-x-auto overflow-y-auto">
         <div className="flex h-full min-w-max divide-x divide-border">
           {columns.map(({ dk, entries }) => (
             <div key={dk} className="flex flex-col w-44 shrink-0">
-              {/* Day header — sticky top */}
               <div className="sticky top-0 z-10 bg-bg-elevated px-3 py-2 border-b border-border">
                 <span className="text-xs font-semibold text-fg-muted uppercase tracking-wide">
                   {formatDayLabel(dk, todayKey, yesterdayKey, t)}
                 </span>
               </div>
 
-              {/* Role entries for this day */}
               <div className="flex flex-col divide-y divide-border/40">
                 {entries.map(({ role, count }) => (
                   <div key={role.id} className="px-3 py-2.5 flex flex-col gap-1.5">
-                    {/* Role name row */}
                     <div className="flex items-center gap-1.5">
                       <div
                         className="w-1.5 h-1.5 rounded-full shrink-0"
@@ -112,7 +91,6 @@ export function HistoryWindow() {
                         {role.name}
                       </span>
                     </div>
-                    {/* Dots row */}
                     <div className="flex flex-wrap gap-1 pl-3">
                       {Array.from({ length: count }).map((_, i) => (
                         <div

@@ -1,4 +1,4 @@
-import { Body, Badge, useI18n } from "@levkobe/c7one";
+import { Badge, useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 import { useRoleStats } from "../hooks/useRoleStats";
 import { FIBONACCI_SET } from "../utils/fibonacci";
@@ -10,15 +10,6 @@ export function ProgressionWindow() {
 
   return (
     <div className="h-full overflow-y-auto bg-bg-base">
-      <div className="px-4 py-3 border-b border-border sticky top-0 bg-bg-base z-10">
-        <Body
-          size="sm"
-          className="text-fg-disabled uppercase tracking-widest font-semibold"
-        >
-          {t("progression.title")}
-        </Body>
-      </div>
-
       <div className="px-4 py-4 space-y-6">
         {sortedRoles.map((role) => {
           const count = pointCounts.get(role.id) ?? 0;
