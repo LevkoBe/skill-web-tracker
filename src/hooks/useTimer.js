@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 export const useTimer = () => {
   const [sessionStart, setSessionStart] = useState(null);
@@ -19,15 +19,23 @@ export const useTimer = () => {
     return () => clearInterval(intervalRef.current);
   }, [isRunning, sessionStart]);
 
-  const start = () => {
+  const start = useCallback(() => {
     setSessionStart(Date.now());
     setElapsed(0);
-  };
-  const stop = () => {
+  }, []);
+
+  const stop = useCallback(() => {
     setSessionStart(null);
     setElapsed(0);
-  };
-  const toggle = () => (isRunning ? stop() : start());
+  }, []);
 
-  return { sessionStart, elapsed, isRunning, start, stop, toggle };
+  const toggle = useCallback(
+    () => (isRunning ? stop() : start()),
+    [isRunning, start, stop],
+  );
+
+  return useMemo(
+    () => ({ sessionStart, elapsed, isRunning, start, stop, toggle }),
+    [sessionStart, elapsed, isRunning, start, stop, toggle],
+  );
 };

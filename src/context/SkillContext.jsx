@@ -1,68 +1,229 @@
-import { createContext, useContext, useRef } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { DEFAULT_SETTINGS } from "../config";
 import { useSkillWeb } from "../hooks/useSkillWeb";
 import { useTimer } from "../hooks/useTimer";
+
+const TimerContext = createContext(null);
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useSkillTimer = () => useContext(TimerContext);
+
+function TimerProviderLayer({ timerRef, children }) {
+  const timer = useTimer();
+  useLayoutEffect(() => {
+    timerRef.current = timer;
+  });
+  return (
+    <TimerContext.Provider value={timer}>{children}</TimerContext.Provider>
+  );
+}
 
 const SkillContext = createContext(null);
 
 export function SkillWebProvider({ children }) {
   const skillWeb = useSkillWeb();
-  const timer = useTimer();
+
+  const {
+    roles,
+    points,
+    connections,
+    offset,
+    settings,
+    techniques,
+    pointsPerNode,
+    unlockedNodes,
+    activeRole,
+    activeMechanic,
+    setOffset,
+    setSettings,
+    setActiveRole,
+    setActiveMechanic,
+    addPoint,
+    addRole,
+    deleteRole,
+    updateRole,
+    updateRoleColor,
+    finalizeLastOpenPoint,
+    updatePointNote,
+    addTechnique,
+    updateTechnique,
+    deleteTechnique,
+    save,
+    load,
+    reset,
+    undo,
+    redo,
+  } = skillWeb;
+
+  const timerRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const triggerLoad = () => fileInputRef.current?.click();
+  const settingsRef = useRef(settings);
+  const activeMechanicRef = useRef(activeMechanic);
+  const activeRoleRef = useRef(activeRole);
+  const rolesRef = useRef(roles);
+  const unlockedNodesRef = useRef(unlockedNodes);
+  useLayoutEffect(() => {
+    settingsRef.current = settings;
+    activeMechanicRef.current = activeMechanic;
+    activeRoleRef.current = activeRole;
+    rolesRef.current = roles;
+    unlockedNodesRef.current = unlockedNodes;
+  });
 
-  const handleTimerStop = () => {
-    skillWeb.finalizeLastOpenPoint();
-    timer.stop();
-  };
+  const triggerLoad = useCallback(() => fileInputRef.current?.click(), []);
 
-  const handleTimerToggle = () =>
-    timer.isRunning ? handleTimerStop() : timer.start();
+  const handleTimerStop = useCallback(() => {
+    finalizeLastOpenPoint();
+    timerRef.current?.stop();
+  }, [finalizeLastOpenPoint]);
 
-  const defaultMechanicFor = (roleId) => {
+  const handleTimerToggle = useCallback(() => {
+    if (timerRef.current?.isRunning) {
+      handleTimerStop();
+    } else {
+      timerRef.current?.start();
+    }
+  }, [handleTimerStop]);
+
+  const defaultMechanicFor = useCallback((roleId) => {
     if (!roleId) return null;
-    const role = skillWeb.roles.find((r) => r.id === roleId);
+    const role = rolesRef.current.find((r) => r.id === roleId);
     const mechs = role?.techniques ?? [];
     if (!mechs.length) return null;
-    const isGradual = (skillWeb.settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
+    const isGradual =
+      (settingsRef.current.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
     if (!isGradual) return mechs[0];
-    return mechs.find((m) => skillWeb.unlockedNodes.includes(m)) ?? null;
-  };
+    return mechs.find((m) => unlockedNodesRef.current.includes(m)) ?? null;
+  }, []);
 
-  const handleRoleSelect = (id) => {
-    skillWeb.setActiveRole(id);
-    skillWeb.setActiveMechanic(defaultMechanicFor(id));
-    timer.stop();
-    if (id !== null && (skillWeb.settings.timerActiveByDefault ?? false))
-      timer.start();
-  };
+  const handleRoleSelect = useCallback(
+    (id) => {
+      setActiveRole(id);
+      setActiveMechanic(defaultMechanicFor(id));
+      timerRef.current?.stop();
+      if (id !== null && (settingsRef.current.timerActiveByDefault ?? false))
+        timerRef.current?.start();
+    },
+    [setActiveRole, setActiveMechanic, defaultMechanicFor],
+  );
 
-  const handleMechanicSelect = (mechId) => {
-    skillWeb.setActiveMechanic(
-      mechId === skillWeb.activeMechanic ? null : mechId,
-    );
-  };
+  const handleMechanicSelect = useCallback(
+    (mechId) => {
+      setActiveMechanic(mechId === activeMechanicRef.current ? null : mechId);
+    },
+    [setActiveMechanic],
+  );
 
-  const handleSettingsChange = (next) => {
-    const justEnabled =
-      !skillWeb.settings.timerActiveByDefault && next.timerActiveByDefault;
-    skillWeb.setSettings(next);
-    if (justEnabled && skillWeb.activeRole !== null && !timer.isRunning)
-      timer.start();
-  };
+  const handleSettingsChange = useCallback(
+    (next) => {
+      const justEnabled =
+        !settingsRef.current.timerActiveByDefault && next.timerActiveByDefault;
+      setSettings(next);
+      if (
+        justEnabled &&
+        activeRoleRef.current !== null &&
+        !timerRef.current?.isRunning
+      )
+        timerRef.current?.start();
+    },
+    [setSettings],
+  );
 
-  const value = {
-    ...skillWeb,
-    timer,
-    fileInputRef,
-    triggerLoad,
-    handleTimerStop,
-    handleTimerToggle,
-    handleRoleSelect,
-    handleMechanicSelect,
-    handleSettingsChange,
-  };
+  const handlePointAdded = useCallback(() => {
+    if (settingsRef.current.timerActiveByDefault ?? false) {
+      timerRef.current?.start();
+    } else {
+      handleTimerStop();
+    }
+  }, [handleTimerStop]);
+
+  const value = useMemo(
+    () => ({
+      roles,
+      points,
+      connections,
+      offset,
+      settings,
+      techniques,
+      pointsPerNode,
+      unlockedNodes,
+      activeRole,
+      activeMechanic,
+      setOffset,
+      setSettings,
+      setActiveRole,
+      setActiveMechanic,
+      addPoint,
+      addRole,
+      deleteRole,
+      updateRole,
+      updateRoleColor,
+      finalizeLastOpenPoint,
+      updatePointNote,
+      addTechnique,
+      updateTechnique,
+      deleteTechnique,
+      save,
+      load,
+      reset,
+      undo,
+      redo,
+      fileInputRef,
+      triggerLoad,
+      handleTimerStop,
+      handleTimerToggle,
+      handleRoleSelect,
+      handleMechanicSelect,
+      handleSettingsChange,
+      handlePointAdded,
+    }),
+    [
+      roles,
+      points,
+      connections,
+      offset,
+      settings,
+      techniques,
+      pointsPerNode,
+      unlockedNodes,
+      activeRole,
+      activeMechanic,
+      setOffset,
+      setSettings,
+      setActiveRole,
+      setActiveMechanic,
+      addPoint,
+      addRole,
+      deleteRole,
+      updateRole,
+      updateRoleColor,
+      finalizeLastOpenPoint,
+      updatePointNote,
+      addTechnique,
+      updateTechnique,
+      deleteTechnique,
+      save,
+      load,
+      reset,
+      undo,
+      redo,
+      triggerLoad,
+      handleTimerStop,
+      handleTimerToggle,
+      handleRoleSelect,
+      handleMechanicSelect,
+      handleSettingsChange,
+      handlePointAdded,
+    ],
+  );
 
   return (
     <SkillContext.Provider value={value}>
@@ -70,10 +231,10 @@ export function SkillWebProvider({ children }) {
         ref={fileInputRef}
         type="file"
         accept=".json"
-        onChange={skillWeb.load}
+        onChange={load}
         className="hidden"
       />
-      {children}
+      <TimerProviderLayer timerRef={timerRef}>{children}</TimerProviderLayer>
     </SkillContext.Provider>
   );
 }

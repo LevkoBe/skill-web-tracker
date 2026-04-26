@@ -1,4 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import { useI18n } from "@levkobe/c7one";
 import { DEFAULT_SETTINGS, MAX_HISTORY } from "../config";
 import { loadState, saveState, clearState } from "../utils/storage";
@@ -81,6 +87,17 @@ export const useSkillWeb = () => {
 
   const past = useRef([]);
   const future = useRef([]);
+
+  const activeRoleRef = useRef(activeRole);
+  const pointsRef = useRef(points);
+  const connectionsRef = useRef(connections);
+  const rolesRef = useRef(roles);
+  useLayoutEffect(() => {
+    activeRoleRef.current = activeRole;
+    pointsRef.current = points;
+    connectionsRef.current = connections;
+    rolesRef.current = roles;
+  });
 
   const saveTimerRef = useRef(null);
   useEffect(() => {
@@ -191,7 +208,6 @@ export const useSkillWeb = () => {
           ]
         : [];
 
-    // Update progression counters
     const nextPPN = {
       ...pointsPerNode,
       [activeRole]: (pointsPerNode[activeRole] ?? 0) + 1,
@@ -221,18 +237,21 @@ export const useSkillWeb = () => {
     }
   };
 
-  const finalizeLastOpenPoint = () => {
-    if (!activeRole) return;
+  const finalizeLastOpenPoint = useCallback(() => {
+    if (!activeRoleRef.current) return;
     const now = Date.now();
-    for (let i = points.length - 1; i >= 0; i--) {
-      if (points[i].roleId === activeRole && points[i].endedAt === null) {
-        setPoints((prev) =>
-          prev.map((p, idx) => (idx === i ? { ...p, endedAt: now } : p)),
-        );
-        return;
+    setPoints((prev) => {
+      for (let i = prev.length - 1; i >= 0; i--) {
+        if (
+          prev[i].roleId === activeRoleRef.current &&
+          prev[i].endedAt === null
+        ) {
+          return prev.map((p, idx) => (idx === i ? { ...p, endedAt: now } : p));
+        }
       }
-    }
-  };
+      return prev;
+    });
+  }, []);
 
   const updatePointNote = (id, note) =>
     setPoints((prev) => prev.map((p) => (p.id === id ? { ...p, note } : p)));

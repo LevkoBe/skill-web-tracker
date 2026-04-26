@@ -1,11 +1,43 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Fullscreen, HelpCircle, Undo2, Redo2, RotateCw } from "lucide-react";
-import { Card, Button, Divider, useC7One, useI18n, usePrimaryBounds } from "@levkobe/c7one";
-import { useSkillContext } from "../context/SkillContext";
+import {
+  Card,
+  Button,
+  Divider,
+  useC7One,
+  useI18n,
+  usePrimaryBounds,
+} from "@levkobe/c7one";
+import { useSkillContext, useSkillTimer } from "../context/SkillContext";
 import { useCanvasDrag } from "../hooks/useCanvasDrag";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 import { WebCanvas } from "../panels/WebCanvas";
 import { formatElapsed } from "../utils/time";
+
+function TimerDisplay({ onToggle }) {
+  const { t } = useI18n();
+  const timer = useSkillTimer();
+  if (!timer) return null;
+  return (
+    <div className="flex items-center gap-2 border-l border-border pl-3">
+      <span
+        className={`text-sm font-mono tabular-nums w-14 text-right ${
+          timer.isRunning ? "text-fg-primary" : "text-fg-disabled"
+        }`}
+      >
+        {formatElapsed(timer.elapsed)}
+      </span>
+      <Button
+        variant={timer.isRunning ? "destructive" : "secondary"}
+        size="sm"
+        onClick={onToggle}
+        title={t("canvas.timer.toggle")}
+      >
+        {timer.isRunning ? t("canvas.timer.stop") : t("canvas.timer.start")}
+      </Button>
+    </div>
+  );
+}
 
 const TOOLTIP_HIT_RADIUS = 12;
 
@@ -23,9 +55,8 @@ export function CanvasWindow() {
     setOffset,
     addPoint,
     updatePointNote,
-    timer,
     handleTimerToggle,
-    handleTimerStop,
+    handlePointAdded,
     fileInputRef,
     save,
     undo,
@@ -70,19 +101,24 @@ export function CanvasWindow() {
     onZoom: handleKeyboardZoom,
   });
 
-  const handleCanvasClick = (e) => {
-    if (!activeRole || isDragging) return;
-    const rect = e.target.getBoundingClientRect();
-    const canvasX = e.clientX - rect.left;
-    const canvasY = e.clientY - rect.top;
-    const newId = Date.now();
-    addPoint((canvasX - offset.x) / scale, (canvasY - offset.y) / scale);
-    setPendingNote({ pointId: newId, screenX: canvasX, screenY: canvasY });
-    setNoteText("");
-    setTooltip(null);
-    if (settings.timerActiveByDefault ?? false) timer.start();
-    else handleTimerStop();
-  };
+  const handleCanvasClick = useCallback(
+    (e) => {
+      if (!activeRole || isDragging) return;
+      const rect = e.target.getBoundingClientRect();
+      const canvasX = e.clientX - rect.left;
+      const canvasY = e.clientY - rect.top;
+      addPoint((canvasX - offset.x) / scale, (canvasY - offset.y) / scale);
+      setPendingNote({
+        pointId: Date.now(),
+        screenX: canvasX,
+        screenY: canvasY,
+      });
+      setNoteText("");
+      setTooltip(null);
+      handlePointAdded();
+    },
+    [activeRole, isDragging, offset, scale, addPoint, handlePointAdded],
+  );
 
   const commitNote = () => {
     if (!pendingNote) return;
@@ -113,7 +149,9 @@ export function CanvasWindow() {
   };
 
   const activeRoleName = roles.find((r) => r.id === activeRole)?.name;
-  const activeMechanicName = techniques.find((t) => t.id === activeMechanic)?.name;
+  const activeMechanicName = techniques.find(
+    (t) => t.id === activeMechanic,
+  )?.name;
 
   const shortcuts = [
     ["Enter", t("shortcut.enter")],
@@ -176,8 +214,7 @@ export function CanvasWindow() {
         !pendingNote &&
         (() => {
           const p = tooltip.point;
-          const durationMs =
-            p.endedAt === null ? 0 : p.endedAt - p.startedAt;
+          const durationMs = p.endedAt === null ? 0 : p.endedAt - p.startedAt;
           return (
             <div
               style={{
@@ -221,25 +258,7 @@ export function CanvasWindow() {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2 border-l border-border pl-3">
-            <span
-              className={`text-sm font-mono tabular-nums w-14 text-right ${
-                timer.isRunning ? "text-fg-primary" : "text-fg-disabled"
-              }`}
-            >
-              {formatElapsed(timer.elapsed)}
-            </span>
-            <Button
-              variant={timer.isRunning ? "destructive" : "secondary"}
-              size="sm"
-              onClick={handleTimerToggle}
-              title={t("canvas.timer.toggle")}
-            >
-              {timer.isRunning
-                ? t("canvas.timer.stop")
-                : t("canvas.timer.start")}
-            </Button>
-          </div>
+          <TimerDisplay onToggle={handleTimerToggle} />
         </Card>
       )}
 
@@ -256,7 +275,12 @@ export function CanvasWindow() {
             const el = containerRef.current;
             if (!el) return;
             const r = el.getBoundingClientRect();
-            zoomReset(points, primaryBounds.ready ? primaryBounds : { x: 0, y: 0, width: r.width, height: r.height });
+            zoomReset(
+              points,
+              primaryBounds.ready
+                ? primaryBounds
+                : { x: 0, y: 0, width: r.width, height: r.height },
+            );
           }}
           title={t("canvas.zoom.reset")}
           className="px-2 py-1 hover:text-fg-primary hover:bg-bg-elevated transition-colors"
@@ -269,7 +293,12 @@ export function CanvasWindow() {
             const el = containerRef.current;
             if (!el) return;
             const r = el.getBoundingClientRect();
-            zoomToFit(points, primaryBounds.ready ? primaryBounds : { x: 0, y: 0, width: r.width, height: r.height });
+            zoomToFit(
+              points,
+              primaryBounds.ready
+                ? primaryBounds
+                : { x: 0, y: 0, width: r.width, height: r.height },
+            );
           }}
           title={t("canvas.zoom.fit")}
           className="px-2 py-1 hover:text-fg-primary hover:bg-bg-elevated transition-colors"

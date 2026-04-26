@@ -1,4 +1,4 @@
-import React, { useRef, useEffect as useLayoutEffect } from "react";
+import React, { useRef, useEffect, useLayoutEffect } from "react";
 
 function hexLuminance(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -68,7 +68,7 @@ function shiftColorForBg(color, isDark) {
   return color;
 }
 
-export const WebCanvas = ({
+export const WebCanvas = React.memo(({
   points,
   connections,
   offset,
@@ -96,23 +96,25 @@ export const WebCanvas = ({
   const rolesRef = useRef(roles);
   const bgColorRef = useRef(bgColor);
 
-  pointsRef.current = points;
-  connectionsRef.current = connections;
-  offsetRef.current = offset;
-  scaleRef.current = scale;
-  activeRoleRef.current = activeRole;
-  settingsRef.current = settings;
-  rolesRef.current = roles;
-  bgColorRef.current = bgColor;
-
   useLayoutEffect(() => {
+    pointsRef.current = points;
+    connectionsRef.current = connections;
+    offsetRef.current = offset;
+    scaleRef.current = scale;
+    activeRoleRef.current = activeRole;
+    settingsRef.current = settings;
+    rolesRef.current = roles;
+    bgColorRef.current = bgColor;
+  });
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !dragHandlers.onWheel) return;
     canvas.addEventListener("wheel", dragHandlers.onWheel, { passive: false });
     return () => canvas.removeEventListener("wheel", dragHandlers.onWheel);
   }, [dragHandlers.onWheel]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const onMove = (e) => {
@@ -350,4 +352,4 @@ export const WebCanvas = ({
       className="w-full h-full cursor-crosshair"
     />
   );
-};
+});
