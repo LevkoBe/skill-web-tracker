@@ -10,10 +10,11 @@ export function DiagramWindow() {
   const { t } = useI18n();
   const { colors } = useC7One();
   const embedTheme = detectIsDark(colors["--color-bg-base"]) ? "dark" : "light";
-  const { roles, techniques, points, activeRole, unlockedNodes, settings } =
+  const { roles, points, activeRole, unlockedNodes, settings } =
     useSkillContext();
   const { pointCounts } = useRoleStats(roles, points);
-  const isGradual = (settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
+  const isGradual =
+    (settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
   const effectiveUnlocked = isGradual ? unlockedNodes : null;
   const iframeRef = useRef(null);
   const dslRef = useRef(null);
@@ -27,8 +28,15 @@ export function DiagramWindow() {
 
   const dsl = useMemo(
     () =>
-      buildDiagramDsl(roles, pointCounts, activeRole, theme, effectiveUnlocked, colors, techniques),
-    [roles, pointCounts, activeRole, theme, effectiveUnlocked, colors, techniques],
+      buildDiagramDsl(
+        roles,
+        pointCounts,
+        activeRole,
+        theme,
+        effectiveUnlocked,
+        colors,
+      ),
+    [roles, pointCounts, activeRole, theme, effectiveUnlocked, colors],
   );
 
   useEffect(() => {

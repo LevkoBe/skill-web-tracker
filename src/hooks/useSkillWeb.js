@@ -18,7 +18,6 @@ import {
   getInitialUnlocked,
 } from "../utils/progression";
 
-
 const getInitialState = (locale) => {
   const saved = loadState();
   if (!saved) {
@@ -45,7 +44,12 @@ const getInitialState = (locale) => {
   const pointsPerNode = saved.pointsPerNode ?? computePointsPerNode(points);
   const unlockedNodes =
     saved.unlockedNodes ??
-    computeUnlocks(roles, pointsPerNode, getInitialUnlocked(roles), settings.unlockThreshold);
+    computeUnlocks(
+      roles,
+      pointsPerNode,
+      getInitialUnlocked(roles),
+      settings.unlockThreshold,
+    );
 
   return {
     roles,
@@ -78,18 +82,32 @@ export const useSkillWeb = () => {
   const past = useRef([]);
   const future = useRef([]);
 
+  const saveTimerRef = useRef(null);
   useEffect(() => {
-    saveState({
-      roles,
-      points,
-      connections,
-      offset,
-      settings,
-      techniques,
-      pointsPerNode,
-      unlockedNodes,
-    });
-  }, [roles, points, connections, offset, settings, techniques, pointsPerNode, unlockedNodes]);
+    clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      saveState({
+        roles,
+        points,
+        connections,
+        offset,
+        settings,
+        techniques,
+        pointsPerNode,
+        unlockedNodes,
+      });
+    }, 600);
+    return () => clearTimeout(saveTimerRef.current);
+  }, [
+    roles,
+    points,
+    connections,
+    offset,
+    settings,
+    techniques,
+    pointsPerNode,
+    unlockedNodes,
+  ]);
 
   const snapshot = (r = roles, p = points, c = connections) => {
     past.current = [
@@ -164,7 +182,13 @@ export const useSkillWeb = () => {
 
     const sequentialConnection =
       closedPoints.length > 0
-        ? [{ fromIdx: closedPoints.length - 1, toIdx: newIdx, color: role.color }]
+        ? [
+            {
+              fromIdx: closedPoints.length - 1,
+              toIdx: newIdx,
+              color: role.color,
+            },
+          ]
         : [];
 
     // Update progression counters
@@ -176,8 +200,14 @@ export const useSkillWeb = () => {
       nextPPN[activeMechanic] = (pointsPerNode[activeMechanic] ?? 0) + 1;
     }
 
-    const threshold = settings.unlockThreshold ?? DEFAULT_SETTINGS.unlockThreshold;
-    const nextUnlocked = computeUnlocks(roles, nextPPN, unlockedNodes, threshold);
+    const threshold =
+      settings.unlockThreshold ?? DEFAULT_SETTINGS.unlockThreshold;
+    const nextUnlocked = computeUnlocks(
+      roles,
+      nextPPN,
+      unlockedNodes,
+      threshold,
+    );
 
     setPoints([...closedPoints, newPoint]);
     setConnections((prev) => [
@@ -281,7 +311,16 @@ export const useSkillWeb = () => {
     const blob = new Blob(
       [
         JSON.stringify(
-          { roles, points, connections, offset, settings, techniques, pointsPerNode, unlockedNodes },
+          {
+            roles,
+            points,
+            connections,
+            offset,
+            settings,
+            techniques,
+            pointsPerNode,
+            unlockedNodes,
+          },
           null,
           2,
         ),
@@ -303,13 +342,18 @@ export const useSkillWeb = () => {
       try {
         const data = JSON.parse(target.result);
         snapshot();
-        const { roles: migratedRoles, points: rolesMigratedPoints } = migrateRoles(
-          data.roles ?? [],
-          migratePoints(data.points ?? []),
+        const { roles: migratedRoles, points: rolesMigratedPoints } =
+          migrateRoles(data.roles ?? [], migratePoints(data.points ?? []));
+        const migratedPoints = migrateMechanicIds(
+          migratedRoles,
+          rolesMigratedPoints,
         );
-        const migratedPoints = migrateMechanicIds(migratedRoles, rolesMigratedPoints);
-        const loadedSettings = { ...DEFAULT_SETTINGS, ...(data.settings ?? {}) };
-        const loadedPPN = data.pointsPerNode ?? computePointsPerNode(migratedPoints);
+        const loadedSettings = {
+          ...DEFAULT_SETTINGS,
+          ...(data.settings ?? {}),
+        };
+        const loadedPPN =
+          data.pointsPerNode ?? computePointsPerNode(migratedPoints);
         const loadedUnlocked =
           data.unlockedNodes ??
           computeUnlocks(

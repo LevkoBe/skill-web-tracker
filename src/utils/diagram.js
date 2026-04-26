@@ -8,7 +8,7 @@ export const getEmbedUrl = (colors, mode = "dark") =>
 const toId = (str) => str.replace(/[\s-]/g, "_");
 
 const hashId = (str) =>
-  [...str].reduce((h, c) => ((h * 31 + c.charCodeAt(0)) & 0xffff), 0);
+  [...str].reduce((h, c) => (h * 31 + c.charCodeAt(0)) & 0xffff, 0);
 
 const nodeIcon = (theme, nodeId) => {
   if (!theme?.icons?.length) return null;
@@ -23,9 +23,7 @@ export function buildDiagramDsl(
   theme = null,
   unlockedNodes = null,
   colors = null,
-  techniques = [],
 ) {
-  const techMap = new Map(techniques.map((t) => [t.id, t]));
   const unlockedSet = unlockedNodes ? new Set(unlockedNodes) : null;
 
   const getRoleStatus = (role) => {
@@ -46,25 +44,10 @@ export function buildDiagramDsl(
     "",
   ];
 
-  for (const role of roles) {
-    const nodeId = toId(role.id);
-    const status = getRoleStatus(role);
-    const ic = nodeIcon(theme, role.id);
-    const roleTechs = role.techniques ?? [];
-
-    if (roleTechs.length > 0) {
-      lines.push(`${nodeId}:${status}{${roleTechs.map(toId).join(" ")}}`);
-    } else {
-      const prefix = ic ? `${nodeId}:${status}(${ic})` : `${nodeId}:${status}`;
-      lines.push(prefix);
-    }
-  }
-
-  lines.push("");
-
+  const roleDefLines = [];
+  const techDefLines = [];
   const placedTechs = new Set();
   const emittedEdges = new Set();
-  const techNodeLines = [];
   const techEdgeLines = [];
 
   const addEdge = (from, to) => {
@@ -76,29 +59,40 @@ export function buildDiagramDsl(
   };
 
   for (const role of roles) {
-    const roleNodeId = toId(role.id);
-    const techs = role.techniques ?? [];
-    if (techs.length === 0) continue;
+    const nodeId = toId(role.id);
+    const status = getRoleStatus(role);
+    const ic = nodeIcon(theme, role.id);
+    const roleTechs = role.techniques ?? [];
 
-    addEdge(roleNodeId, toId(techs[0]));
-
-    let prevNew = null;
-    for (const tech of techs) {
-      const techId = toId(tech);
-      if (!placedTechs.has(tech)) {
-        placedTechs.add(tech);
-        const status = getTechStatus(tech);
-        const ic = nodeIcon(theme, tech);
-        techNodeLines.push(`${techId}:${status}(${ic ?? ""})`);
-        if (prevNew !== null) addEdge(prevNew, techId);
-        prevNew = techId;
-      } else {
-        prevNew = null;
+    if (roleTechs.length > 0) {
+      roleDefLines.push(
+        `${nodeId}:${status}{${roleTechs.map(toId).join(" ")}}`,
+      );
+      addEdge(nodeId, toId(roleTechs[0]));
+      let prevNew = null;
+      for (const tech of roleTechs) {
+        const techId = toId(tech);
+        if (!placedTechs.has(tech)) {
+          placedTechs.add(tech);
+          const techStatus = getTechStatus(tech);
+          const techIc = nodeIcon(theme, tech);
+          techDefLines.push(`${techId}:${techStatus}(${techIc ?? ""})`);
+          if (prevNew !== null) addEdge(prevNew, techId);
+          prevNew = techId;
+        } else {
+          prevNew = null;
+        }
       }
+    } else {
+      const prefix = ic ? `${nodeId}:${status}(${ic})` : `${nodeId}:${status}`;
+      roleDefLines.push(prefix);
     }
   }
 
-  lines.push(...techNodeLines);
+  const allDefLines = [...roleDefLines, ...techDefLines];
+  allDefLines.sort((a, b) => hashId(a) - hashId(b));
+  lines.push(...allDefLines);
+
   lines.push("");
 
   const roleEdgeSeen = new Set();
@@ -113,7 +107,6 @@ export function buildDiagramDsl(
     }
   }
 
-  lines.push("");
   lines.push(...techEdgeLines);
   console.log(lines.join("\n"));
 

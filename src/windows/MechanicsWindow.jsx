@@ -45,7 +45,7 @@ export function MechanicsWindow() {
         })),
       }))
       .filter((g) => g.mechs.length > 0);
-  }, [roles, techniques, pointsPerMechanic, unlockedSet, isGradual, techMap]);
+  }, [roles, pointsPerMechanic, unlockedSet, isGradual, techMap]);
 
   return (
     <div className="flex flex-col h-full bg-bg-base overflow-hidden">

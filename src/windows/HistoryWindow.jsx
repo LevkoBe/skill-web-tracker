@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 
@@ -23,8 +23,10 @@ export function HistoryWindow() {
     [roles],
   );
 
-  const todayKey = toDayKey(Date.now());
-  const yesterdayKey = toDayKey(Date.now() - 86_400_000);
+  const [{ todayKey, yesterdayKey }] = useState(() => {
+    const now = Date.now();
+    return { todayKey: toDayKey(now), yesterdayKey: toDayKey(now - 86_400_000) };
+  });
 
   const dayData = useMemo(() => {
     const map = new Map();

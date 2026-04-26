@@ -78,4 +78,5 @@ export function SkillWebProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSkillContext = () => useContext(SkillContext);

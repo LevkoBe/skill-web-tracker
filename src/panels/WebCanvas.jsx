@@ -1,8 +1,5 @@
 import React, { useRef, useEffect as useLayoutEffect } from "react";
 
-// ─── Color helpers ────────────────────────────────────────────────────────────
-
-/** Return perceived luminance (0–1) of a hex color. */
 function hexLuminance(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -10,7 +7,6 @@ function hexLuminance(hex) {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 }
 
-/** Convert HSL (0-360, 0-100, 0-100) → 6-char hex string. */
 function hslToHex(h, s, l) {
   s /= 100;
   l /= 100;
@@ -18,36 +14,39 @@ function hslToHex(h, s, l) {
   const a = s * Math.min(l, 1 - l);
   const f = (n) =>
     l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-  const toB = (x) => Math.round(x * 255).toString(16).padStart(2, "0");
+  const toB = (x) =>
+    Math.round(x * 255)
+      .toString(16)
+      .padStart(2, "0");
   return `#${toB(f(0))}${toB(f(8))}${toB(f(4))}`;
 }
 
-/**
- * Re-pin the HSL value (lightness) of a hex or hsl color so it reads well
- * against the canvas background. Always returns a 6-char hex string so that
- * hex alpha suffixes like "30", "60" remain valid canvas colors.
- *   isDark = true  → bright nodes (L ≈ 65%)
- *   isDark = false → dark  nodes (L ≈ 38%)
- */
 function shiftColorForBg(color, isDark) {
   const targetL = isDark ? 65 : 38;
   const minS = 55;
 
-  // ── hex input ──────────────────────────────────────────────────────────────
   if (color.startsWith("#") && color.length === 7) {
     const r = parseInt(color.slice(1, 3), 16) / 255;
     const g = parseInt(color.slice(3, 5), 16) / 255;
     const b = parseInt(color.slice(5, 7), 16) / 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, s = 0;
+    const max = Math.max(r, g, b),
+      min = Math.min(r, g, b);
+    let h = 0,
+      s = 0;
     const lVal = (max + min) / 2;
     if (max !== min) {
       const d = max - min;
       s = lVal > 0.5 ? d / (2 - max - min) : d / (max + min);
       switch (max) {
-        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-        case g: h = ((b - r) / d + 2) / 6; break;
-        case b: h = ((r - g) / d + 4) / 6; break;
+        case r:
+          h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+          break;
+        case g:
+          h = ((b - r) / d + 2) / 6;
+          break;
+        case b:
+          h = ((r - g) / d + 4) / 6;
+          break;
       }
     }
     return hslToHex(
@@ -57,10 +56,7 @@ function shiftColorForBg(color, isDark) {
     );
   }
 
-  // ── hsl(h, s%, l%) input ───────────────────────────────────────────────────
-  const m = color.match(
-    /hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*[\d.]+%\s*\)/,
-  );
+  const m = color.match(/hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*[\d.]+%\s*\)/);
   if (m) {
     return hslToHex(
       parseFloat(m[1]),
@@ -71,8 +67,6 @@ function shiftColorForBg(color, isDark) {
 
   return color;
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export const WebCanvas = ({
   points,
@@ -89,9 +83,27 @@ export const WebCanvas = ({
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const timeRef = useRef(0);
-  const pointOffsetsRef = useRef([]); // { dx, dy, vx, vy, breathPhase } per node
-  const mouseRef = useRef(null);       // canvas-space { x, y } or null
-  const hoverScalesRef = useRef([]);   // per-node hover multiplier (1..2.5, lerped)
+  const pointOffsetsRef = useRef([]);
+  const mouseRef = useRef(null);
+  const hoverScalesRef = useRef([]);
+
+  const pointsRef = useRef(points);
+  const connectionsRef = useRef(connections);
+  const offsetRef = useRef(offset);
+  const scaleRef = useRef(scale);
+  const activeRoleRef = useRef(activeRole);
+  const settingsRef = useRef(settings);
+  const rolesRef = useRef(roles);
+  const bgColorRef = useRef(bgColor);
+
+  pointsRef.current = points;
+  connectionsRef.current = connections;
+  offsetRef.current = offset;
+  scaleRef.current = scale;
+  activeRoleRef.current = activeRole;
+  settingsRef.current = settings;
+  rolesRef.current = roles;
+  bgColorRef.current = bgColor;
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -103,8 +115,12 @@ export const WebCanvas = ({
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const onMove = (e) => { mouseRef.current = { x: e.offsetX, y: e.offsetY }; };
-    const onLeave = () => { mouseRef.current = null; };
+    const onMove = (e) => {
+      mouseRef.current = { x: e.offsetX, y: e.offsetY };
+    };
+    const onLeave = () => {
+      mouseRef.current = null;
+    };
     canvas.addEventListener("mousemove", onMove);
     canvas.addEventListener("mouseleave", onLeave);
     return () => {
@@ -133,29 +149,36 @@ export const WebCanvas = ({
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    const bg = bgColor || "#0f0f0f";
-
-    // Compute once per effect run (only changes when bgColor changes)
-    const isDark =
-      !bg.startsWith("#") || hexLuminance(bg) < 0.5;
-
-    // Ghost label color (inactive cluster centroid label)
-    const ghostLabel = isDark ? "#ffffff28" : "#00000018";
-
-    const roleMap = new Map(roles.map((r) => [r.id, r]));
-
-    // Cache shifted colors per role id so we don't recompute every frame
-    const shiftedRoleColor = new Map();
-    roles.forEach((r) => {
-      shiftedRoleColor.set(r.id, shiftColorForBg(r.color, isDark));
-    });
 
     const animate = () => {
+      if (
+        canvas.offsetWidth > 0 &&
+        canvas.offsetHeight > 0 &&
+        (canvas.width !== canvas.offsetWidth ||
+          canvas.height !== canvas.offsetHeight)
+      ) {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+
+      const points = pointsRef.current;
+      const connections = connectionsRef.current;
+      const offset = offsetRef.current;
+      const scale = scaleRef.current;
+      const activeRole = activeRoleRef.current;
+      const settings = settingsRef.current;
+      const roles = rolesRef.current;
+      const bg = bgColorRef.current || "#0f0f0f";
+
+      const isDark = !bg.startsWith("#") || hexLuminance(bg) < 0.5;
+      const ghostLabel = isDark ? "#ffffff28" : "#00000018";
+      const roleMap = new Map(roles.map((r) => [r.id, r]));
+      const shiftedRoleColor = new Map();
+      roles.forEach((r) => {
+        shiftedRoleColor.set(r.id, shiftColorForBg(r.color, isDark));
+      });
+
       timeRef.current += 0.01;
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -164,7 +187,7 @@ export const WebCanvas = ({
       ctx.translate(offset.x, offset.y);
       ctx.scale(scale, scale);
 
-      const maxRadius = settings.pointDriftRadius * 5; // canvas units
+      const maxRadius = settings.pointDriftRadius * 5;
       const maxSpeed = settings.pointDriftSpeed * 0.25;
       const accelMag = settings.pointDriftSpeed * 0.012;
 
@@ -173,22 +196,18 @@ export const WebCanvas = ({
         if (!o) return { ...point, displayX: point.x, displayY: point.y };
 
         if (maxRadius > 0) {
-          // Random acceleration nudge each frame
           o.vx += (Math.random() - 0.5) * accelMag;
           o.vy += (Math.random() - 0.5) * accelMag;
 
-          // Cap speed
           const spd = Math.hypot(o.vx, o.vy);
           if (spd > maxSpeed) {
             o.vx = (o.vx / spd) * maxSpeed;
             o.vy = (o.vy / spd) * maxSpeed;
           }
 
-          // Advance position
           o.dx += o.vx;
           o.dy += o.vy;
 
-          // Soft boundary: push back when beyond radius
           const dist = Math.hypot(o.dx, o.dy);
           if (dist > maxRadius) {
             const over = dist - maxRadius;
@@ -198,7 +217,6 @@ export const WebCanvas = ({
             o.dy = (o.dy / dist) * maxRadius;
           }
         } else {
-          // Radius = 0: dampen back to center
           o.vx *= 0.85;
           o.vy *= 0.85;
           o.dx *= 0.85;
@@ -212,7 +230,6 @@ export const WebCanvas = ({
         };
       });
 
-      // Cluster labels
       if (settings.showClusterLabels ?? true) {
         const clusters = new Map();
         animatedPoints.forEach((p) => {
@@ -236,7 +253,6 @@ export const WebCanvas = ({
         });
       }
 
-      // Connections
       connections.forEach((conn) => {
         const from = animatedPoints[conn.fromIdx];
         const to = animatedPoints[conn.toIdx];
@@ -253,8 +269,7 @@ export const WebCanvas = ({
           activeRole &&
           (from.roleId === activeRole || to.roleId === activeRole);
 
-        const shiftedConn =
-          shiftedRoleColor.get(from.roleId) ?? conn.color;
+        const shiftedConn = shiftedRoleColor.get(from.roleId) ?? conn.color;
         ctx.strokeStyle = shiftedConn + (highlighted ? "70" : "38");
         ctx.lineWidth = highlighted ? 0.8 : 0.5;
         ctx.beginPath();
@@ -263,11 +278,10 @@ export const WebCanvas = ({
         ctx.stroke();
       });
 
-      // Nodes
       const scaleFactor = settings.durationScaleFactor ?? 1;
       const breathAmp = settings.breathingStrength ?? 0.3;
       const mouse = mouseRef.current;
-      const hoverThreshSq = (20 / scale) ** 2; // 20px screen-space threshold
+      const hoverThreshSq = (20 / scale) ** 2;
 
       animatedPoints.forEach((point, idx) => {
         const highlighted = activeRole === point.roleId;
@@ -281,15 +295,14 @@ export const WebCanvas = ({
           baseRadius *
           (1 + (scaleFactor - 1) * Math.log10(durationSec / 1000 + 1));
 
-        // Breathing pulse
         const o = pointOffsetsRef.current[idx];
         const breathMult = o
-          ? 1 + breathAmp * 0.35 * Math.sin(timeRef.current * 1.8 + o.breathPhase)
+          ? 1 +
+            breathAmp * 0.35 * Math.sin(timeRef.current * 1.8 + o.breathPhase)
           : 1;
 
-        // Hover scale (lerp toward target each frame)
-        const wx = (mouse ? (mouse.x - offset.x) / scale : Infinity);
-        const wy = (mouse ? (mouse.y - offset.y) / scale : Infinity);
+        const wx = mouse ? (mouse.x - offset.x) / scale : Infinity;
+        const wy = mouse ? (mouse.y - offset.y) / scale : Infinity;
         const dSq = (point.displayX - wx) ** 2 + (point.displayY - wy) ** 2;
         const hovered = dSq < hoverThreshSq;
         const targetHover = hovered ? 2.5 : 1;
@@ -314,11 +327,7 @@ export const WebCanvas = ({
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
           ctx.fillStyle = shifted + (highlighted || hovered ? "cc" : "66");
-          ctx.fillText(
-            point.note,
-            point.displayX,
-            point.displayY + radius + 3,
-          );
+          ctx.fillText(point.note, point.displayX, point.displayY + radius + 3);
         }
       });
 
@@ -329,7 +338,7 @@ export const WebCanvas = ({
 
     animate();
     return () => cancelAnimationFrame(animationRef.current);
-  }, [points, connections, offset, scale, activeRole, settings, roles, bgColor]);
+  }, []);
 
   const { onWheel: _onWheel, ...mouseHandlers } = dragHandlers;
 
