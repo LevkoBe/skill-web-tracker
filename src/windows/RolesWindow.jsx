@@ -4,6 +4,7 @@ import { Button, Input, Textarea, Modal, useI18n } from "@levkobe/c7one";
 import { RoleItem } from "../components/RoleItem";
 import { useRoleStats } from "../hooks/useRoleStats";
 import { useSkillContext } from "../context/SkillContext";
+import { DEFAULT_SETTINGS } from "../config";
 
 function TechniqueModal({ tech, open, onOpenChange, onUpdate }) {
   const { t } = useI18n();
@@ -169,7 +170,7 @@ export function RolesWindow() {
   } = useSkillContext();
 
   const [newRoleName, setNewRoleName] = useState("");
-  const isGradual = (settings?.gameMode ?? "immediate") === "gradual";
+  const isGradual = (settings?.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
   const { levels, sortedRoles } = useRoleStats(roles, points);
   const unlockedSet = useMemo(() => new Set(unlockedNodes), [unlockedNodes]);
 

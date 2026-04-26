@@ -11,6 +11,7 @@ import {
   useI18n,
 } from "@levkobe/c7one";
 import { DARK_COLORS, LIGHT_COLORS } from "../themes";
+import { SUPPORTED_LOCALES } from "../config";
 import { AppSettings } from "../windows/SettingsWindow";
 import { StatsWindow } from "../windows/StatsWindow";
 import { HistoryWindow } from "../windows/HistoryWindow";
@@ -56,7 +57,7 @@ export function AppHeader() {
       <div className="flex items-center gap-2">
         {/* Locale toggle */}
         <div className="flex items-center rounded-[calc(var(--radius)*0.75)] border border-border overflow-hidden">
-          {["en", "uk"].map((loc) => (
+          {SUPPORTED_LOCALES.map((loc) => (
             <button
               key={loc}
               onClick={() => setLocale(loc)}

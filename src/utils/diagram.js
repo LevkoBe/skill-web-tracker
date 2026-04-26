@@ -2,12 +2,17 @@ const EMBED_BASE = "https://levkobe.github.io/diagravinci/embed.html";
 
 export const EMBED_ORIGIN = "https://levkobe.github.io";
 
-export const EMBED_URL = `${EMBED_BASE}?viewMode=timeline&theme=dark&classDiagram=off`;
+export const getEmbedUrl = (colors, mode = "dark") =>
+  `${EMBED_BASE}?viewMode=timeline&theme=${mode}&classDiagram=off&relLineStyle=curved&colors=${encodeURIComponent(JSON.stringify(colors))}`;
 
 const toId = (str) => str.replace(/[\s-]/g, "_");
 
-const nodeIcon = (theme, id) => {
-  const name = theme?.icons?.[id];
+const hashId = (str) =>
+  [...str].reduce((h, c) => ((h * 31 + c.charCodeAt(0)) & 0xffff), 0);
+
+const nodeIcon = (theme, nodeId) => {
+  if (!theme?.icons?.length) return null;
+  const name = theme.icons[hashId(nodeId) % theme.icons.length];
   return name ? `_${name}_` : null;
 };
 
@@ -17,7 +22,10 @@ export function buildDiagramDsl(
   activeRoleId,
   theme = null,
   unlockedNodes = null,
+  colors = null,
+  techniques = [],
 ) {
+  const techMap = new Map(techniques.map((t) => [t.id, t]));
   const unlockedSet = unlockedNodes ? new Set(unlockedNodes) : null;
 
   const getRoleStatus = (role) => {
@@ -32,9 +40,9 @@ export function buildDiagramDsl(
   };
 
   const lines = [
-    "!selector name=unlocked  color=#4caf50  mode=color",
-    "!selector name=current   color=#2196f3  mode=color",
-    "!selector name=locked    color=#757575  mode=color",
+    `!selector name=unlocked  color=${colors["--color-success"]}  mode=color`,
+    `!selector name=current   color=${colors["--color-accent"]}  mode=color`,
+    `!selector name=locked    color=${colors["--color-fg-disabled"]}  mode=color`,
     "",
   ];
 
@@ -42,10 +50,10 @@ export function buildDiagramDsl(
     const nodeId = toId(role.id);
     const status = getRoleStatus(role);
     const ic = nodeIcon(theme, role.id);
-    const techniques = role.techniques ?? [];
+    const roleTechs = role.techniques ?? [];
 
-    if (techniques.length > 0) {
-      lines.push(`${nodeId}:${status}{${techniques.map(toId).join(" ")}}`);
+    if (roleTechs.length > 0) {
+      lines.push(`${nodeId}:${status}{${roleTechs.map(toId).join(" ")}}`);
     } else {
       const prefix = ic ? `${nodeId}:${status}(${ic})` : `${nodeId}:${status}`;
       lines.push(prefix);

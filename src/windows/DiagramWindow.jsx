@@ -1,20 +1,24 @@
 import { useRef, useEffect, useMemo, useState } from "react";
-import { Body, useI18n } from "@levkobe/c7one";
+import { Body, useI18n, useC7One, detectIsDark } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 import { useRoleStats } from "../hooks/useRoleStats";
-import { buildDiagramDsl, EMBED_URL, EMBED_ORIGIN } from "../utils/diagram";
+import { buildDiagramDsl, getEmbedUrl, EMBED_ORIGIN } from "../utils/diagram";
 import { THEMES } from "../data/themes";
+import { DEFAULT_DIAGRAM_THEME_ID, DEFAULT_SETTINGS } from "../config";
 
 export function DiagramWindow() {
   const { t } = useI18n();
-  const { roles, points, activeRole, unlockedNodes, settings } = useSkillContext();
+  const { colors } = useC7One();
+  const embedTheme = detectIsDark(colors["--color-bg-base"]) ? "dark" : "light";
+  const { roles, techniques, points, activeRole, unlockedNodes, settings } =
+    useSkillContext();
   const { pointCounts } = useRoleStats(roles, points);
-  const isGradual = (settings.gameMode ?? "immediate") === "gradual";
+  const isGradual = (settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
   const effectiveUnlocked = isGradual ? unlockedNodes : null;
   const iframeRef = useRef(null);
   const dslRef = useRef(null);
   const isLoadedRef = useRef(false);
-  const [themeId, setThemeId] = useState("craft");
+  const [themeId, setThemeId] = useState(DEFAULT_DIAGRAM_THEME_ID);
 
   const theme = useMemo(
     () => THEMES.find((th) => th.id === themeId) ?? THEMES[0],
@@ -22,8 +26,9 @@ export function DiagramWindow() {
   );
 
   const dsl = useMemo(
-    () => buildDiagramDsl(roles, pointCounts, activeRole, theme, effectiveUnlocked),
-    [roles, pointCounts, activeRole, theme, effectiveUnlocked],
+    () =>
+      buildDiagramDsl(roles, pointCounts, activeRole, theme, effectiveUnlocked, colors, techniques),
+    [roles, pointCounts, activeRole, theme, effectiveUnlocked, colors, techniques],
   );
 
   useEffect(() => {
@@ -81,7 +86,7 @@ export function DiagramWindow() {
       <div className="flex-1 min-h-0">
         <iframe
           ref={iframeRef}
-          src={EMBED_URL}
+          src={getEmbedUrl(colors, embedTheme)}
           className="w-full h-full border-0"
           title="Role progression diagram"
         />

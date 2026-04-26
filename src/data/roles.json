@@ -5,19 +5,9 @@
     "complexity": 0,
     "type": "positive",
     "summary": "The baseline role — who you are before any persona. A starting point for self-knowledge, personal values, and authentic identity.",
-    "techniques": [
-      "journaling-reflection",
-      "self-acknowledgment",
-      "anti-behavior-tracking"
-    ],
+    "techniques": ["journaling-reflection", "self-acknowledgment", "anti-behavior-tracking"],
     "buildsFrom": [],
-    "buildsInto": [
-      "executor",
-      "observer",
-      "survivor",
-      "explorer",
-      "present"
-    ]
+    "buildsInto": ["executor", "observer", "survivor", "explorer", "present"]
   },
   {
     "id": "executor",
@@ -25,18 +15,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Receives objectives and delivers results through structured execution. No drama, just completion — consistent and reliable regardless of mood.",
-    "techniques": [
-      "planning",
-      "goal-definition",
-      "task-chunking",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "robot"
-    ]
+    "techniques": ["planning", "goal-definition", "task-chunking", "minimal-viable-action"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["robot"]
   },
   {
     "id": "observer",
@@ -44,19 +25,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Steps back to see the bigger picture with analytical detachment. Transforms anxiety into curiosity — enjoying what is rather than reacting to it.",
-    "techniques": [
-      "analytical-detachment",
-      "pattern-recognition",
-      "emotional-reframing",
-      "scenario-forecasting"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "past",
-      "little-human"
-    ]
+    "techniques": ["analytical-detachment", "pattern-recognition", "emotional-reframing", "scenario-forecasting"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["past", "little-human"]
   },
   {
     "id": "survivor",
@@ -64,18 +35,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Does whatever it takes to persist. Detects the most minimal viable path through a hard day and eliminates only the necessary obstacles.",
-    "techniques": [
-      "minimal-viable-action",
-      "task-chunking",
-      "friction-as-fuel"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "resistor",
-      "past"
-    ]
+    "techniques": ["minimal-viable-action", "task-chunking", "friction-as-fuel"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["resistor", "past"]
   },
   {
     "id": "explorer",
@@ -83,18 +45,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "A curious adventurer who reframes challenges as opportunities for discovery. Transforms fear of the unknown into excitement and wonder.",
-    "techniques": [
-      "first-step-rule",
-      "brainstorming",
-      "scenario-forecasting",
-      "journaling-reflection"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "enjoyer"
-    ]
+    "techniques": ["first-step-rule", "brainstorming", "scenario-forecasting", "journaling-reflection"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["enjoyer"]
   },
   {
     "id": "present",
@@ -102,17 +55,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Anchors fully in the current moment, cutting through past regrets and future anxieties. Life happens only here, right now.",
-    "techniques": [
-      "sensory-grounding",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "enjoyer",
-      "little-human"
-    ]
+    "techniques": ["sensory-grounding", "minimal-viable-action"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["enjoyer", "little-human"]
   },
   {
     "id": "procrastinator",
@@ -120,12 +65,8 @@
     "complexity": 1,
     "type": "negative",
     "summary": "An anti-role for tracking avoidance behavior. Not a persona to embody — a pattern to observe and resist.",
-    "techniques": [
-      "anti-behavior-tracking"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
+    "techniques": ["anti-behavior-tracking"],
+    "buildsFrom": ["myself"],
     "buildsInto": []
   },
   {
@@ -134,18 +75,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Functions as an emotionless machine, getting work done without feelings interfering. Mechanical repetition without overthinking.",
-    "techniques": [
-      "task-chunking",
-      "minimal-viable-action",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "executor"
-    ],
-    "buildsInto": [
-      "accelerator",
-      "impactor"
-    ]
+    "techniques": ["task-chunking", "minimal-viable-action", "analytical-detachment"],
+    "buildsFrom": ["executor"],
+    "buildsInto": ["accelerator", "impactor"]
   },
   {
     "id": "past",
@@ -153,19 +85,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Processes what has already happened and extracts wisdom from it. Treats memory as a library, not a prison.",
-    "techniques": [
-      "journaling-reflection",
-      "pattern-recognition",
-      "root-cause-analysis"
-    ],
-    "buildsFrom": [
-      "observer",
-      "survivor"
-    ],
-    "buildsInto": [
-      "archivist",
-      "future"
-    ]
+    "techniques": ["journaling-reflection", "pattern-recognition", "root-cause-analysis"],
+    "buildsFrom": ["observer", "survivor"],
+    "buildsInto": ["archivist", "future"]
   },
   {
     "id": "little-human",
@@ -173,19 +95,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "A tiny creature in a vast world. Accepts its imperfection and limited power — doing only what's actually possible right now, not what's ideal.",
-    "techniques": [
-      "task-chunking",
-      "first-step-rule",
-      "self-acknowledgment",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "observer",
-      "present"
-    ],
-    "buildsInto": [
-      "future"
-    ]
+    "techniques": ["task-chunking", "first-step-rule", "self-acknowledgment", "minimal-viable-action"],
+    "buildsFrom": ["observer", "present"],
+    "buildsInto": ["future"]
   },
   {
     "id": "resistor",
@@ -193,17 +105,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Gets energized by obstacles and resistance, converting friction into motivational fuel. The harder the world pushes back, the harder it pushes forward.",
-    "techniques": [
-      "friction-as-fuel",
-      "momentum-building",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "survivor"
-    ],
-    "buildsInto": [
-      "impactor"
-    ]
+    "techniques": ["friction-as-fuel", "momentum-building", "goal-definition"],
+    "buildsFrom": ["survivor"],
+    "buildsInto": ["impactor"]
   },
   {
     "id": "enjoyer",
@@ -211,18 +115,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Finds genuine enjoyment in whatever is happening, regardless of whether it's objectively pleasant. Doesn't need moments to be good to enjoy them.",
-    "techniques": [
-      "emotional-reframing",
-      "sensory-grounding",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "explorer",
-      "present"
-    ],
-    "buildsInto": [
-      "candy-hunter"
-    ]
+    "techniques": ["emotional-reframing", "sensory-grounding", "analytical-detachment"],
+    "buildsFrom": ["explorer", "present"],
+    "buildsInto": ["candy-hunter"]
   },
   {
     "id": "accelerator",
@@ -230,18 +125,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Compresses time by creating urgency to finish quickly. Uses speed-based techniques to overcome hesitation and get things done fast.",
-    "techniques": [
-      "two-minute-rule",
-      "first-step-rule",
-      "minimal-viable-action",
-      "momentum-building"
-    ],
-    "buildsFrom": [
-      "robot"
-    ],
-    "buildsInto": [
-      "challenger"
-    ]
+    "techniques": ["two-minute-rule", "first-step-rule", "minimal-viable-action", "momentum-building"],
+    "buildsFrom": ["robot"],
+    "buildsInto": ["challenger"]
   },
   {
     "id": "archivist",
@@ -249,19 +135,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Collects, organizes, and retrieves information systematically. Creates structure and clarity from mental chaos through notes, lists, and categorization.",
-    "techniques": [
-      "note-taking",
-      "mind-mapping",
-      "space-decluttering",
-      "pattern-recognition"
-    ],
-    "buildsFrom": [
-      "past"
-    ],
-    "buildsInto": [
-      "proud",
-      "representative"
-    ]
+    "techniques": ["note-taking", "mind-mapping", "space-decluttering", "pattern-recognition"],
+    "buildsFrom": ["past"],
+    "buildsInto": ["proud", "representative"]
   },
   {
     "id": "impactor",
@@ -269,19 +145,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Focuses energy only on what creates real, measurable change. Cuts through busyness to find the highest-leverage actions.",
-    "techniques": [
-      "impact-assessment",
-      "goal-definition",
-      "root-cause-analysis"
-    ],
-    "buildsFrom": [
-      "robot",
-      "resistor"
-    ],
-    "buildsInto": [
-      "sportsman",
-      "challenger"
-    ]
+    "techniques": ["impact-assessment", "goal-definition", "root-cause-analysis"],
+    "buildsFrom": ["robot", "resistor"],
+    "buildsInto": ["sportsman", "challenger"]
   },
   {
     "id": "candy-hunter",
@@ -289,17 +155,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "A kid who will do anything for sweets. Uses the reward system to fuel completion of whatever task stands between you and the treat.",
-    "techniques": [
-      "reward-system",
-      "goal-definition",
-      "task-chunking"
-    ],
-    "buildsFrom": [
-      "enjoyer"
-    ],
-    "buildsInto": [
-      "challenger"
-    ]
+    "techniques": ["reward-system", "goal-definition", "task-chunking"],
+    "buildsFrom": ["enjoyer"],
+    "buildsInto": ["challenger"]
   },
   {
     "id": "future",
@@ -307,19 +165,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Your future self looking back, providing support and perspective on what actually matters. Evaluates present actions through the lens of who you're becoming.",
-    "techniques": [
-      "future-self-projection",
-      "scenario-forecasting",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "past",
-      "little-human"
-    ],
-    "buildsInto": [
-      "hopeful",
-      "representative"
-    ]
+    "techniques": ["future-self-projection", "scenario-forecasting", "goal-definition"],
+    "buildsFrom": ["past", "little-human"],
+    "buildsInto": ["hopeful", "representative"]
   },
   {
     "id": "hopeful",
@@ -327,19 +175,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Maintains hope through difficulty by setting small, achievable goals that build toward something bigger. Believes the situation can improve.",
-    "techniques": [
-      "goal-definition",
-      "task-chunking",
-      "future-self-projection",
-      "self-acknowledgment"
-    ],
-    "buildsFrom": [
-      "future"
-    ],
-    "buildsInto": [
-      "wannabe-astronaut",
-      "perfecto"
-    ]
+    "techniques": ["goal-definition", "task-chunking", "future-self-projection", "self-acknowledgment"],
+    "buildsFrom": ["future"],
+    "buildsInto": ["wannabe-astronaut", "perfecto"]
   },
   {
     "id": "proud",
@@ -347,16 +185,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Pauses to genuinely appreciate how far you've come. Acknowledges effort and growth with warmth rather than measuring against some ideal.",
-    "techniques": [
-      "self-acknowledgment",
-      "journaling-reflection"
-    ],
-    "buildsFrom": [
-      "archivist"
-    ],
-    "buildsInto": [
-      "perfecto"
-    ]
+    "techniques": ["self-acknowledgment", "journaling-reflection"],
+    "buildsFrom": ["archivist"],
+    "buildsInto": ["perfecto"]
   },
   {
     "id": "representative",
@@ -364,18 +195,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Uses empathy and social grace to navigate interactions. Can split into two sides of a dialogue, genuinely defending each position.",
-    "techniques": [
-      "perspective-reversal",
-      "inner-dialogue",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "archivist",
-      "future"
-    ],
-    "buildsInto": [
-      "actor"
-    ]
+    "techniques": ["perspective-reversal", "inner-dialogue", "analytical-detachment"],
+    "buildsFrom": ["archivist", "future"],
+    "buildsInto": ["actor"]
   },
   {
     "id": "sportsman",
@@ -383,19 +205,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Channels energy into physical activity and discipline. Treats the body as something to train, maintain, and push.",
-    "techniques": [
-      "planning",
-      "minimal-viable-action",
-      "momentum-building",
-      "reward-system"
-    ],
-    "buildsFrom": [
-      "impactor"
-    ],
-    "buildsInto": [
-      "endurer",
-      "operator"
-    ]
+    "techniques": ["planning", "minimal-viable-action", "momentum-building", "reward-system"],
+    "buildsFrom": ["impactor"],
+    "buildsInto": ["endurer", "operator"]
   },
   {
     "id": "challenger",
@@ -403,21 +215,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Challenges the self by doing what you normally wouldn't. Deliberately steps outside the comfort zone to change the trajectory of your life.",
-    "techniques": [
-      "first-step-rule",
-      "friction-as-fuel",
-      "scenario-forecasting",
-      "dream-visualization"
-    ],
-    "buildsFrom": [
-      "accelerator",
-      "impactor",
-      "candy-hunter"
-    ],
-    "buildsInto": [
-      "endurer",
-      "operator"
-    ]
+    "techniques": ["first-step-rule", "friction-as-fuel", "scenario-forecasting", "dream-visualization"],
+    "buildsFrom": ["accelerator", "impactor", "candy-hunter"],
+    "buildsInto": ["endurer", "operator"]
   },
   {
     "id": "sad-kid",
@@ -425,18 +225,9 @@
     "complexity": 2,
     "type": "shadow",
     "summary": "Genuinely enjoys the experience of sadness. Reframes melancholy as something to savor rather than escape — a variant of Mind-Warper for emotional states.",
-    "techniques": [
-      "emotional-reframing",
-      "sensory-grounding",
-      "journaling-reflection"
-    ],
-    "buildsFrom": [
-      "enjoyer",
-      "observer"
-    ],
-    "buildsInto": [
-      "mind-warper"
-    ]
+    "techniques": ["emotional-reframing", "sensory-grounding", "journaling-reflection"],
+    "buildsFrom": ["enjoyer", "observer"],
+    "buildsInto": ["mind-warper"]
   },
   {
     "id": "wannabe-astronaut",
@@ -444,18 +235,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Dreams big and believes completely. Won't give up on ambitious goals no matter how distant they feel right now.",
-    "techniques": [
-      "dream-visualization",
-      "goal-definition",
-      "future-self-projection",
-      "scenario-forecasting"
-    ],
-    "buildsFrom": [
-      "hopeful"
-    ],
-    "buildsInto": [
-      "oracle"
-    ]
+    "techniques": ["dream-visualization", "goal-definition", "future-self-projection", "scenario-forecasting"],
+    "buildsFrom": ["hopeful"],
+    "buildsInto": ["oracle"]
   },
   {
     "id": "perfecto",
@@ -463,19 +245,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Your ideal self — not a standard to fall short of, but a patient and compassionate guide. Inspires through belief in your potential, not fear of inadequacy.",
-    "techniques": [
-      "future-self-projection",
-      "self-acknowledgment",
-      "inner-dialogue",
-      "dream-visualization"
-    ],
-    "buildsFrom": [
-      "hopeful",
-      "proud"
-    ],
-    "buildsInto": [
-      "resolver"
-    ]
+    "techniques": ["future-self-projection", "self-acknowledgment", "inner-dialogue", "dream-visualization"],
+    "buildsFrom": ["hopeful", "proud"],
+    "buildsInto": ["resolver"]
   },
   {
     "id": "actor",
@@ -483,17 +255,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Carries hidden personalities and switches between them as needed. The visible face is composed and capable; the hidden self is still figuring it out.",
-    "techniques": [
-      "perspective-reversal",
-      "inner-dialogue",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "representative"
-    ],
-    "buildsInto": [
-      "opportunist"
-    ]
+    "techniques": ["perspective-reversal", "inner-dialogue", "analytical-detachment"],
+    "buildsFrom": ["representative"],
+    "buildsInto": ["opportunist"]
   },
   {
     "id": "endurer",
@@ -501,20 +265,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Survives what others couldn't, with a more heroic and determined quality than Survivor. Built for long-haul endurance, not just getting through the day.",
-    "techniques": [
-      "friction-as-fuel",
-      "minimal-viable-action",
-      "momentum-building",
-      "self-acknowledgment"
-    ],
-    "buildsFrom": [
-      "sportsman",
-      "challenger"
-    ],
-    "buildsInto": [
-      "tracker",
-      "calm-before-storm"
-    ]
+    "techniques": ["friction-as-fuel", "minimal-viable-action", "momentum-building", "self-acknowledgment"],
+    "buildsFrom": ["sportsman", "challenger"],
+    "buildsInto": ["tracker", "calm-before-storm"]
   },
   {
     "id": "operator",
@@ -522,21 +275,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Gets tasks done with unstoppable momentum. No questions about how — just completion. An evolved Executor that eliminates all excuses.",
-    "techniques": [
-      "goal-definition",
-      "planning",
-      "momentum-building",
-      "task-chunking"
-    ],
-    "buildsFrom": [
-      "sportsman",
-      "challenger"
-    ],
-    "buildsInto": [
-      "resolver",
-      "calm-before-storm",
-      "tracker"
-    ]
+    "techniques": ["goal-definition", "planning", "momentum-building", "task-chunking"],
+    "buildsFrom": ["sportsman", "challenger"],
+    "buildsInto": ["resolver", "calm-before-storm", "tracker"]
   },
   {
     "id": "impostor",
@@ -544,18 +285,9 @@
     "complexity": 3,
     "type": "shadow",
     "summary": "Survives unfamiliar territory by mimicking competence. Uses the world's expectations against itself — figuring it out while looking like you already have.",
-    "techniques": [
-      "perspective-reversal",
-      "pattern-recognition",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "resistor",
-      "representative"
-    ],
-    "buildsInto": [
-      "opportunist"
-    ]
+    "techniques": ["perspective-reversal", "pattern-recognition", "analytical-detachment"],
+    "buildsFrom": ["resistor", "representative"],
+    "buildsInto": ["opportunist"]
   },
   {
     "id": "oracle",
@@ -563,19 +295,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Predicts and foresees threats and obstacles with vivid detail. Explores multiple possible futures, preparing for what might come.",
-    "techniques": [
-      "scenario-forecasting",
-      "pattern-recognition",
-      "future-self-projection",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "wannabe-astronaut"
-    ],
-    "buildsInto": [
-      "mind-warper",
-      "puppeteer"
-    ]
+    "techniques": ["scenario-forecasting", "pattern-recognition", "future-self-projection", "analytical-detachment"],
+    "buildsFrom": ["wannabe-astronaut"],
+    "buildsInto": ["mind-warper", "puppeteer"]
   },
   {
     "id": "resolver",
@@ -583,20 +305,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Identifies core problems and generates practical solutions. Cuts through symptoms to find what actually needs fixing, then tests the simplest solution first.",
-    "techniques": [
-      "root-cause-analysis",
-      "brainstorming",
-      "iteration",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "perfecto",
-      "operator"
-    ],
-    "buildsInto": [
-      "ashmaker",
-      "blocker"
-    ]
+    "techniques": ["root-cause-analysis", "brainstorming", "iteration", "goal-definition"],
+    "buildsFrom": ["perfecto", "operator"],
+    "buildsInto": ["ashmaker", "blocker"]
   },
   {
     "id": "opportunist",
@@ -604,19 +315,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Scans for chances to improve the situation and acts on them swiftly. Sees openings where others see obstacles.",
-    "techniques": [
-      "pattern-recognition",
-      "scenario-forecasting",
-      "impact-assessment",
-      "first-step-rule"
-    ],
-    "buildsFrom": [
-      "actor"
-    ],
-    "buildsInto": [
-      "hero",
-      "mind-warper"
-    ]
+    "techniques": ["pattern-recognition", "scenario-forecasting", "impact-assessment", "first-step-rule"],
+    "buildsFrom": ["actor"],
+    "buildsInto": ["hero", "mind-warper"]
   },
   {
     "id": "tracker",
@@ -624,19 +325,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Tracks relentlessly down to the root cause of any problem. Won't stop at symptoms — wants the source, the why behind the why.",
-    "techniques": [
-      "root-cause-analysis",
-      "pattern-recognition",
-      "brainstorming",
-      "iteration"
-    ],
-    "buildsFrom": [
-      "endurer",
-      "operator"
-    ],
-    "buildsInto": [
-      "ashmaker"
-    ]
+    "techniques": ["root-cause-analysis", "pattern-recognition", "brainstorming", "iteration"],
+    "buildsFrom": ["endurer", "operator"],
+    "buildsInto": ["ashmaker"]
   },
   {
     "id": "calm-before-storm",
@@ -644,19 +335,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Builds momentum silently, gathering strength and resolve, then delivers a decisive and powerful action at the right moment.",
-    "techniques": [
-      "momentum-building",
-      "scenario-forecasting",
-      "strategic-planning"
-    ],
-    "buildsFrom": [
-      "endurer",
-      "operator"
-    ],
-    "buildsInto": [
-      "hero",
-      "puppeteer"
-    ]
+    "techniques": ["momentum-building", "scenario-forecasting", "strategic-planning"],
+    "buildsFrom": ["endurer", "operator"],
+    "buildsInto": ["hero", "puppeteer"]
   },
   {
     "id": "mind-warper",
@@ -664,20 +345,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Rewrites the meaning of any experience. Turns fear into excitement, sadness into pleasure, discomfort into sensation. Reality is interpretation.",
-    "techniques": [
-      "emotional-reframing",
-      "perspective-reversal",
-      "inner-dialogue",
-      "sensory-grounding"
-    ],
-    "buildsFrom": [
-      "oracle",
-      "opportunist"
-    ],
-    "buildsInto": [
-      "lover",
-      "director"
-    ]
+    "techniques": ["emotional-reframing", "perspective-reversal", "inner-dialogue", "sensory-grounding"],
+    "buildsFrom": ["oracle", "opportunist"],
+    "buildsInto": ["lover", "director"]
   },
   {
     "id": "puppeteer",
@@ -685,20 +355,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Splits into the manager and the puppet. The manager directs without feeling; the puppet executes. Creates full separation from the discomfort of what needs to be done.",
-    "techniques": [
-      "body-dissociation",
-      "analytical-detachment",
-      "strategic-planning",
-      "inner-dialogue"
-    ],
-    "buildsFrom": [
-      "oracle",
-      "calm-before-storm"
-    ],
-    "buildsInto": [
-      "director",
-      "god"
-    ]
+    "techniques": ["body-dissociation", "analytical-detachment", "strategic-planning", "inner-dialogue"],
+    "buildsFrom": ["oracle", "calm-before-storm"],
+    "buildsInto": ["director", "god"]
   },
   {
     "id": "ashmaker",
@@ -706,19 +365,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Destroys problems completely — not fixes, not manages, but ends them. Burns away what isn't needed to create space for what's next.",
-    "techniques": [
-      "root-cause-analysis",
-      "impact-assessment",
-      "momentum-building"
-    ],
-    "buildsFrom": [
-      "resolver",
-      "tracker"
-    ],
-    "buildsInto": [
-      "phoenix",
-      "avenger"
-    ]
+    "techniques": ["root-cause-analysis", "impact-assessment", "momentum-building"],
+    "buildsFrom": ["resolver", "tracker"],
+    "buildsInto": ["phoenix", "avenger"]
   },
   {
     "id": "blocker",
@@ -726,18 +375,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Sets up invisible barriers against things you're not ready to face. Protects psychological space by temporarily shielding from overwhelming threats.",
-    "techniques": [
-      "analytical-detachment",
-      "body-dissociation",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "resolver"
-    ],
-    "buildsInto": [
-      "phoenix",
-      "lover"
-    ]
+    "techniques": ["analytical-detachment", "body-dissociation", "minimal-viable-action"],
+    "buildsFrom": ["resolver"],
+    "buildsInto": ["phoenix", "lover"]
   },
   {
     "id": "hero",
@@ -745,20 +385,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Refuses to stop at discomfort. Breaks through any uncomfortable situation with a sense of control and power — going beyond what feels possible.",
-    "techniques": [
-      "friction-as-fuel",
-      "momentum-building",
-      "body-dissociation",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "opportunist",
-      "calm-before-storm"
-    ],
-    "buildsInto": [
-      "avenger",
-      "phoenix"
-    ]
+    "techniques": ["friction-as-fuel", "momentum-building", "body-dissociation", "goal-definition"],
+    "buildsFrom": ["opportunist", "calm-before-storm"],
+    "buildsInto": ["avenger", "phoenix"]
   },
   {
     "id": "phoenix",
@@ -766,17 +395,8 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Rises from the ashes of failure or destruction to transform and adapt. Losing isn't the end — it's the reset that enables a better version.",
-    "techniques": [
-      "iteration",
-      "self-acknowledgment",
-      "momentum-building",
-      "dream-visualization"
-    ],
-    "buildsFrom": [
-      "blocker",
-      "ashmaker",
-      "hero"
-    ],
+    "techniques": ["iteration", "self-acknowledgment", "momentum-building", "dream-visualization"],
+    "buildsFrom": ["blocker", "ashmaker", "hero"],
     "buildsInto": []
   },
   {
@@ -785,15 +405,8 @@
     "complexity": 5,
     "type": "positive",
     "summary": "The advanced Enjoyer. Doesn't just enjoy — it loves. Even pain, fear, or sadness becomes something to feel with complete openness and ecstasy.",
-    "techniques": [
-      "emotional-reframing",
-      "sensory-grounding",
-      "body-dissociation"
-    ],
-    "buildsFrom": [
-      "blocker",
-      "mind-warper"
-    ],
+    "techniques": ["emotional-reframing", "sensory-grounding", "body-dissociation"],
+    "buildsFrom": ["blocker", "mind-warper"],
     "buildsInto": []
   },
   {
@@ -802,16 +415,8 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Fully committed to making wrongs right. Will endure anything to restore justice — frames the mission as moral and righteous.",
-    "techniques": [
-      "goal-definition",
-      "momentum-building",
-      "friction-as-fuel",
-      "scenario-forecasting"
-    ],
-    "buildsFrom": [
-      "ashmaker",
-      "hero"
-    ],
+    "techniques": ["goal-definition", "momentum-building", "friction-as-fuel", "scenario-forecasting"],
+    "buildsFrom": ["ashmaker", "hero"],
     "buildsInto": []
   },
   {
@@ -820,16 +425,8 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Knows the full score and conducts accordingly. Orchestrates people, events, and moments — not by reacting but by directing the entire composition.",
-    "techniques": [
-      "strategic-planning",
-      "scenario-forecasting",
-      "inner-dialogue",
-      "pattern-recognition"
-    ],
-    "buildsFrom": [
-      "puppeteer",
-      "mind-warper"
-    ],
+    "techniques": ["strategic-planning", "scenario-forecasting", "inner-dialogue", "pattern-recognition"],
+    "buildsFrom": ["puppeteer", "mind-warper"],
     "buildsInto": []
   },
   {
@@ -838,17 +435,8 @@
     "complexity": 5,
     "type": "shadow",
     "summary": "Channels deep dissatisfaction with the world into relentless pursuit of power and influence. Uses any means necessary to reshape what has disappointed.",
-    "techniques": [
-      "strategic-planning",
-      "impact-assessment",
-      "momentum-building",
-      "friction-as-fuel"
-    ],
-    "buildsFrom": [
-      "hero",
-      "ashmaker",
-      "puppeteer"
-    ],
+    "techniques": ["strategic-planning", "impact-assessment", "momentum-building", "friction-as-fuel"],
+    "buildsFrom": ["hero", "ashmaker", "puppeteer"],
     "buildsInto": []
   },
   {
@@ -857,14 +445,8 @@
     "complexity": 5,
     "type": "shadow",
     "summary": "The advanced Puppeteer — total detachment from self, complete strategic control. Treats existence itself as the stage to be directed. Use with extreme caution.",
-    "techniques": [
-      "body-dissociation",
-      "strategic-planning",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "puppeteer"
-    ],
+    "techniques": ["body-dissociation", "strategic-planning", "analytical-detachment"],
+    "buildsFrom": ["puppeteer"],
     "buildsInto": []
   }
 ]

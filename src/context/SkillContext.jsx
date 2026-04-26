@@ -1,4 +1,5 @@
 import { createContext, useContext, useRef } from "react";
+import { DEFAULT_SETTINGS } from "../config";
 import { useSkillWeb } from "../hooks/useSkillWeb";
 import { useTimer } from "../hooks/useTimer";
 
@@ -24,7 +25,7 @@ export function SkillWebProvider({ children }) {
     const role = skillWeb.roles.find((r) => r.id === roleId);
     const mechs = role?.techniques ?? [];
     if (!mechs.length) return null;
-    const isGradual = (skillWeb.settings.gameMode ?? "immediate") === "gradual";
+    const isGradual = (skillWeb.settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
     if (!isGradual) return mechs[0];
     return mechs.find((m) => skillWeb.unlockedNodes.includes(m)) ?? null;
   };

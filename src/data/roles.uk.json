@@ -5,26 +5,9 @@
     "complexity": 0,
     "type": "positive",
     "summary": "Той/та, ким ти є до всіх масок і ролей. Точка відліку, з якої починається все інше.",
-    "techniques": [
-      "journaling-reflection",
-      "self-acknowledgment",
-      "anti-behavior-tracking"
-    ],
+    "techniques": ["journaling-reflection", "self-acknowledgment", "anti-behavior-tracking"],
     "buildsFrom": [],
-    "buildsInto": [
-      "archivist",
-      "executor",
-      "explorer",
-      "observer",
-      "past",
-      "present",
-      "representative",
-      "survivor",
-      "enjoyer",
-      "future",
-      "little-human",
-      "procrastinator"
-    ]
+    "buildsInto": ["archivist", "executor", "explorer", "observer", "past", "present", "representative", "survivor", "enjoyer", "future", "little-human", "procrastinator"]
   },
   {
     "id": "archivist",
@@ -32,18 +15,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Перетворює хаос у системи. Знаходить, зберігає, каталогізує — і завжди знає, де що лежить у голові.",
-    "techniques": [
-      "note-taking",
-      "mind-mapping",
-      "space-decluttering",
-      "pattern-recognition"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "resolver"
-    ]
+    "techniques": ["note-taking", "mind-mapping", "space-decluttering", "pattern-recognition"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["resolver"]
   },
   {
     "id": "executor",
@@ -51,21 +25,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Отримує задачу — виконує задачу. Без нарікань, без відкладань, незалежно від настрою. Саме існування цієї ролі — аргумент проти прокрастинації.",
-    "techniques": [
-      "planning",
-      "goal-definition",
-      "task-chunking",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "impactor",
-      "robot",
-      "resolver",
-      "accelerator"
-    ]
+    "techniques": ["planning", "goal-definition", "task-chunking", "minimal-viable-action"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["impactor", "robot", "resolver", "accelerator"]
   },
   {
     "id": "explorer",
@@ -73,23 +35,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Там, де інші бачать перешкоду — бачить нове й незвідане. Перетворює тривогу невідомого на азарт першовідкривача/ки.",
-    "techniques": [
-      "first-step-rule",
-      "brainstorming",
-      "scenario-forecasting",
-      "journaling-reflection"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "impactor",
-      "perfecto",
-      "mind-warper",
-      "danger",
-      "opportunist",
-      "wannabe-astronaut"
-    ]
+    "techniques": ["first-step-rule", "brainstorming", "scenario-forecasting", "journaling-reflection"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["impactor", "perfecto", "mind-warper", "danger", "opportunist", "wannabe-astronaut"]
   },
   {
     "id": "observer",
@@ -97,26 +45,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Відходить від гри, щоб побачити всю шахову дошку. Замінює реакцію на цікавість, а паніку — на аналіз.",
-    "techniques": [
-      "analytical-detachment",
-      "pattern-recognition",
-      "emotional-reframing",
-      "scenario-forecasting"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "impactor",
-      "perfecto",
-      "resolver",
-      "mind-warper",
-      "puppeteer",
-      "tracker",
-      "oracle",
-      "proud",
-      "calm-before-storm"
-    ]
+    "techniques": ["analytical-detachment", "pattern-recognition", "emotional-reframing", "scenario-forecasting"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["impactor", "perfecto", "resolver", "mind-warper", "puppeteer", "tracker", "oracle", "proud", "calm-before-storm"]
   },
   {
     "id": "past",
@@ -124,18 +55,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Осмислює пережите і знаходить у ньому розуміння. Пам'ять — це бібліотека, а не в'язниця.",
-    "techniques": [
-      "journaling-reflection",
-      "pattern-recognition",
-      "root-cause-analysis"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "proud",
-      "resolver"
-    ]
+    "techniques": ["journaling-reflection", "pattern-recognition", "root-cause-analysis"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["proud", "resolver"]
   },
   {
     "id": "present",
@@ -143,18 +65,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Відрізає шум минулого і тривогу майбутнього. Все, що є — тут і зараз, і цього достатньо.",
-    "techniques": [
-      "sensory-grounding",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "hopeful",
-      "little-human",
-      "sportsman"
-    ]
+    "techniques": ["sensory-grounding", "minimal-viable-action"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["hopeful", "little-human", "sportsman"]
   },
   {
     "id": "representative",
@@ -162,18 +75,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Вміє бути і собою, і іншим/ою одночасно. Заходить у конфлікт через розуміння, а не через протистояння.",
-    "techniques": [
-      "perspective-reversal",
-      "inner-dialogue",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "impostor",
-      "actor"
-    ]
+    "techniques": ["perspective-reversal", "inner-dialogue", "analytical-detachment"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["impostor", "actor"]
   },
   {
     "id": "survivor",
@@ -181,21 +85,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Робить усе, щоб пережити важкий період. Подолати цей відрізок — не ідеально — але вижити. Знаходить найменший можливий крок уперед і робить його.",
-    "techniques": [
-      "minimal-viable-action",
-      "task-chunking",
-      "friction-as-fuel"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "resistor",
-      "impostor",
-      "avenger",
-      "endurer",
-      "phoenix"
-    ]
+    "techniques": ["minimal-viable-action", "task-chunking", "friction-as-fuel"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["resistor", "impostor", "avenger", "endurer", "phoenix"]
   },
   {
     "id": "enjoyer",
@@ -203,19 +95,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Знаходить задоволення не в ідеальних умовах, а в будь-яких. Не чекає «правильного» моменту — насолоджується цим.",
-    "techniques": [
-      "emotional-reframing",
-      "sensory-grounding",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "lover",
-      "sad-kid",
-      "candy-hunter"
-    ]
+    "techniques": ["emotional-reframing", "sensory-grounding", "analytical-detachment"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["lover", "sad-kid", "candy-hunter"]
   },
   {
     "id": "future",
@@ -223,20 +105,9 @@
     "complexity": 1,
     "type": "positive",
     "summary": "Твоє майбутнє «я» дивиться назад і підказує, що насправді важливо. Фільтрує сьогоднішні рішення через призму того, ким ти стаєш.",
-    "techniques": [
-      "future-self-projection",
-      "scenario-forecasting",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
-    "buildsInto": [
-      "perfecto",
-      "hopeful",
-      "wannabe-astronaut",
-      "oracle"
-    ]
+    "techniques": ["future-self-projection", "scenario-forecasting", "goal-definition"],
+    "buildsFrom": ["myself"],
+    "buildsInto": ["perfecto", "hopeful", "wannabe-astronaut", "oracle"]
   },
   {
     "id": "impactor",
@@ -244,41 +115,19 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Не витрачає енергію на зайнятість заради зайнятості. Запитує: де тут справжній результат? — і діє лише там.",
-    "techniques": [
-      "impact-assessment",
-      "goal-definition",
-      "root-cause-analysis"
-    ],
-    "buildsFrom": [
-      "executor",
-      "observer"
-    ],
-    "buildsInto": [
-      "opportunist",
-      "ashmaker"
-    ]
+    "techniques": ["impact-assessment", "goal-definition", "root-cause-analysis"],
+    "buildsFrom": ["executor", "observer"],
+    "buildsInto": ["opportunist", "ashmaker"]
   },
   {
     "id": "resistor",
     "name": "Резистор",
     "complexity": 2,
     "type": "positive",
-    "summary": "Чим більше тиск ззовні — тим більше сил зсередини. Опір не зламує, а заряджає.",
-    "techniques": [
-      "friction-as-fuel",
-      "momentum-building",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "survivor"
-    ],
-    "buildsInto": [
-      "impostor",
-      "operator",
-      "antagonist",
-      "endurer",
-      "danger"
-    ]
+    "summary": "Чим більше тиск ззовні — тим більше сил зсередині. Опір не зламує, а заряджає.",
+    "techniques": ["friction-as-fuel", "momentum-building", "goal-definition"],
+    "buildsFrom": ["survivor"],
+    "buildsInto": ["impostor", "operator", "antagonist", "endurer", "danger"]
   },
   {
     "id": "robot",
@@ -286,19 +135,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Вимикає почуття — вмикає виконання. Ефективний, передбачуваний, невпинний. Робота без внутрішніх дебатів.",
-    "techniques": [
-      "task-chunking",
-      "minimal-viable-action",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "executor"
-    ],
-    "buildsInto": [
-      "operator",
-      "puppeteer",
-      "accelerator"
-    ]
+    "techniques": ["task-chunking", "minimal-viable-action", "analytical-detachment"],
+    "buildsFrom": ["executor"],
+    "buildsInto": ["operator", "puppeteer", "accelerator"]
   },
   {
     "id": "hopeful",
@@ -306,19 +145,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Підтримує в собі іскру навіть у темряві — через маленькі цілі, що ведуть до великих. Вірить, що стане краще, і діє відповідно.",
-    "techniques": [
-      "goal-definition",
-      "task-chunking",
-      "future-self-projection",
-      "self-acknowledgment"
-    ],
-    "buildsFrom": [
-      "present",
-      "future"
-    ],
-    "buildsInto": [
-      "wannabe-astronaut"
-    ]
+    "techniques": ["goal-definition", "task-chunking", "future-self-projection", "self-acknowledgment"],
+    "buildsFrom": ["present", "future"],
+    "buildsInto": ["wannabe-astronaut"]
   },
   {
     "id": "sportsman",
@@ -326,20 +155,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Переводить напругу в рух. Тіло — не перешкода, а ресурс. Тренування, дисципліна, прогрес.",
-    "techniques": [
-      "planning",
-      "minimal-viable-action",
-      "momentum-building",
-      "reward-system"
-    ],
-    "buildsFrom": [
-      "executor",
-      "present"
-    ],
-    "buildsInto": [
-      "endurer",
-      "hero"
-    ]
+    "techniques": ["planning", "minimal-viable-action", "momentum-building", "reward-system"],
+    "buildsFrom": ["executor", "present"],
+    "buildsInto": ["endurer", "hero"]
   },
   {
     "id": "procrastinator",
@@ -347,12 +165,8 @@
     "complexity": 2,
     "type": "negative",
     "summary": "Антироль для відстеження уникання. Не для втілення — для усвідомлення.",
-    "techniques": [
-      "anti-behavior-tracking"
-    ],
-    "buildsFrom": [
-      "myself"
-    ],
+    "techniques": ["anti-behavior-tracking"],
+    "buildsFrom": ["myself"],
     "buildsInto": []
   },
   {
@@ -361,19 +175,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Неспинний, постійний рух. Визначеність та рішучість. Енергія постійного прискорення.",
-    "techniques": [
-      "two-minute-rule",
-      "first-step-rule",
-      "minimal-viable-action",
-      "momentum-building"
-    ],
-    "buildsFrom": [
-      "executor",
-      "robot"
-    ],
-    "buildsInto": [
-      "operator"
-    ]
+    "techniques": ["two-minute-rule", "first-step-rule", "minimal-viable-action", "momentum-building"],
+    "buildsFrom": ["executor", "robot"],
+    "buildsInto": ["operator"]
   },
   {
     "id": "little-human",
@@ -381,19 +185,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Приймає свою обмеженість. Робить лише те, що реально можливо прямо зараз — і цього достатньо.",
-    "techniques": [
-      "task-chunking",
-      "first-step-rule",
-      "self-acknowledgment",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "myself",
-      "present"
-    ],
-    "buildsInto": [
-      "hopeful"
-    ]
+    "techniques": ["task-chunking", "first-step-rule", "self-acknowledgment", "minimal-viable-action"],
+    "buildsFrom": ["myself", "present"],
+    "buildsInto": ["hopeful"]
   },
   {
     "id": "proud",
@@ -401,17 +195,9 @@
     "complexity": 2,
     "type": "positive",
     "summary": "Робить паузу, щоб побачити, як далеко зайшов/зайшла. Без порівнянь з ідеалом — просто тепло й чесно.",
-    "techniques": [
-      "self-acknowledgment",
-      "journaling-reflection"
-    ],
-    "buildsFrom": [
-      "past",
-      "observer"
-    ],
-    "buildsInto": [
-      "perfecto"
-    ]
+    "techniques": ["self-acknowledgment", "journaling-reflection"],
+    "buildsFrom": ["past", "observer"],
+    "buildsInto": ["perfecto"]
   },
   {
     "id": "impostor",
@@ -419,20 +205,9 @@
     "complexity": 3,
     "type": "shadow",
     "summary": "Виживає на незнайомій території, видаючи невпевненість за компетентність. Поки не розбереться — виглядає так, ніби вже.",
-    "techniques": [
-      "perspective-reversal",
-      "pattern-recognition",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "resistor",
-      "survivor",
-      "representative"
-    ],
-    "buildsInto": [
-      "antagonist",
-      "actor"
-    ]
+    "techniques": ["perspective-reversal", "pattern-recognition", "analytical-detachment"],
+    "buildsFrom": ["resistor", "survivor", "representative"],
+    "buildsInto": ["antagonist", "actor"]
   },
   {
     "id": "operator",
@@ -440,24 +215,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Ніяких відмовок, ніяких «але». Ціль отримана — ціль виконана. Виконавець/иця для справді жорстких задач, де сумніви неприпустимі.",
-    "techniques": [
-      "goal-definition",
-      "planning",
-      "momentum-building",
-      "task-chunking"
-    ],
-    "buildsFrom": [
-      "executor",
-      "robot",
-      "resistor",
-      "accelerator"
-    ],
-    "buildsInto": [
-      "ashmaker",
-      "avenger",
-      "calm-before-storm",
-      "hero"
-    ]
+    "techniques": ["goal-definition", "planning", "momentum-building", "task-chunking"],
+    "buildsFrom": ["executor", "robot", "resistor", "accelerator"],
+    "buildsInto": ["ashmaker", "avenger", "calm-before-storm", "hero"]
   },
   {
     "id": "perfecto",
@@ -465,22 +225,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Твоє ідеальне «я» — не суддя, а наставник/ця. Не вимагає досконалості, а вірить у твій потенціал, надихає, та допомагає до нього рухатися.",
-    "techniques": [
-      "future-self-projection",
-      "self-acknowledgment",
-      "inner-dialogue",
-      "dream-visualization"
-    ],
-    "buildsFrom": [
-      "observer",
-      "explorer",
-      "future",
-      "proud"
-    ],
-    "buildsInto": [
-      "lover",
-      "wannabe-astronaut"
-    ]
+    "techniques": ["future-self-projection", "self-acknowledgment", "inner-dialogue", "dream-visualization"],
+    "buildsFrom": ["observer", "explorer", "future", "proud"],
+    "buildsInto": ["lover", "wannabe-astronaut"]
   },
   {
     "id": "resolver",
@@ -488,22 +235,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Докопується до суті, а не лікує симптоми. Знаходить найпростіше робоче рішення і тестує його першим/ою.",
-    "techniques": [
-      "root-cause-analysis",
-      "brainstorming",
-      "iteration",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "observer",
-      "executor",
-      "archivist",
-      "past"
-    ],
-    "buildsInto": [
-      "tracker",
-      "ashmaker"
-    ]
+    "techniques": ["root-cause-analysis", "brainstorming", "iteration", "goal-definition"],
+    "buildsFrom": ["observer", "executor", "archivist", "past"],
+    "buildsInto": ["tracker", "ashmaker"]
   },
   {
     "id": "blocker",
@@ -511,18 +245,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Створює невидимий бар'єр між тобою і тим, до чого ти ще не готовий/а. Іноді найкраща стратегія — просто не пускати.",
-    "techniques": [
-      "analytical-detachment",
-      "body-dissociation",
-      "minimal-viable-action"
-    ],
-    "buildsFrom": [
-      "survivor",
-      "observer"
-    ],
-    "buildsInto": [
-      "puppeteer"
-    ]
+    "techniques": ["analytical-detachment", "body-dissociation", "minimal-viable-action"],
+    "buildsFrom": ["survivor", "observer"],
+    "buildsInto": ["puppeteer"]
   },
   {
     "id": "opportunist",
@@ -530,19 +255,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Сканує ситуацію на наявність вікон можливостей і стрибає в них раніше за інших. Бачить вихід там, де всі бачать глухий кут.",
-    "techniques": [
-      "pattern-recognition",
-      "scenario-forecasting",
-      "impact-assessment",
-      "first-step-rule"
-    ],
-    "buildsFrom": [
-      "explorer",
-      "impactor"
-    ],
-    "buildsInto": [
-      "antagonist"
-    ]
+    "techniques": ["pattern-recognition", "scenario-forecasting", "impact-assessment", "first-step-rule"],
+    "buildsFrom": ["explorer", "impactor"],
+    "buildsInto": ["antagonist"]
   },
   {
     "id": "danger",
@@ -550,20 +265,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Робить те, чого зазвичай не наважується. Навмисно руйнує власні обмеження, щоб змінити траєкторію. Дискомфорт — плата за трансформацію.",
-    "techniques": [
-      "first-step-rule",
-      "friction-as-fuel",
-      "scenario-forecasting",
-      "dream-visualization"
-    ],
-    "buildsFrom": [
-      "explorer",
-      "resistor"
-    ],
-    "buildsInto": [
-      "hero",
-      "antagonist"
-    ]
+    "techniques": ["first-step-rule", "friction-as-fuel", "scenario-forecasting", "dream-visualization"],
+    "buildsFrom": ["explorer", "resistor"],
+    "buildsInto": ["hero", "antagonist"]
   },
   {
     "id": "candy-hunter",
@@ -571,18 +275,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Зробить усе заради винагороди. Знаходить морквинку, прив'язує її до неприємного завдання — і раптом все стає можливим.",
-    "techniques": [
-      "reward-system",
-      "goal-definition",
-      "task-chunking"
-    ],
-    "buildsFrom": [
-      "enjoyer",
-      "executor"
-    ],
-    "buildsInto": [
-      "opportunist"
-    ]
+    "techniques": ["reward-system", "goal-definition", "task-chunking"],
+    "buildsFrom": ["enjoyer", "executor"],
+    "buildsInto": ["opportunist"]
   },
   {
     "id": "sad-kid",
@@ -590,41 +285,18 @@
     "complexity": 3,
     "type": "shadow",
     "summary": "Не тікає від смутку — смакує його. Меланхолія стає естетичним переживанням, а не ворогом.",
-    "techniques": [
-      "emotional-reframing",
-      "sensory-grounding",
-      "journaling-reflection"
-    ],
-    "buildsFrom": [
-      "enjoyer",
-      "observer"
-    ],
-    "buildsInto": [
-      "mind-warper",
-      "lover"
-    ]
+    "techniques": ["emotional-reframing", "sensory-grounding", "journaling-reflection"],
+    "buildsFrom": ["enjoyer", "observer"],
+    "buildsInto": ["mind-warper", "lover"]
   },
   {
     "id": "wannabe-astronaut",
     "name": "Зоряний/а мрійник/иця",
     "complexity": 3,
     "type": "Мріє масштабно, вірить незламно. Рухається до досягнення своїх мрій.",
-    "techniques": [
-      "dream-visualization",
-      "goal-definition",
-      "future-self-projection",
-      "scenario-forecasting"
-    ],
-    "buildsFrom": [
-      "explorer",
-      "hopeful",
-      "future",
-      "perfecto"
-    ],
-    "buildsInto": [
-      "antagonist",
-      "avenger"
-    ]
+    "techniques": ["dream-visualization", "goal-definition", "future-self-projection", "scenario-forecasting"],
+    "buildsFrom": ["explorer", "hopeful", "future", "perfecto"],
+    "buildsInto": ["antagonist", "avenger"]
   },
   {
     "id": "actor",
@@ -632,19 +304,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Носить кілька масок і майстерно перемикається між ними. Назовні — зібраний/а і впевнений/а. Всередині — все ще розбирається.",
-    "techniques": [
-      "perspective-reversal",
-      "inner-dialogue",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "representative",
-      "impostor"
-    ],
-    "buildsInto": [
-      "puppeteer",
-      "director"
-    ]
+    "techniques": ["perspective-reversal", "inner-dialogue", "analytical-detachment"],
+    "buildsFrom": ["representative", "impostor"],
+    "buildsInto": ["puppeteer", "director"]
   },
   {
     "id": "endurer",
@@ -652,21 +314,9 @@
     "complexity": 3,
     "type": "positive",
     "summary": "Не просто виживає — витримує те, від чого інші ламаються. Витривалість як стиль існування, а не як виняток.",
-    "techniques": [
-      "friction-as-fuel",
-      "minimal-viable-action",
-      "momentum-building",
-      "self-acknowledgment"
-    ],
-    "buildsFrom": [
-      "survivor",
-      "resistor",
-      "sportsman"
-    ],
-    "buildsInto": [
-      "hero",
-      "avenger"
-    ]
+    "techniques": ["friction-as-fuel", "minimal-viable-action", "momentum-building", "self-acknowledgment"],
+    "buildsFrom": ["survivor", "resistor", "sportsman"],
+    "buildsInto": ["hero", "avenger"]
   },
   {
     "id": "ashmaker",
@@ -674,20 +324,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Не виправляє — знищує під корінь. Спалює все зайве без жалю, щоб звільнити місце для наступного. Радикально й ефективно.",
-    "techniques": [
-      "root-cause-analysis",
-      "impact-assessment",
-      "momentum-building"
-    ],
-    "buildsFrom": [
-      "operator",
-      "resolver",
-      "impactor"
-    ],
-    "buildsInto": [
-      "phoenix",
-      "antagonist"
-    ]
+    "techniques": ["root-cause-analysis", "impact-assessment", "momentum-building"],
+    "buildsFrom": ["operator", "resolver", "impactor"],
+    "buildsInto": ["phoenix", "antagonist"]
   },
   {
     "id": "mind-warper",
@@ -695,21 +334,9 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Перетворює переживання на нові якості: страх — на адреналін, смуток — на глибину, біль — на відчуття себе живим/ою. Реальність — це те, яким сенсом ти її наповнюєш.",
-    "techniques": [
-      "emotional-reframing",
-      "perspective-reversal",
-      "inner-dialogue",
-      "sensory-grounding"
-    ],
-    "buildsFrom": [
-      "explorer",
-      "observer",
-      "sad-kid"
-    ],
-    "buildsInto": [
-      "lover",
-      "director"
-    ]
+    "techniques": ["emotional-reframing", "perspective-reversal", "inner-dialogue", "sensory-grounding"],
+    "buildsFrom": ["explorer", "observer", "sad-kid"],
+    "buildsInto": ["lover", "director"]
   },
   {
     "id": "puppeteer",
@@ -717,22 +344,9 @@
     "complexity": 5,
     "type": "shadow",
     "summary": "Виокремлює режисера/ку і виконавця/иця. Одна частина керує, інша — беземоційно виконує. Повна відстороненість від дискомфорту дії.",
-    "techniques": [
-      "body-dissociation",
-      "analytical-detachment",
-      "strategic-planning",
-      "inner-dialogue"
-    ],
-    "buildsFrom": [
-      "robot",
-      "observer",
-      "blocker",
-      "actor"
-    ],
-    "buildsInto": [
-      "god",
-      "director"
-    ]
+    "techniques": ["body-dissociation", "analytical-detachment", "strategic-planning", "inner-dialogue"],
+    "buildsFrom": ["robot", "observer", "blocker", "actor"],
+    "buildsInto": ["god", "director"]
   },
   {
     "id": "calm-before-storm",
@@ -740,19 +354,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Мовчки накопичує силу і ресурс. Не поспішає. Вдаряє тоді, коли момент правильний — і тоді не промахується.",
-    "techniques": [
-      "momentum-building",
-      "scenario-forecasting",
-      "strategic-planning"
-    ],
-    "buildsFrom": [
-      "operator",
-      "observer"
-    ],
-    "buildsInto": [
-      "avenger",
-      "antagonist"
-    ]
+    "techniques": ["momentum-building", "scenario-forecasting", "strategic-planning"],
+    "buildsFrom": ["operator", "observer"],
+    "buildsInto": ["avenger", "antagonist"]
   },
   {
     "id": "tracker",
@@ -760,20 +364,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Копає вглиб, поки не знайде справжню першопричину. Не задовольняється симптомами — хоче знати, звідки ноги ростуть.",
-    "techniques": [
-      "root-cause-analysis",
-      "pattern-recognition",
-      "brainstorming",
-      "iteration"
-    ],
-    "buildsFrom": [
-      "resolver",
-      "observer"
-    ],
-    "buildsInto": [
-      "antagonist",
-      "ashmaker"
-    ]
+    "techniques": ["root-cause-analysis", "pattern-recognition", "brainstorming", "iteration"],
+    "buildsFrom": ["resolver", "observer"],
+    "buildsInto": ["antagonist", "ashmaker"]
   },
   {
     "id": "oracle",
@@ -781,19 +374,9 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Бачить на кілька ходів уперед. Програє можливі майбутні ще до того, як вони настали, — і готується заздалегідь.",
-    "techniques": [
-      "scenario-forecasting",
-      "pattern-recognition",
-      "future-self-projection",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "future",
-      "observer"
-    ],
-    "buildsInto": [
-      "director"
-    ]
+    "techniques": ["scenario-forecasting", "pattern-recognition", "future-self-projection", "analytical-detachment"],
+    "buildsFrom": ["future", "observer"],
+    "buildsInto": ["director"]
   },
   {
     "id": "phoenix",
@@ -801,20 +384,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Програш — не кінець, а початок. Піднімається з попелу вже іншим/ою — і це не слабкість, а перевага.",
-    "techniques": [
-      "iteration",
-      "self-acknowledgment",
-      "momentum-building",
-      "dream-visualization"
-    ],
-    "buildsFrom": [
-      "survivor",
-      "ashmaker"
-    ],
-    "buildsInto": [
-      "avenger",
-      "lover"
-    ]
+    "techniques": ["iteration", "self-acknowledgment", "momentum-building", "dream-visualization"],
+    "buildsFrom": ["survivor", "ashmaker"],
+    "buildsInto": ["avenger", "lover"]
   },
   {
     "id": "hero",
@@ -822,23 +394,9 @@
     "complexity": 4,
     "type": "positive",
     "summary": "Відмовляється зупинятися, коли стає важко. Пробиває дискомфорт з відчуттям контролю та сили — і виходить по той бік.",
-    "techniques": [
-      "friction-as-fuel",
-      "momentum-building",
-      "body-dissociation",
-      "goal-definition"
-    ],
-    "buildsFrom": [
-      "operator",
-      "survivor",
-      "endurer",
-      "danger",
-      "sportsman"
-    ],
-    "buildsInto": [
-      "avenger",
-      "antagonist"
-    ]
+    "techniques": ["friction-as-fuel", "momentum-building", "body-dissociation", "goal-definition"],
+    "buildsFrom": ["operator", "survivor", "endurer", "danger", "sportsman"],
+    "buildsInto": ["avenger", "antagonist"]
   },
   {
     "id": "antagonist",
@@ -846,23 +404,8 @@
     "complexity": 5,
     "type": "shadow",
     "summary": "Перетворює глибоке розчарування у світі на паливо для влади та впливу. Не чекає дозволу — бере те, що потрібно, щоб змінити те, що не влаштовує.",
-    "techniques": [
-      "strategic-planning",
-      "impact-assessment",
-      "momentum-building",
-      "friction-as-fuel"
-    ],
-    "buildsFrom": [
-      "resistor",
-      "impostor",
-      "opportunist",
-      "danger",
-      "tracker",
-      "calm-before-storm",
-      "wannabe-astronaut",
-      "hero",
-      "ashmaker"
-    ],
+    "techniques": ["strategic-planning", "impact-assessment", "momentum-building", "friction-as-fuel"],
+    "buildsFrom": ["resistor", "impostor", "opportunist", "danger", "tracker", "calm-before-storm", "wannabe-astronaut", "hero", "ashmaker"],
     "buildsInto": []
   },
   {
@@ -871,21 +414,8 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Повністю відданий/а відновленню справедливості. Витерпить будь-що, щоб виправити кривду. На відміну від Антагоніста/ки — рушієм є мораль, а не розчарування.",
-    "techniques": [
-      "goal-definition",
-      "momentum-building",
-      "friction-as-fuel",
-      "scenario-forecasting"
-    ],
-    "buildsFrom": [
-      "operator",
-      "survivor",
-      "endurer",
-      "phoenix",
-      "calm-before-storm",
-      "hero",
-      "wannabe-astronaut"
-    ],
+    "techniques": ["goal-definition", "momentum-building", "friction-as-fuel", "scenario-forecasting"],
+    "buildsFrom": ["operator", "survivor", "endurer", "phoenix", "calm-before-storm", "hero", "wannabe-astronaut"],
     "buildsInto": []
   },
   {
@@ -894,18 +424,8 @@
     "complexity": 5,
     "type": "positive",
     "summary": "Просунута версія Гедоніста/ки. Не просто отримує задоволення — закоханий/а все, що відбувається. Навіть біль, страх і сум стають чимось, що можна полюбити.",
-    "techniques": [
-      "emotional-reframing",
-      "sensory-grounding",
-      "body-dissociation"
-    ],
-    "buildsFrom": [
-      "enjoyer",
-      "perfecto",
-      "mind-warper",
-      "phoenix",
-      "sad-kid"
-    ],
+    "techniques": ["emotional-reframing", "sensory-grounding", "body-dissociation"],
+    "buildsFrom": ["enjoyer", "perfecto", "mind-warper", "phoenix", "sad-kid"],
     "buildsInto": []
   },
   {
@@ -914,18 +434,8 @@
     "complexity": 5,
     "type": "shadow",
     "summary": "Знає всю партитуру і диригує відповідно. Не реагує на події — конструює їх. Люди, обставини, моменти — все це інструменти в оркестрі.",
-    "techniques": [
-      "strategic-planning",
-      "scenario-forecasting",
-      "inner-dialogue",
-      "pattern-recognition"
-    ],
-    "buildsFrom": [
-      "oracle",
-      "puppeteer",
-      "actor",
-      "mind-warper"
-    ],
+    "techniques": ["strategic-planning", "scenario-forecasting", "inner-dialogue", "pattern-recognition"],
+    "buildsFrom": ["oracle", "puppeteer", "actor", "mind-warper"],
     "buildsInto": []
   },
   {
@@ -934,14 +444,8 @@
     "complexity": 5,
     "type": "shadow",
     "summary": "Просунута версія Ляльководки. Повне відокремлення від себе, абсолютний стратегічний контроль. Ставиться до власного існування як до шахової партії. Застосовуй з обережністю.",
-    "techniques": [
-      "body-dissociation",
-      "strategic-planning",
-      "analytical-detachment"
-    ],
-    "buildsFrom": [
-      "puppeteer"
-    ],
+    "techniques": ["body-dissociation", "strategic-planning", "analytical-detachment"],
+    "buildsFrom": ["puppeteer"],
     "buildsInto": []
   }
 ]

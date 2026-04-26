@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Lock } from "lucide-react";
 import { Card, Body, useI18n } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
+import { DEFAULT_SETTINGS } from "../config";
 
 export function MechanicsWindow() {
   const { t } = useI18n();
@@ -15,7 +16,7 @@ export function MechanicsWindow() {
     handleMechanicSelect,
   } = useSkillContext();
 
-  const isGradual = (settings.gameMode ?? "immediate") === "gradual";
+  const isGradual = (settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual";
   const unlockedSet = useMemo(() => new Set(unlockedNodes), [unlockedNodes]);
 
   const techMap = useMemo(

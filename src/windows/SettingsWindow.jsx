@@ -10,14 +10,15 @@ import {
 } from "@levkobe/c7one";
 import { DARK_COLORS, LIGHT_COLORS } from "../themes";
 import { useSkillContext } from "../context/SkillContext";
+import { DEFAULT_SETTINGS } from "../config";
 
 export function AppSettings() {
   const { t } = useI18n();
   const { settings, handleSettingsChange } = useSkillContext();
   const set = (key, val) => handleSettingsChange({ ...settings, [key]: val });
 
-  const durationScaleFactor = settings.durationScaleFactor ?? 1;
-  const breathingStrength = settings.breathingStrength ?? 0.3;
+  const durationScaleFactor = settings.durationScaleFactor ?? DEFAULT_SETTINGS.durationScaleFactor;
+  const breathingStrength = settings.breathingStrength ?? DEFAULT_SETTINGS.breathingStrength;
 
   return (
     <div className="space-y-4">
@@ -151,7 +152,7 @@ export function AppSettings() {
 
       <div className="space-y-3">
         <Toggle
-          checked={(settings.gameMode ?? "immediate") === "gradual"}
+          checked={(settings.gameMode ?? DEFAULT_SETTINGS.gameMode) === "gradual"}
           onCheckedChange={(v) => set("gameMode", v ? "gradual" : "immediate")}
           label={t("settings.progression.gradual")}
         />
@@ -159,14 +160,14 @@ export function AppSettings() {
         <div className="space-y-1.5">
           <Label className="text-xs text-fg-muted">
             {t("settings.progression.threshold", {
-              value: settings.unlockThreshold ?? 5,
+              value: settings.unlockThreshold ?? DEFAULT_SETTINGS.unlockThreshold,
             })}
           </Label>
           <Slider
             min={1}
             max={50}
             step={1}
-            value={[settings.unlockThreshold ?? 5]}
+            value={[settings.unlockThreshold ?? DEFAULT_SETTINGS.unlockThreshold]}
             onValueChange={([v]) => set("unlockThreshold", v)}
           />
         </div>

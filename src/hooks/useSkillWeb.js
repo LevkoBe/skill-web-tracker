@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useI18n } from "@levkobe/c7one";
+import { DEFAULT_SETTINGS, MAX_HISTORY } from "../config";
 import { loadState, saveState, clearState } from "../utils/storage";
 import { nextRoleColor } from "../utils/colors";
 import { removeRoleFromGraph } from "../utils/connections";
@@ -17,21 +18,6 @@ import {
   getInitialUnlocked,
 } from "../utils/progression";
 
-const DEFAULT_SETTINGS = {
-  connectionRange: 150,
-  pointDriftRadius: 2,
-  pointDriftSpeed: 1,
-  maxProximityConnections: 3,
-  timerActiveByDefault: false,
-  durationScaleFactor: 1,
-  showClusterLabels: true,
-  showNoteLabels: true,
-  breathingStrength: 0.3,
-  gameMode: "gradual",
-  unlockThreshold: 5,
-};
-
-const MAX_HISTORY = 50;
 
 const getInitialState = (locale) => {
   const saved = loadState();
@@ -190,7 +176,7 @@ export const useSkillWeb = () => {
       nextPPN[activeMechanic] = (pointsPerNode[activeMechanic] ?? 0) + 1;
     }
 
-    const threshold = settings.unlockThreshold ?? 10;
+    const threshold = settings.unlockThreshold ?? DEFAULT_SETTINGS.unlockThreshold;
     const nextUnlocked = computeUnlocks(roles, nextPPN, unlockedNodes, threshold);
 
     setPoints([...closedPoints, newPoint]);
