@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Fullscreen, HelpCircle, Undo2, Redo2, RotateCw } from "lucide-react";
-import { Card, Button, Divider, useC7One, useI18n } from "@levkobe/c7one";
+import { Card, Button, Divider, useC7One, useI18n, usePrimaryBounds } from "@levkobe/c7one";
 import { useSkillContext } from "../context/SkillContext";
 import { useCanvasDrag } from "../hooks/useCanvasDrag";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
@@ -34,6 +34,7 @@ export function CanvasWindow() {
 
   const { colors } = useC7One();
   const bgColor = colors["--color-bg-base"] || "#0f0f0f";
+  const primaryBounds = usePrimaryBounds();
 
   const { isDragging, dragHandlers, scale, zoom, zoomReset, zoomToFit } =
     useCanvasDrag(offset, setOffset);
@@ -48,8 +49,14 @@ export function CanvasWindow() {
   const handleKeyboardZoom = (delta) => {
     const el = containerRef.current;
     if (!el) return;
-    const { width, height } = el.getBoundingClientRect();
-    const pos = lastCanvasPos.current ?? { x: width / 2, y: height / 2 };
+    const fallback = el.getBoundingClientRect();
+    const cx = primaryBounds.ready
+      ? primaryBounds.x + primaryBounds.width / 2
+      : fallback.width / 2;
+    const cy = primaryBounds.ready
+      ? primaryBounds.y + primaryBounds.height / 2
+      : fallback.height / 2;
+    const pos = lastCanvasPos.current ?? { x: cx, y: cy };
     zoom(delta, pos.x, pos.y);
   };
 
@@ -248,7 +255,8 @@ export function CanvasWindow() {
           onClick={() => {
             const el = containerRef.current;
             if (!el) return;
-            zoomReset(points, el.getBoundingClientRect());
+            const r = el.getBoundingClientRect();
+            zoomReset(points, primaryBounds.ready ? primaryBounds : { x: 0, y: 0, width: r.width, height: r.height });
           }}
           title={t("canvas.zoom.reset")}
           className="px-2 py-1 hover:text-fg-primary hover:bg-bg-elevated transition-colors"
@@ -260,7 +268,8 @@ export function CanvasWindow() {
           onClick={() => {
             const el = containerRef.current;
             if (!el) return;
-            zoomToFit(points, el.getBoundingClientRect());
+            const r = el.getBoundingClientRect();
+            zoomToFit(points, primaryBounds.ready ? primaryBounds : { x: 0, y: 0, width: r.width, height: r.height });
           }}
           title={t("canvas.zoom.fit")}
           className="px-2 py-1 hover:text-fg-primary hover:bg-bg-elevated transition-colors"

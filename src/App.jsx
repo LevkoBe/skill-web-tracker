@@ -1,7 +1,20 @@
-import { useMemo } from "react";
-import { DynamicPanelRoot, useI18n } from "@levkobe/c7one";
-import { Waypoints, List, TrendingUp, Settings, BarChart2, History, Zap, Network, BookOpen } from "lucide-react";
-import { AppHeader } from "./components/AppHeader";
+import { useMemo, useEffect } from "react";
+import { Moon, Sun, BarChart2, History, List, TrendingUp, Settings, Zap, Network, BookOpen } from "lucide-react";
+import {
+  AppShell,
+  PRIMARY_WINDOW_ID,
+  Badge,
+  Button,
+  Modal,
+  RandomizeButton,
+  SettingsModalButton,
+  ThemeToggleButton,
+  useC7One,
+  useI18n,
+} from "@levkobe/c7one";
+import { DARK_COLORS, LIGHT_COLORS } from "./themes";
+import { SUPPORTED_LOCALES } from "./config";
+import { AppSettings } from "./windows/SettingsWindow";
 import { CanvasWindow } from "./windows/CanvasWindow";
 import { RolesWindow } from "./windows/RolesWindow";
 import { ProgressionWindow } from "./windows/ProgressionWindow";
@@ -17,23 +30,162 @@ const LAYOUT = {
   direction: "horizontal",
   sizes: [64, 18, 18],
   children: [
-    { type: "leaf", windowId: "canvas", isDefault: true },
+    { type: "leaf", windowId: PRIMARY_WINDOW_ID, isDefault: true },
     { type: "leaf", windowId: "roles" },
     { type: "leaf", windowId: "progression" },
   ],
 };
 
 function App() {
-  const { t } = useI18n();
+  const { t, locale, setLocale } = useI18n();
+  const { mode } = useC7One();
+
+  // R key → click the hidden balanced randomize button
+  useEffect(() => {
+    function onKey(e) {
+      if (
+        e.key === "r" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !(e.target instanceof HTMLInputElement) &&
+        !(e.target instanceof HTMLTextAreaElement)
+      ) {
+        document.getElementById("randomize-main-btn")?.click();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const logo = (
+    <div className="flex items-center gap-3">
+      <span className="text-sm font-bold text-fg-primary tracking-tight">
+        SKILL <span className="text-accent">WEB</span>
+      </span>
+      <span className="text-[10px] text-fg-disabled hidden sm:block">
+        {t("app.subtitle")}
+      </span>
+      <div className="hidden sm:flex items-center gap-1.5 ml-1">
+        <Badge variant="neutral">{mode}</Badge>
+      </div>
+    </div>
+  );
+
+  const headerActions = (
+    <div className="flex items-center gap-2">
+      {/* Locale toggle */}
+      <div className="flex items-center rounded-[calc(var(--radius)*0.75)] border border-border overflow-hidden">
+        {SUPPORTED_LOCALES.map((loc) => (
+          <button
+            key={loc}
+            onClick={() => setLocale(loc)}
+            className={[
+              "px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+              "transition-colors duration-(--transition-speed)",
+              "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent",
+              locale === loc
+                ? "bg-accent text-bg-base"
+                : "text-fg-muted hover:text-fg-primary hover:bg-bg-elevated",
+            ].join(" ")}
+          >
+            {loc}
+          </button>
+        ))}
+      </div>
+
+      <ThemeToggleButton
+        dark={DARK_COLORS}
+        light={LIGHT_COLORS}
+        size="sm"
+        variant="secondary"
+        title={t("app.toggleTheme")}
+        darkIcon={<Moon size={14} />}
+        lightIcon={<Sun size={14} />}
+      />
+
+      {/* Three randomize buttons — desktop */}
+      <div className="hidden md:flex items-center gap-1">
+        <RandomizeButton
+          freedom={20}
+          size="sm"
+          variant="secondary"
+          title={t("app.randomizeTame")}
+        />
+        <RandomizeButton
+          id="randomize-main-btn"
+          freedom={50}
+          size="sm"
+          title={t("app.randomize")}
+        />
+        <RandomizeButton
+          freedom={100}
+          size="sm"
+          variant="destructive"
+          title={t("app.randomizeChaos")}
+        />
+      </div>
+      {/* Mobile: balanced only */}
+      <div className="flex md:hidden">
+        <RandomizeButton
+          id="randomize-main-btn"
+          freedom={50}
+          size="sm"
+          title={t("app.randomize")}
+        />
+      </div>
+
+      <Modal>
+        <Modal.Trigger asChild>
+          <Button size="sm" variant="secondary" title={t("window.stats")}>
+            <BarChart2 size={14} />
+          </Button>
+        </Modal.Trigger>
+        <Modal.Content className="max-w-5xl w-[90vw] h-[80vh] p-0 overflow-hidden">
+          <StatsWindow />
+        </Modal.Content>
+      </Modal>
+
+      <Modal>
+        <Modal.Trigger asChild>
+          <Button size="sm" variant="secondary" title={t("window.history")}>
+            <History size={14} />
+          </Button>
+        </Modal.Trigger>
+        <Modal.Content className="max-w-5xl w-[90vw] h-[80vh] p-0 overflow-hidden">
+          <HistoryWindow />
+        </Modal.Content>
+      </Modal>
+
+      <SettingsModalButton
+        label={t("app.openSettings")}
+        expose={[
+          "mode",
+          "colors",
+          "--radius",
+          "--border-width",
+          "--transition-speed",
+          "--shadow-intensity",
+        ]}
+        presets={[
+          {
+            label: t("theme.dark"),
+            icon: <Moon size={12} />,
+            apply: (ctx) => ctx.setColors(DARK_COLORS),
+          },
+          {
+            label: t("theme.light"),
+            icon: <Sun size={12} />,
+            apply: (ctx) => ctx.setColors(LIGHT_COLORS),
+          },
+        ]}
+        renderAppSettings={() => <AppSettings />}
+      />
+    </div>
+  );
 
   const windows = useMemo(
     () => [
-      {
-        id: "canvas",
-        title: t("window.canvas"),
-        icon: <Waypoints size={16} />,
-        component: CanvasWindow,
-      },
       {
         id: "roles",
         title: t("window.roles"),
@@ -87,17 +239,15 @@ function App() {
   );
 
   return (
-    <div className="w-screen h-screen bg-bg-base text-fg-primary overflow-hidden flex flex-col">
-      <AppHeader />
-      <div className="flex-1 min-h-0">
-        <DynamicPanelRoot
-          windows={windows}
-          layout={LAYOUT}
-          storageKey="skill-web-layout"
-          className="w-full h-full"
-        />
-      </div>
-    </div>
+    <AppShell
+      logo={logo}
+      headerActions={headerActions}
+      windows={windows}
+      layout={LAYOUT}
+      storageKey="skill-web-layout-v2"
+    >
+      <CanvasWindow />
+    </AppShell>
   );
 }
 

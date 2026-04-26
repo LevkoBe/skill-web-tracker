@@ -1,2 +1,4 @@
 @import "@levkobe/c7one/styles";
 @import "tailwindcss";
+
+html, body, #root { height: 100%; }

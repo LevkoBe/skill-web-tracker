@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")).render(
     >
       <C7OneProvider
         defaultMode="classic"
-        config={{ colors: DARK_COLORS }}
+        config={{ colors: DARK_COLORS, splitMargin: 8 }}
         storageKey="skill-web-theme"
       >
         <SkillWebProvider>

@@ -63,14 +63,14 @@ export const useCanvasDrag = (offset, setOffset) => {
   const zoomReset = (points, containerRect) => {
     scaleRef.current = 1;
     setScaleState(1);
-    const { width: vw, height: vh } = containerRect;
+    const { x = 0, y = 0, width: vw, height: vh } = containerRect;
     const { centerX, centerY } = getPointsDimensions(points);
-    setOffset({ x: vw / 2 - centerX, y: vh / 2 - centerY });
+    setOffset({ x: x + vw / 2 - centerX, y: y + vh / 2 - centerY });
   };
 
   const zoomToFit = (points, containerRect) => {
     if (!points.length) return;
-    const { width: vw, height: vh } = containerRect;
+    const { x = 0, y = 0, width: vw, height: vh } = containerRect;
     const { centerX, centerY, w, h } = getPointsDimensions(points);
 
     const newScale = Math.min(
@@ -83,8 +83,8 @@ export const useCanvasDrag = (offset, setOffset) => {
     scaleRef.current = newScale;
     setScaleState(newScale);
     setOffset({
-      x: vw / 2 - centerX * newScale,
-      y: vh / 2 - centerY * newScale,
+      x: x + vw / 2 - centerX * newScale,
+      y: y + vh / 2 - centerY * newScale,
     });
   };
 
