@@ -2,7 +2,6 @@ import { useMemo, useEffect } from "react";
 import { Moon, Sun, BarChart2, History, List, TrendingUp, Settings, Zap, Network, BookOpen } from "lucide-react";
 import {
   AppShell,
-  PRIMARY_WINDOW_ID,
   Badge,
   Button,
   Modal,
@@ -30,7 +29,7 @@ const LAYOUT = {
   direction: "horizontal",
   sizes: [64, 18, 18],
   children: [
-    { type: "leaf", windowId: PRIMARY_WINDOW_ID, isDefault: true },
+    { type: "leaf", windowId: "canvas", isDefault: true },
     { type: "leaf", windowId: "roles" },
     { type: "leaf", windowId: "progression" },
   ],
@@ -187,6 +186,12 @@ function App() {
   const windows = useMemo(
     () => [
       {
+        id: "canvas",
+        title: t("window.canvas"),
+        headless: true,
+        component: CanvasWindow,
+      },
+      {
         id: "roles",
         title: t("window.roles"),
         icon: <List size={16} />,
@@ -244,10 +249,8 @@ function App() {
       headerActions={headerActions}
       windows={windows}
       layout={LAYOUT}
-      storageKey="skill-web-layout-v2"
-    >
-      <CanvasWindow />
-    </AppShell>
+      storageKey="skill-web-layout-v3"
+    />
   );
 }
 
