@@ -2,8 +2,8 @@ const EMBED_BASE = "https://levkobe.github.io/diagravinci/embed.html";
 
 export const EMBED_ORIGIN = "https://levkobe.github.io";
 
-export const getEmbedUrl = (colors, mode = "dark") =>
-  `${EMBED_BASE}?viewMode=timeline&theme=${mode}&classDiagram=off&relLineStyle=curved&colors=${encodeURIComponent(JSON.stringify(colors))}`;
+export const getEmbedUrl = (colors, mode = "dark", layout = "timeline") =>
+  `${EMBED_BASE}?viewMode=${layout}&theme=${mode}&classDiagram=off&relLineStyle=curved&colors=${encodeURIComponent(JSON.stringify(colors))}`;
 
 const toId = (str) => str.replace(/[\s-]/g, "_");
 

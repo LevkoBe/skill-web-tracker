@@ -1,10 +1,39 @@
 import { useRef, useEffect, useMemo, useState } from "react";
-import { Body, useI18n, useC7One, detectIsDark } from "@levkobe/c7one";
+import { Body, Select, useI18n, useC7One, detectIsDark } from "@levkobe/c7one";
+import {
+  GitBranch,
+  Clock,
+  Layers,
+  Circle,
+  Play,
+  Palette,
+  Shield,
+  Wrench,
+  Disc,
+} from "lucide-react";
 import { useSkillContext } from "../context/SkillContext";
 import { useRoleStats } from "../hooks/useRoleStats";
 import { buildDiagramDsl, getEmbedUrl, EMBED_ORIGIN } from "../utils/diagram";
 import { THEMES } from "../data/themes";
 import { DEFAULT_DIAGRAM_THEME_ID, DEFAULT_SETTINGS } from "../config";
+
+const LAYOUT_OPTIONS = [
+  {
+    value: "hierarchical",
+    label: "Hierarchical",
+    icon: <GitBranch size={12} />,
+  },
+  { value: "timeline", label: "Timeline", icon: <Clock size={12} /> },
+  { value: "pipeline", label: "Pipeline", icon: <Layers size={12} /> },
+  { value: "radial", label: "Radial", icon: <Disc size={12} /> },
+  { value: "circular", label: "Circular", icon: <Circle size={12} /> },
+];
+
+const THEME_OPTIONS = [
+  { value: "default", label: "Default", icon: <Palette size={12} /> },
+  { value: "battle", label: "Battle", icon: <Shield size={12} /> },
+  { value: "craft", label: "Craft", icon: <Wrench size={12} /> },
+];
 
 export function DiagramWindow() {
   const { t } = useI18n();
@@ -20,6 +49,7 @@ export function DiagramWindow() {
   const dslRef = useRef(null);
   const isLoadedRef = useRef(false);
   const [themeId, setThemeId] = useState(DEFAULT_DIAGRAM_THEME_ID);
+  const [layout, setLayout] = useState("timeline");
 
   const theme = useMemo(
     () => THEMES.find((th) => th.id === themeId) ?? THEMES[0],
@@ -42,6 +72,10 @@ export function DiagramWindow() {
   useEffect(() => {
     dslRef.current = dsl;
   });
+
+  useEffect(() => {
+    isLoadedRef.current = false;
+  }, [layout]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -74,27 +108,25 @@ export function DiagramWindow() {
         >
           {t("diagram.title")}
         </Body>
-        <div className="flex items-center gap-1">
-          {THEMES.map((th) => (
-            <button
-              key={th.id}
-              onClick={() => setThemeId(th.id)}
-              className={[
-                "px-2 py-0.5 rounded text-xs transition-colors",
-                themeId === th.id
-                  ? "bg-accent text-white"
-                  : "text-fg-muted hover:text-fg-primary hover:bg-bg-elevated",
-              ].join(" ")}
-            >
-              {t(`diagram.theme.${th.id}`)}
-            </button>
-          ))}
+        <div className="flex items-center gap-2">
+          <Select
+            options={LAYOUT_OPTIONS}
+            value={layout}
+            onValueChange={setLayout}
+            className="w-38"
+          />
+          <Select
+            options={THEME_OPTIONS}
+            value={themeId}
+            onValueChange={setThemeId}
+            className="w-30"
+          />
         </div>
       </div>
       <div className="flex-1 min-h-0">
         <iframe
           ref={iframeRef}
-          src={getEmbedUrl(colors, embedTheme)}
+          src={getEmbedUrl(colors, embedTheme, layout)}
           className="w-full h-full border-0"
           title="Role progression diagram"
         />

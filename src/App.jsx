@@ -140,7 +140,12 @@ function App() {
             <BarChart2 size={14} />
           </Button>
         </Modal.Trigger>
-        <Modal.Content className="max-w-5xl w-[90vw] h-[80vh] p-0 overflow-hidden">
+        <Modal.Content
+          title={t("window.stats")}
+          icon={<BarChart2 size={12} />}
+          maxWidth={1024}
+          className="h-[80vh]"
+        >
           <StatsWindow />
         </Modal.Content>
       </Modal>
@@ -151,8 +156,29 @@ function App() {
             <History size={14} />
           </Button>
         </Modal.Trigger>
-        <Modal.Content className="max-w-5xl w-[90vw] h-[80vh] p-0 overflow-hidden">
+        <Modal.Content
+          title={t("window.history")}
+          icon={<History size={12} />}
+          maxWidth={1024}
+          className="h-[80vh]"
+        >
           <HistoryWindow />
+        </Modal.Content>
+      </Modal>
+
+      <Modal>
+        <Modal.Trigger asChild>
+          <Button size="sm" variant="secondary" title={t("window.diagram")}>
+            <Network size={14} />
+          </Button>
+        </Modal.Trigger>
+        <Modal.Content
+          title={t("window.diagram")}
+          icon={<Network size={12} />}
+          maxWidth={1024}
+          className="h-[80vh]"
+        >
+          <DiagramWindow />
         </Modal.Content>
       </Modal>
 
