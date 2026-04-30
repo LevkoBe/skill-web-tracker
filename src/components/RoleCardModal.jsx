@@ -286,7 +286,8 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
 
   return (
     <Modal open={open} onOpenChange={handleClose}>
-      <Modal.Content className="max-w-md w-full">
+      <Modal.Content maxWidth={448}>
+        <div className="p-4">
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
@@ -311,7 +312,7 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
                   {displayRole.name}
                 </h2>
               )}
-              <Badge variant={typeColor} className="text-xs capitalize shrink-0">
+              <Badge variant={typeColor} className="capitalize shrink-0">
                 {displayRole.type ?? "positive"}
               </Badge>
             </div>
@@ -379,7 +380,7 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
                 value={editSummary}
                 onChange={(e) => setEditSummary(e.target.value)}
                 rows={3}
-                className="resize-none text-sm"
+                className="resize-none"
               />
             ) : (
               <p className="text-sm text-fg-secondary leading-relaxed">
@@ -483,7 +484,7 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
             <Button
               variant="primary"
               size="sm"
-              className="flex-1 gap-1.5"
+              className="flex-1"
               onClick={saveEdit}
             >
               <Check size={14} /> {t("common.save")}
@@ -498,6 +499,7 @@ export function RoleCardModal({ role, usageLevel, open, onOpenChange }) {
             </Button>
           </div>
         )}
+        </div>
       </Modal.Content>
     </Modal>
   );

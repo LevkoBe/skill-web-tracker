@@ -29,7 +29,8 @@ function TechniqueModal({ tech, open, onOpenChange, onUpdate }) {
 
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
-      <Modal.Content className="max-w-sm w-full">
+      <Modal.Content maxWidth={384}>
+        <div className="p-4">
         <div className="space-y-3">
           {isEditing ? (
             <>
@@ -45,7 +46,7 @@ function TechniqueModal({ tech, open, onOpenChange, onUpdate }) {
                 value={editDesc}
                 onChange={(e) => setEditDesc(e.target.value)}
                 rows={4}
-                className="resize-none text-sm"
+                className="resize-none"
                 placeholder={t("techniques.description.placeholder")}
               />
               <div className="flex gap-2">
@@ -80,6 +81,7 @@ function TechniqueModal({ tech, open, onOpenChange, onUpdate }) {
               )}
             </>
           )}
+        </div>
         </div>
       </Modal.Content>
     </Modal>
@@ -270,7 +272,7 @@ export function RolesWindow() {
             onClick={save}
             variant="secondary"
             size="sm"
-            className="flex-1 gap-1.5"
+            className="flex-1"
           >
             <Save size={14} /> {t("roles.save")}
           </Button>
@@ -278,7 +280,7 @@ export function RolesWindow() {
             onClick={triggerLoad}
             variant="secondary"
             size="sm"
-            className="flex-1 gap-1.5"
+            className="flex-1"
           >
             <Upload size={14} /> {t("roles.load")}
           </Button>
@@ -287,7 +289,7 @@ export function RolesWindow() {
           onClick={handleReset}
           variant="destructive"
           size="sm"
-          className="w-full gap-1.5"
+          className="w-full"
         >
           <RotateCcw size={14} /> {t("roles.reset")}
         </Button>

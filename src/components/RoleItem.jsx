@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Trash2, Palette, Maximize2 } from "lucide-react";
 import { Card, Button, useI18n } from "@levkobe/c7one";
 import { randomBrightColor } from "../utils/colors";
 import { RoleCardModal } from "./RoleCardModal";
 
-export const RoleItem = ({
+const RoleItemInner = ({
   role,
   isActive,
   level,
@@ -25,7 +25,7 @@ export const RoleItem = ({
     <>
       <Card
         variant={isActive ? "elevated" : "outlined"}
-        className={`p-0 cursor-pointer transition-colors select-none ${
+        className={`p-0 cursor-pointer select-none ${
           isActive ? "" : "hover:bg-bg-elevated"
         }`}
         onClick={onSelect}
@@ -108,3 +108,11 @@ export const RoleItem = ({
     </>
   );
 };
+
+export const RoleItem = React.memo(
+  RoleItemInner,
+  (prev, next) =>
+    prev.role === next.role &&
+    prev.isActive === next.isActive &&
+    prev.level === next.level,
+);

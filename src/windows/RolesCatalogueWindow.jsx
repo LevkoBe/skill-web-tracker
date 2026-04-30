@@ -1,15 +1,12 @@
 import { useState, useMemo } from "react";
 import { Search, Edit2, Trash2 } from "lucide-react";
-import { Input, Button, Badge, useI18n } from "@levkobe/c7one";
+import { Input, Button, useI18n } from "@levkobe/c7one";
 import { RoleCardModal } from "../components/RoleCardModal";
 import { useRoleStats } from "../hooks/useRoleStats";
 import { useSkillContext } from "../context/SkillContext";
 
-const TYPE_VARIANT = { positive: "success", negative: "error", shadow: "warning" };
-
 function RoleCatalogueCard({ role, level, onDelete }) {
   const [showCard, setShowCard] = useState(false);
-  const variant = TYPE_VARIANT[role.type] ?? "default";
 
   return (
     <>
@@ -39,9 +36,6 @@ function RoleCatalogueCard({ role, level, onDelete }) {
             style={{ backgroundColor: role.color, boxShadow: `0 0 4px ${role.color}` }}
           />
           <span className="text-sm font-semibold text-fg-primary truncate">{role.name}</span>
-          <Badge variant={variant} className="text-xs capitalize shrink-0">
-            {role.type ?? "positive"}
-          </Badge>
         </div>
 
         {role.summary && (

@@ -34,7 +34,7 @@ function TechniqueCard({ tech, roles, onUpdate, onDelete }) {
           onKeyDown={(e) => e.key === "Escape" && cancel()}
           placeholder={t("techniques.name.placeholder")}
           autoFocus
-          className="text-sm font-semibold"
+          className="font-semibold"
         />
         <Textarea
           value={editDesc}

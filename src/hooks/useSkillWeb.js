@@ -273,39 +273,42 @@ export const useSkillWeb = () => {
     ]);
   };
 
-  const deleteRole = (id) => {
-    snapshot();
+  const deleteRole = useCallback((id) => {
+    past.current = [
+      ...past.current.slice(-MAX_HISTORY + 1),
+      { roles: rolesRef.current, points: pointsRef.current, connections: connectionsRef.current },
+    ];
+    future.current = [];
     const { newPoints, newConnections } = removeRoleFromGraph(
-      points,
-      connections,
+      pointsRef.current,
+      connectionsRef.current,
       id,
     );
     setRoles((prev) => prev.filter((r) => r.id !== id));
     setPoints(newPoints);
     setConnections(newConnections);
-    if (activeRole === id) setActiveRole(null);
-  };
+    if (activeRoleRef.current === id) setActiveRole(null);
+  }, []);
 
   const updateRole = (id, updates) =>
     setRoles((prev) =>
       prev.map((r) => (r.id === id ? { ...r, ...updates } : r)),
     );
 
-  const updateRoleColor = (id, color) => {
-    snapshot();
+  const updateRoleColor = useCallback((id, color) => {
+    past.current = [
+      ...past.current.slice(-MAX_HISTORY + 1),
+      { roles: rolesRef.current, points: pointsRef.current, connections: connectionsRef.current },
+    ];
+    future.current = [];
     setRoles((prev) => prev.map((r) => (r.id === id ? { ...r, color } : r)));
-    setPoints((prev) =>
-      prev.map((p) => (p.roleId === id ? { ...p, color } : p)),
-    );
-    const updatedPoints = points.map((p) =>
-      p.roleId === id ? { ...p, color } : p,
-    );
+    setPoints((prev) => prev.map((p) => (p.roleId === id ? { ...p, color } : p)));
     setConnections((prev) =>
       prev.map((c) =>
-        updatedPoints[c.fromIdx]?.roleId === id ? { ...c, color } : c,
+        pointsRef.current[c.fromIdx]?.roleId === id ? { ...c, color } : c,
       ),
     );
-  };
+  }, []);
 
   // ── Techniques CRUD ────────────────────────────────────────────────────────
 
