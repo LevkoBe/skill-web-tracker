@@ -34,15 +34,15 @@ const RoleProgressRow = React.memo(({ role, count }) => {
               key={idx}
               className={[
                 "w-2.5 h-2.5 border",
-                isMilestone ? "border-border" : "border-border/30",
-                filled && !isMilestone ? "bg-fg-disabled/20" : "",
+                isMilestone ? "border-border" : "border-border/55",
+                filled ? "bg-fg-muted" : "",
                 !filled ? "bg-transparent" : "",
               ].join(" ")}
               style={
                 filled && isMilestone
                   ? {
-                      backgroundColor: role.color + "50",
-                      borderColor: role.color + "90",
+                      backgroundColor: role.color + "80",
+                      borderColor: role.color + "cc",
                     }
                   : {}
               }
